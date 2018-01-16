@@ -1,0 +1,9 @@
+# Ignore all Eclipse workspace files #
+*.eclipse*
+*.xml
+*.log
+*.class
+*.project
+*.class*
+*.metadata*
+*.recommenders*
