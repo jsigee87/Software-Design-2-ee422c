@@ -7,3 +7,11 @@
 *.class*
 *.metadata*
 *.recommenders*
+
+# Ignore all virtual environment files
+bin
+include
+local
+lib
+share
+*selfcheck.json
