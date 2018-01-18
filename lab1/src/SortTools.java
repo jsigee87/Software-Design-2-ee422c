@@ -58,13 +58,13 @@ public class SortTools {
          */
 
         if (x.len == 0){
-           return false;
+           return -1;
         }
         if (n == 0){
-           return false;
+           return -1;
         }
         if (n == 1){
-            if (v == x[0]){
+            if (target == x[0]){
                 return 0;
             }
         }
