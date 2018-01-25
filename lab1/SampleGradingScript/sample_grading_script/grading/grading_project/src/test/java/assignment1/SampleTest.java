@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 
-public class SortToolsTest {
+public class SampleTest {
 	
 	@Test(timeout = 2000)
 	public void testFindFoundFull(){
