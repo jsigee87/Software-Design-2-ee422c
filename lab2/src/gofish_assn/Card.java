@@ -16,25 +16,58 @@ public class Card {
 	}
 	
 	public Card(int r, char s) {
-
+		this.rank = r;
+		this.suit = this.toSuit(s);
 	}
 	
 	public Card(int r, Suits s) {
-
+		this.rank = r;
+		this.suit = s;
 	}
 	
 	private Suits toSuit(char c) {
-		return Suits.spade; //dummy
+		c = Character.toLowerCase(c);
+		switch(c) {
+			case 'c': return Suits.club;
+			case 'd': return Suits.diamond;
+			case 'h': return Suits.heart;
+			case 's': return Suits.spade;
+			default: assert false ;
+		}
+		return null; //dummy return
 	}
 	
 	private String suitToString(Suits s)
 	{
-		return "s"; //dummy
+		switch(s) {
+			case club: return "c";
+			case diamond: return "d";
+			case heart: return "h";
+			case spade: return "s";
+			default: assert false ;
+	}
+		return null; //dummy return
 	}
 	
 	private String rankToString(int r)
 	{
-		return "A"; //dummy
+		switch(r) {
+			case 1: return "A";
+			case 2: return "2";
+			case 3: return "3";
+			case 4: return "4";
+			case 5: return "5";
+			case 6: return "6";
+			case 7: return "7";
+			case 8: return "8";
+			case 9: return "9";
+			case 10: return "10";
+			case 11: return "J";
+			case 12: return "Q";
+			case 13: return "K";
+			default: assert false;
+		}
+		return null; //dummy return
 	}
 		
 	
