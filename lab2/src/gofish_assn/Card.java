@@ -1,5 +1,11 @@
 package gofish_assn;
 
+/**
+ * This class simulates a card from a standard deck
+ * of 52 cards, with no jokers.
+ * @author John Sigmon, Daniel Diamont
+ *
+ */
 public class Card {
 	
 	public enum Suits {club, diamond, heart, spade};
@@ -10,21 +16,52 @@ public class Card {
 	int rank;  //1 is an Ace
 	Suits suit;
 	
+	/**
+	 * This constructor is the default, and makes 
+	 * an ace of spades.
+	 */
 	public Card() {
 		rank = 1;
 		suit = Suits.spade;
 	}
 	
+	/**
+	 * This constructor creates a card of a specific
+	 * rank and suit.
+	 * @param r This parameter is an int, it defines the rank of the 
+	 * card being created. Rank 1 corresponds to an ace,
+	 * rank 11 -> Jack, rank 12 -> Queen, rank 13 -> King.
+	 * 
+	 * @param s This parameter is a single char, used as
+	 * shorthand to denote the desired suit. Either upper
+	 * or lower case can be used. s -> spades, d -> diamonds, 
+	 * c -> clubs, h -> hearts.
+	 */
 	public Card(int r, char s) {
 		this.rank = r;
 		this.suit = this.toSuit(s);
 	}
 	
+	///////////////////////Check this one.
+	/**
+	 * This constructor creates a card of a specific
+	 * rank and suit.
+	 * @param r This parameter is an int, it defines the rank of the 
+	 * card being created. Rank 1 corresponds to an ace,
+	 * rank 11 -> Jack, rank 12 -> Queen, rank 13 -> King.
+	 * 
+	 * @param s This parameter is an enum type, and it
+	 * assigns the proper enum to the card suit.
+	 */
 	public Card(int r, Suits s) {
 		this.rank = r;
 		this.suit = s;
 	}
-	
+	/**
+	 * This 
+	 * @param c
+	 * @return
+	 */
 	private Suits toSuit(char c) {
 		c = Character.toLowerCase(c);
 		switch(c) {
