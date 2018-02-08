@@ -2,6 +2,8 @@ package gofish_assn;
 
 public class GoFishGame {
 	
+	final static int NUMBOOKSTOWIN = 26;
+	final static int SIZEFIRSTHAND = 7;
 	// If turn == 0, player 1 goes
 	// If turn == 1, player 2 goes
 	int turn;
@@ -23,14 +25,17 @@ public class GoFishGame {
 	}
 	
 	public void dealHand(Player p) {
-		
+		for (int i = 0; i < SIZEFIRSTHAND; i ++){
+			p.addCardToHand(gameDeck.dealCard());
+		}
 	}
 	
 	public void requestCard(int turn) {
 		if (turn == 0) {
 			Card requestedCard = player1.chooseCardFromHand();
-			// If player 2 has the requested card
 			Card myCard = player2.sameRankInHand(requestedCard);
+			// If player 2 has the requested card, remove it from
+			// both hands, update the books.
 			if (myCard != null) {
 				player2.removeCardFromHand(myCard);
 				player1.removeCardFromHand(requestedCard);
@@ -44,7 +49,6 @@ public class GoFishGame {
 		}
 		else {
 			Card requestedCard = player2.chooseCardFromHand();
-			// If player 1 has the requested card
 			Card myCard = player1.sameRankInHand(requestedCard);
 			if (myCard != null) {
 				player1.removeCardFromHand(myCard);
@@ -60,15 +64,47 @@ public class GoFishGame {
 	}
 	
 	public void updateBooks() {
-		
+		// Loop until we have removed all books
+		while (true) {
+			int bookRank = player1.checkForBook();
+			if (bookRank > 0 && bookRank <= 13) {
+				player1.removeBookFromHand(bookRank);
+			}
+			else {
+				break;
+			}
+		}
+		// Loop until we have removed all books
+		while (true) {
+			int bookRank = player2.checkForBook();
+			if (bookRank > 0 && bookRank <= 13) {
+				player2.removeBookFromHand(bookRank);
+			}
+			else {
+				break;
+			}
+		}
 	}
 	
-	public void isGameOver() {
-		
+	public boolean isGameOver() throws IllegalStateException {
+		int pl1Books = player1.books.size();
+		int pl2Books = player2.books.size();
+		int totalBooks = pl1Books + pl2Books;
+		if (totalBooks == NUMBOOKSTOWIN) {
+			return true;
+		}
+		if (totalBooks < NUMBOOKSTOWIN) {
+			return false;
+		}
+		if (totalBooks > NUMBOOKSTOWIN) {
+			throw new IllegalStateException("You somehow have too many books.");
+		}
+		return false;
 	}
 	
 	public void changeTurn() {
-	
+		// XOR to alternate turns
+		turn ^= 1;
 	}
 
 }

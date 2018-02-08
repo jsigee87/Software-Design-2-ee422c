@@ -65,10 +65,74 @@ public class Player {
 		return hand.size();
 	}
 	
-	
 	public int getBookSize() {
 		return books.size();
 	}
+	
+	// Pass it the card you are requesting. It looks for a card with same rank
+    // in the players hand. If the card is not there, it returns null.
+    public Card sameRankInHand(Card c) {
+    	int rank = c.getRank();
+    	for (Card card : hand) {
+    		if (card.getRank() == rank) {
+    			return card;
+    		}
+    	}
+    	return null;
+    }
+    
+    /**
+	 * This function checks your hand for a book.
+	 * @return Rank of book, if there is one. -1 otherwise.
+	 */
+	public int checkForBook() {
+		for (Card card: this.hand){
+			// Not null means there is that same rank in the hand
+			if (sameRankInHand(card) != null) {
+				return card.rank;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * This function searches an entire hand and removes only one book
+	 * of the given rank. This function assumes that you already checked
+	 * if there is a book.
+	 * @param Rank input tells the function what book to look for
+	 */
+	
+    public CardPair removeBookFromHand(int rank) {   
+    	int counter = 0;
+    	List<Card> pair = new ArrayList<Card>();
+    	for (Card card : hand) {
+    		if (card.getRank() == rank) {
+    			pair.add(card);
+    			hand.remove(card);
+    			/////////////////////////need to make sure both cards get added to pair
+    			counter += 1;
+    			// If we found two, then return.
+    			if (counter == 2) {
+    				CardPair myPair = new CardPair(pair.get(0), pair.get(1));
+    				return myPair;
+    			}
+    		}
+    	}
+		return null;	
+    }
+	
+    //uses some strategy to choose one card from the player's
+    //hand so they can say "Do you have a 4?"
+    public Card chooseCardFromHand() {
+    	Card c = new Card();
+    	
+    	return c;
+    }
+
+    public void addPairToBook(CardPair pair) {
+    	books.add(pair);
+    }
+	
 	
 	/*
     public int checkHandForBook() {
@@ -87,32 +151,18 @@ public class Player {
     }
     */
    
-    public void removeBookFromHand(int rank) {   
-    	for (Card card : hand) {
-    		if (card.getRank() == rank) {
-    			hand.remove(card);
-    		}
-    	}	
-    }
+	
+	
     
-    public void addPairToBook(CardPair pair) {
-    	books.add(pair);
-    }
     
     //OPTIONAL
     // comment out if you decide to not use it    
     //Does the player have a card with the same rank as c in her hand?
-    public boolean rankInHand(Card c) {
-    	return false; //stubbed
-    }
+    //public boolean rankInHand(Card c) {
+    //	return false; //stubbed
+    //}
     
-    //uses some strategy to choose one card from the player's
-    //hand so they can say "Do you have a 4?"
-    public Card chooseCardFromHand() {
-    	Card c = new Card();
-    	
-    	return c;
-    }
+    
     
     //Does the player have the card c in her hand?
     /*public boolean cardInHand(Card c) {
@@ -131,16 +181,6 @@ public class Player {
     //e.g. will return true if the player has a 7d and the parameter is 7c
     
     
-    // Pass it the card you are requesting. It looks for a card with same rank
-    // in the players hand. If the card is not there, it returns null.
-    public Card sameRankInHand(Card c) {
-    	int rank = c.getRank();
-    	for (Card card : hand) {
-    		if (card.getRank() == rank) {
-    			return card;
-    		}
-    	}
-    	return null;
-    }
+    
 
 }

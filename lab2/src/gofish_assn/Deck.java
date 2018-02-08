@@ -42,18 +42,24 @@ public class Deck {
 		}
 	}
 	
-	
+	/**
+	 * This function deals a card from the deck. Due to the choice of
+	 * ArrayList, the function draws the the end of the deck to be a
+	 * little more efficient. The dealt card is then removed from the 
+	 * deck.
+	 * @return Card object, the card being dealt.
+	 */
 	public Card dealCard() {
-		/////////////////////// fix this?
 		if (deck.isEmpty() == true) {
-			assert false;
+			throw new IllegalStateException("You can't draw from an empty deck");
 		}
-		Card c = deck.get(0);
-		deck.remove(0);
+		Card c = deck.get(deck.size() - 1);
+		deck.remove(deck.size() - 1);
 		return c;
 		
 	}
 	
+	// This function isnt needed is it??????//////////////////////////
 	public Card getFirstCard() {
 		if (deck.isEmpty() == true) {
 			assert false;
