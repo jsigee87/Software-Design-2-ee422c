@@ -26,6 +26,15 @@ public class Card {
 	}
 	
 	/**
+	 * Constructor takes a rank and makes a "rank" of spades.
+	 * @param r
+	 */
+	public Card(int r) {
+		this.rank = r;
+		this.suit = Suits.spade;
+	}
+	
+	/**
 	 * This constructor creates a card of a specific
 	 * rank and suit.
 	 * @param r This parameter is an int, it defines the rank of the 
@@ -119,7 +128,7 @@ public class Card {
 	public String toString() {
 		String s = "";
 		
-		s = s + rankToString(getRank()) + suitToString(getSuit());
+		s = s + rankToString(getRank()) + suitToString(getSuit()); //format on piazza?
 		
 		return s;
 	}

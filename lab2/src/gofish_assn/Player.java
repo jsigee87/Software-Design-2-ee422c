@@ -123,10 +123,26 @@ public class Player {
 	
     //uses some strategy to choose one card from the player's
     //hand so they can say "Do you have a 4?"
+    
+    /**
+     * this method selects ranks between 1 and 13 at random and checks
+     * if a card of that rank exists in the current player's hand. If this is the case,
+     * the function returns that card.
+     * @return a random card in a player's hand
+     */
     public Card chooseCardFromHand() {
-    	Card c = new Card();
+    	//we can problably select this card randomly
+    	Random rand = new Random();
+    	int rank;
     	
-    	return c;
+    	while(true) {
+    		rank = rand.nextInt(14) + 1; //return random Int from 1 to 13
+    		Card c = new Card(rank);
+    		Card newCard = this.sameRankInHand(c);
+    		if(newCard != null) { //check if card exists in current player's hand
+    			return newCard;
+    		}
+    	}
     }
 
     public void addPairToBook(CardPair pair) {
