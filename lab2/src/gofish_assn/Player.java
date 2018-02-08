@@ -4,9 +4,10 @@ import java.util.*;
 
 public class Player {
 	
-	ArrayList<Card> hand = new ArrayList<Card>();
-	ArrayList<CardPair> books = new ArrayList<CardPair>();
-	String name;
+	private ArrayList<Card> hand = new ArrayList<Card>();
+	private ArrayList<CardPair> book = new ArrayList<CardPair>();
+	
+	private String name;
 	
 	public Player() {
 		this.name = null;
@@ -52,7 +53,7 @@ public class Player {
 		String s = new String();
 		s = "";
 		
-		for(CardPair pair : books) {
+		for(CardPair pair : book) {
 			for (Card card : pair.getPair()) {
 				s = s + card.toString() + ", "; //ask for format on piazza?
 			}
@@ -66,7 +67,7 @@ public class Player {
 	}
 	
 	public int getBookSize() {
-		return books.size();
+		return book.size();
 	}
 	
 	// Pass it the card you are requesting. It looks for a card with same rank
@@ -131,7 +132,7 @@ public class Player {
      * @return a random card in a player's hand
      */
     public Card chooseCardFromHand() {
-    	//we can problably select this card randomly
+    	//we can probably select this card randomly
     	Random rand = new Random();
     	int rank;
     	
@@ -146,7 +147,7 @@ public class Player {
     }
 
     public void addPairToBook(CardPair pair) {
-    	books.add(pair);
+    	book.add(pair);
     }
 	
 	
