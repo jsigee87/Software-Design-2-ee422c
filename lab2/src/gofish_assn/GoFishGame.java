@@ -60,11 +60,9 @@ public class GoFishGame {
 		}
 	}
 	
-	public void requestCard(int turn) {
+	public boolean requestCard(int currentPlayer, Card requestedCard) {
 		
-		Card requestedCard = playerList.get(turn).chooseCardFromHand();
-		
-		int nextPlayer = (turn + 1) % numPlayers;
+		int nextPlayer = (currentPlayer + 1) % numPlayers;
 		
 		Card myCard = playerList.get(nextPlayer).sameRankInHand(requestedCard);
 		
@@ -72,13 +70,13 @@ public class GoFishGame {
 		// both hands, update the books.
 		if (myCard != null) {
 			playerList.get(nextPlayer).removeCardFromHand(myCard);
-			playerList.get(turn).removeCardFromHand(requestedCard);
+			playerList.get(currentPlayer).removeCardFromHand(requestedCard);
 			CardPair bookPair = new CardPair(requestedCard, myCard);
 			playerList.get(turn).addPairToBook(bookPair);
-			return;
+			return true;
 		}
 		else {
-			return ;
+			return false;
 		}
 //		if (turn == 0) {
 //			Card requestedCard = player1.chooseCardFromHand();

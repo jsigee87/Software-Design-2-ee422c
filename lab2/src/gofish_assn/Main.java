@@ -37,9 +37,63 @@ public class Main {
 				game.updateAllBooks();
 				
 				/*
-				 * the player requests a card from the other (next) player
+				 * the player requests a card from the other (next) player.
+				 * 
+				 * Note that a player can only request a card if he/she has at least
+				 * one card in their hand.
+				 * 
+				 * If the current player does not have at least one card, he/she draws
+				 * a card and the turn goes to the other player.
 				 */
-				game.requestCard(turn);
+				if(game.playerList.get(turn).getHandSize() >= 1) {
+					
+					Card requestedCard = game.playerList.get(turn).chooseCardFromHand();
+					
+					System.out.println(game.playerList.get(turn).getName()
+							+ " asks - Do you have a " + requestedCard.getRank() + "?");
+					
+					boolean nextPlayerHadCard = game.requestCard(turn, requestedCard);
+					
+					System.out.print(game.playerList.get((turn+1)%game.getNumPlayers()) + " says - ");
+					
+					if(nextPlayerHadCard) {
+						
+						System.out.println("Yes. I have a " + requestedCard.getRank() + ".");
+						
+						System.out.println(game.playerList.get(turn).getName() + " books the " + requestedCard.getRank() + ".");
+					}
+					else { //if the next player did NOT have the requested Card
+						
+						System.out.println("Go Fish");
+						
+						/*
+						 * current player goes fishing
+						 */
+						try {
+							
+							Card newCard = game.gameDeck.dealCard();
+							
+							System.out.println(game.playerList.get(turn).getName() + " draws " + newCard.toString());
+							
+							game.playerList.get(turn).addCardToHand(newCard); //add card from gameDeck to hand
+						}
+						catch (IllegalStateException ex) { //drew from an empty deck
+							throw ex;
+						}
+					}
+					
+				}
+				else {
+					
+					try {
+						
+						game.playerList.get(turn).addCardToHand(game.gameDeck.dealCard()); //add card from gameDeck to hand						
+					}
+					catch (IllegalStateException ex) {
+						throw ex;
+					}
+					
+				}
 				
 
 				/*
