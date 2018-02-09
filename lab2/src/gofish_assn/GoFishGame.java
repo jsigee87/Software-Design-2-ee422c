@@ -17,6 +17,8 @@ public class GoFishGame {
 	
 	ArrayList<Player> playerList = new ArrayList<Player>();
 	
+//	ArrayList<Integer> numBooks = new ArrayList<Integer>();
+	
 	Deck gameDeck;
 	
 	public GoFishGame(String player1, String player2) {
@@ -171,8 +173,9 @@ public class GoFishGame {
 		
 		int totalBooks = 0;
 		
-		for(Player p : this.playerList) {
-			totalBooks += p.getBookSize();
+		for(int i = 0; i < playerList.size(); i++) {
+			
+			totalBooks += playerList.get(i).getBookSize();
 		}
 		/*
 		 * commented the lines below because now we can have a set of players of size greater than 2,
@@ -216,25 +219,72 @@ public class GoFishGame {
 	
 	public int determineWinner() {
 		
-		int winnerIndex = -1;
+//		int winnerIndex = playerList.get(0).getBookSize();
+//		
+//		int i;
+//		
+//		for(i = 1; i < playerList.size(); i++) {
+//			
+//			if(playerList.get(i).getBookSize() > playerList.get(i-1).getBookSize()) {
+//				
+//				winnerIndex = i;
+//			}
+//		
+//		}
 		
-		for(int i = 1; i < playerList.size(); i++) {
+		//find the max in the arrayList
+		int max = playerList.get(0).getBookSize();
+		
+//		System.out.println("p1 size: " + max);
+//		System.out.println("p2 size: " + playerList.get(1).getBookSize());
+		
+		int indexMax = 0;
+		
+		int size;
+		
+		for(int i = 0; i < playerList.size(); i++) {
 			
-			if(playerList.get(i).getBookSize() > playerList.get(i-1).getBookSize()) {
-				
-				winnerIndex = i;
+			size = playerList.get(i).getBookSize();
+			
+			if(size > max) {
+				max = size;
+				indexMax = i;
 			}
-		
 		}
 		
-		return winnerIndex;
+//		System.out.println("max: " + max);
+		
+		//find number of other occurrences of max
+		int occurrences = 0;
+		
+		for(int i = 0; i < playerList.size(); i++) {
+			
+			if(i != indexMax && playerList.get(i).getBookSize() == max)
+				occurrences++;			
+		}
+		
+//		System.out.println("Other occurrences: " + occurrences);
+		
+		if(occurrences == 0) {//we only have one winner
+//			System.out.println("indexMax = " + indexMax);
+			return indexMax;
+		}
+		else {//we have a tie
+			indexMax = -1;
+//			System.out.println("indexMax = " + indexMax);
+			return indexMax;
+		}
 	}
 	
 	public Player printWinner() {	
 		
-		int winIndex = determineWinner();
+		int winIndex;
 		
-		if(winIndex != -1) {
+		winIndex = determineWinner();
+		
+//		System.out.println("WinIndex: " + winIndex);
+		
+		if(winIndex >= 0) {
 			
 			Player winner = playerList.get(winIndex);
 			
@@ -244,7 +294,7 @@ public class GoFishGame {
 			System.out.println(winner.bookToString());		
 			
 			return winner;
-		}
+		}		
 		else {
 			System.out.println("\n\nThe game resulted in a tie!");
 			
