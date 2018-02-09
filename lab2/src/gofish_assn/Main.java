@@ -13,23 +13,45 @@ public class Main {
 		names.add("Jane");
 		names.add("Joe");
 		
+//		System.out.println("Welcome to goFish!");
+		
 		GoFishGame game = new GoFishGame(names);
+		
+//		System.out.println("\nGame has been created");
+		
+//		for(Player p : game.playerList) {
+//			System.out.println(p.getName() + "'s hand is of size: " + p.getHandSize());
+//			System.out.println("Hand: " + p.handToString());
+//			System.out.println("Book: " + p.bookToString());
+//		}
 		
 		try {
 			
 			/*
 			 * Check if any of the players have one or more books..
-			 */
+			 */			
 			game.updateAllBooks();
 			
+//			System.out.println("\nBooks have been updated..\n");
+			
+//			for(Player p : game.playerList) {
+//				System.out.println(p.getName() + "'s hand is of size: " + p.getHandSize());
+//				System.out.println("Hand: " + p.handToString());
+//				System.out.println("Book: " + p.bookToString());
+//			}
+			
 			int turn;
+			game.chooseFirstPlayer();
 			turn = game.getTurn(); //get whose turn it is for the first round
+			
+//			System.out.println("It is " + game.playerList.get(turn).getName() + "'s turn.");
 			
 			/*
 			 * game loop
 			 */
+//			int roundCounter = 1;
+			
 			while(!game.isGameOver()) {
-				
 				
 				/*
 				 * Check if any of the players have one or more books..
@@ -47,6 +69,8 @@ public class Main {
 				 */
 				if(game.playerList.get(turn).getHandSize() >= 1) {
 					
+//					System.out.println(game.playerList.get(turn).getName() + " has cards in the hand.");
+					
 					Card requestedCard = game.playerList.get(turn).chooseCardFromHand();
 					
 					System.out.println(game.playerList.get(turn).getName()
@@ -54,7 +78,7 @@ public class Main {
 					
 					boolean nextPlayerHadCard = game.requestCard(turn, requestedCard);
 					
-					System.out.print(game.playerList.get((turn+1)%game.getNumPlayers()) + " says - ");
+					System.out.print(game.playerList.get((turn+1)%game.getNumPlayers()).getName() + " says - ");
 					
 					if(nextPlayerHadCard) {
 						
@@ -85,6 +109,8 @@ public class Main {
 				}
 				else {
 					
+					System.out.println(game.playerList.get(turn).getName() + " had no cards ");
+					
 					try {
 						
 						game.playerList.get(turn).addCardToHand(game.gameDeck.dealCard()); //add card from gameDeck to hand						
@@ -106,7 +132,7 @@ public class Main {
 				 */
 				turn = game.changeTurn();
 				
-				
+//				roundCounter++;
 			}
 			
 			/*
@@ -115,6 +141,12 @@ public class Main {
 			 * Who won...
 			 * With how many pairs
 			 */
+			
+			Player winner = game.printWinner();
+			
+			game.printLosers(winner);
+			
+			
 		}
 		catch (IllegalStateException ex){
 			

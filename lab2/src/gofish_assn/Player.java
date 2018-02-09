@@ -57,6 +57,7 @@ public class Player {
 			for (Card card : pair.getPair()) {
 				s = s + card.toString() + ", "; //ask for format on piazza?
 			}
+			s = s + '\n';
 		}
 	
 		return s;
@@ -75,7 +76,7 @@ public class Player {
     public Card sameRankInHand(Card c) {
     	int rank = c.getRank();
     	for (Card card : hand) {
-    		if (card.getRank() == rank) {
+    		if (card.getRank() == rank && !card.equals(c)) {
     			return card;
     		}
     	}
@@ -106,15 +107,20 @@ public class Player {
     public CardPair removeBookFromHand(int rank) {   
     	int counter = 0;
     	List<Card> pair = new ArrayList<Card>();
-    	for (Card card : hand) {
-    		if (card.getRank() == rank) {
-    			pair.add(card);
-    			hand.remove(card);
+    	
+    	for (int i = 0; i < hand.size(); i++) { //used counter instead of for-each to avoid concurrentModificationExceptiton
+    		if (hand.get(i).getRank() == rank) {
+    			pair.add(hand.get(i));
+    			hand.remove(hand.get(i));
+    			i--;
+    			
     			/////////////////////////need to make sure both cards get added to pair
     			counter += 1;
+    			
     			// If we found two, then return.
     			if (counter == 2) {
     				CardPair myPair = new CardPair(pair.get(0), pair.get(1));
+//    				System.out.println("Removed " + pair.get(0).toString() + " and " + pair.get(1).toString() + ".");
     				return myPair;
     			}
     		}

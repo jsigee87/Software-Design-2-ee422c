@@ -115,12 +115,15 @@ public class GoFishGame {
 		for(Player player : playerList) {
 			
 			int bookRank = player.checkForBook();
+//			System.out.println("bookRank = " + bookRank);
 			
 			while(bookRank != -1) { //keep removing books until there are no more books left
 				
 				CardPair pair = player.removeBookFromHand(bookRank);
 				player.addPairToBook(pair);
-				bookRank = player.checkForBook();				
+				bookRank = player.checkForBook();
+//				System.out.println("bookRank = " + bookRank);
+
 			}
 		}
 	}
@@ -128,18 +131,18 @@ public class GoFishGame {
 	/*
 	 * do we even need this function if we care about everyone's books?
 	 */
-	public void updateBook(Player p) {
-		
-		int bookRank = p.checkForBook();
-		
-		while(bookRank != -1) {
-			
-			CardPair pair = p.removeBookFromHand(bookRank);
-			p.addPairToBook(pair);
-			bookRank = p.checkForBook();	
-		}
-		
-	}
+//	public void updateBook(Player p) {
+//		
+//		int bookRank = p.checkForBook();
+//		
+//		while(bookRank != -1) {
+//			
+//			CardPair pair = p.removeBookFromHand(bookRank);
+//			p.addPairToBook(pair);
+//			bookRank = p.checkForBook();	
+//		}
+//		
+//	}
 		
 		
 //		// Loop until we have removed all books
@@ -209,6 +212,58 @@ public class GoFishGame {
 		Random rand = new Random();
 		
 		turn =  rand.nextInt(2);
+	}
+	
+	public int determineWinner() {
+		
+		int winnerIndex = -1;
+		
+		for(int i = 1; i < playerList.size(); i++) {
+			
+			if(playerList.get(i).getBookSize() > playerList.get(i-1).getBookSize()) {
+				
+				winnerIndex = i;
+			}
+		
+		}
+		
+		return winnerIndex;
+	}
+	
+	public Player printWinner() {	
+		
+		int winIndex = determineWinner();
+		
+		if(winIndex != -1) {
+			
+			Player winner = playerList.get(winIndex);
+			
+			System.out.println("\n\n" + winner.getName() 
+			+ " wins with " + winner.getBookSize() + " booked pairs.\nPairs:");
+			
+			System.out.println(winner.bookToString());		
+			
+			return winner;
+		}
+		else {
+			System.out.println("\n\nThe game resulted in a tie!");
+			
+			return null;
+		}
+	}
+	
+	public void printLosers(Player winner) {
+		
+		for(Player player : playerList) {
+			
+			if(!player.equals(winner) || winner.equals(null) == true) {
+				
+				System.out.println("\n\n" + player.getName() 
+					+ " has " + player.getBookSize() + " booked pairs.\nPairs:");
+				
+				System.out.println(player.bookToString());
+			}
+		}
 	}
 
 }
