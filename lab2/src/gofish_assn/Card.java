@@ -17,7 +17,7 @@ public class Card {
 	Suits suit;
 	
 	/**
-	 * This constructor is the default, and makes 
+	 * This is the default constructor, and makes 
 	 * an ace of spades.
 	 */
 	public Card() {
@@ -66,10 +66,14 @@ public class Card {
 		this.rank = r;
 		this.suit = s;
 	}
+	
+	/////////////////////check this one.
 	/**
-	 * This 
+	 * This method converts a single char (upper or lower case) to
+	 * the appropriate suit. An exception is thrown if a char that
+	 * is not covered is passed in.
 	 * @param c
-	 * @return
+	 * @return Suit 
 	 */
 	private Suits toSuit(char c) {
 		c = Character.toLowerCase(c);
@@ -78,11 +82,15 @@ public class Card {
 			case 'd': return Suits.diamond;
 			case 'h': return Suits.heart;
 			case 's': return Suits.spade;
-			default: assert false ;
+			default: throw new IllegalArgumentException();
 		}
-		return null; //dummy return
 	}
 	
+	/**
+	 * This method prints the object's suit as a char
+	 * @param s
+	 * @return String
+	 */
 	private String suitToString(Suits s)
 	{
 		switch(s) {
@@ -90,11 +98,15 @@ public class Card {
 			case diamond: return "d";
 			case heart: return "h";
 			case spade: return "s";
-			default: assert false ;
-	}
-		return null; //dummy return
+			default: throw new IllegalArgumentException();
+		}
 	}
 	
+	/**
+	 * This method prints the object's rank as a String.
+	 * @param r is the rank as an int
+	 * @return String is the actual rank
+	 */
 	private String rankToString(int r)
 	{
 		switch(r) {
@@ -116,15 +128,26 @@ public class Card {
 		return null; //dummy return
 	}
 		
-	
+	/**
+	 * This method gets the rank of the card and returns it
+	 * @return int rank
+	 */
 	public int getRank() {
 		return rank;
 	}
 	
+	/**
+	 * This method gets the suit of the card and returns it
+	 * @return Suits
+	 */
 	public Suits getSuit() {
 		return suit;
 	}
 	
+	/**
+	 * This toString method prints up the object by printing the
+	 * rank and the suit together.
+	 */
 	public String toString() {
 		String s = "";
 		
