@@ -1,5 +1,7 @@
 package gofish_assn;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class GoFishGame {
@@ -276,7 +278,9 @@ public class GoFishGame {
 		}
 	}
 	
-	public Player printWinner() {	
+	public Player printWinner() throws FileNotFoundException {	
+		
+		PrintWriter print = new PrintWriter("GoFish_results.txt");
 		
 		int winIndex;
 		
@@ -290,30 +294,43 @@ public class GoFishGame {
 			
 			System.out.println("\n\n" + winner.getName() 
 			+ " wins with " + winner.getBookSize() + " booked pairs.\nPairs:");
+			print.println("\n\n" + winner.getName() 
+			+ " wins with " + winner.getBookSize() + " booked pairs.\nPairs:");
 			
-			System.out.println(winner.bookToString());		
+			System.out.println(winner.bookToString());
+			print.println(winner.bookToString());
 			
+			print.close();
 			return winner;
 		}		
 		else {
 			System.out.println("\n\nThe game resulted in a tie!");
+			print.println("\n\nThe game resulted in a tie!");
 			
+			print.close();
 			return null;
 		}
+		
 	}
 	
-	public void printLosers(Player winner) {
-		
-		for(Player player : playerList) {
-			
-			if(!player.equals(winner) || winner.equals(null) == true) {
-				
-				System.out.println("\n\n" + player.getName() 
-					+ " has " + player.getBookSize() + " booked pairs.\nPairs:");
-				
-				System.out.println(player.bookToString());
-			}
-		}
-	}
+//	public void printLosers(Player winner) throws FileNotFoundException {
+//		
+//		PrintWriter print = new PrintWriter("GoFish_results.txt");
+//		
+//		for(Player player : playerList) {
+//			
+//			if(!player.equals(winner) || winner.equals(null) == true) {
+//				
+//				System.out.println("\n\n" + player.getName() 
+//					+ " has " + player.getBookSize() + " booked pairs.\nPairs:");
+//				print.println("\n\n" + player.getName() 
+//				+ " has " + player.getBookSize() + " booked pairs.\nPairs:");
+//				
+//				System.out.println(player.bookToString());
+//				print.println(player.bookToString());
+//			}
+//		}
+//		print.close();
+//	}
 
 }

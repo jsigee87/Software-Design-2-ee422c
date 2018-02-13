@@ -57,7 +57,7 @@ public class Player {
 			for (Card card : pair.getPair()) {
 				s = s + card.toString() + ", "; //ask for format on piazza?
 			}
-			s = s + '\n';
+			s = s + "\r\n";
 		}
 	
 		return s;
