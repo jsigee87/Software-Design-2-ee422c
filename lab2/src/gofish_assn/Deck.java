@@ -81,7 +81,7 @@ public class Deck {
 	
 	/**
 	 * This method returns the number of cards left in the deck
-	 * @return int that is the number of cards left in the deck.
+	 * @return integer that is the number of cards left in the deck.
 	 */
 	public int getSize() {
 		return deck.size();

@@ -13,8 +13,8 @@ public class CardPair {
 	
 	/**
 	 * Constructor takes two Card types and makes them a pair
-	 * @param card1
-	 * @param card2
+	 * @param card1 first card
+	 * @param card2 second card
 	 */
 	public CardPair(Card card1, Card card2) {
 		this.Card1 = card1;

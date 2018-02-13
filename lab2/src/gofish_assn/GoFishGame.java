@@ -28,8 +28,8 @@ public class GoFishGame {
 	 * This is the primary game constructor, it takes two strings, 
 	 * makes them into players, creates a deck, shuffles it, and 
 	 * deals an initial hand.
-	 * @param player1 
-	 * @param player2
+	 * @param player1 first player
+	 * @param player2 second player
 	 */
 	public GoFishGame(String player1, String player2) {
 		
@@ -85,12 +85,12 @@ public class GoFishGame {
 	}
 	
 	/**
-	 * This method takes an  int identifying the current player, and a Card
+	 * This method takes an  integer identifying the current player, and a Card
 	 * type and checks the other players hand for that card. If it finds it,
 	 * it removes it from the other player's hand and adds it to the current
 	 * players hand, then makes a book immediately.
-	 * @param currentPlayer
-	 * @param requestedCard
+	 * @param currentPlayer is the current player
+	 * @param requestedCard the card being requested
 	 * @return true or false depending on if the request was successful.
 	 */
 	public boolean requestCard(int currentPlayer, Card requestedCard) {
@@ -170,7 +170,7 @@ public class GoFishGame {
 	 * If there are somehow more books than necessary to end the game, and illegal state exception
 	 * is thrown
 	 * @return true if the game is over, false if the game should continue.
-	 * @throws IllegalStateException
+	 * @throws IllegalStateException when you have too many books somehow
 	 */
 	public boolean isGameOver() throws IllegalStateException {
 		
@@ -201,7 +201,7 @@ public class GoFishGame {
 	
 	/**
 	 * This method changes the turn
-	 * @return int for which player's turn it is.
+	 * @return integer for which player's turn it is.
 	 */
 	public int changeTurn() {
 		
@@ -212,7 +212,7 @@ public class GoFishGame {
 	
 	/**
 	 * This method returns the current turn.
-	 * @return int turn for current player's turn.
+	 * @return integer turn for current player's turn.
 	 */
 	public int getTurn() {
 		return turn;
@@ -220,7 +220,7 @@ public class GoFishGame {
 	
 	/**
 	 * This method gets the number of players
-	 * @return int number of players.
+	 * @return integer number of players.
 	 */
 	public int getNumPlayers() {
 		return numPlayers;
@@ -238,7 +238,7 @@ public class GoFishGame {
 	/**
 	 * This method figures out which player is the winner, given that 
 	 * the game is over.
-	 * @return int for which player wins.
+	 * @return integer for which player wins.
 	 */
 	public int determineWinner() {
 //		int winnerIndex = playerList.get(0).getBookSize();
@@ -290,35 +290,31 @@ public class GoFishGame {
 	}
 	
 	/**
-	 * 
-	 * @return
-	 * @throws FileNotFoundException
+	 *  This method prints the winning player.
+	 * @return the player that wins
+	 * @throws FileNotFoundException if the file needed does not exist
 	 */
-	public Player printWinner() throws FileNotFoundException {	
-		try {
+	public Player printWinner() throws FileNotFoundException {		
+		PrintWriter print = new PrintWriter("GoFish_results.txt");
+		int winIndex;
+		winIndex = determineWinner();
+		
+	//	System.out.println("WinIndex: " + winIndex);
 			
-			File f = new File("GoFish_results.txt");
-			PrintWriter print = new PrintWriter("GoFish_results.txt");
-			int winIndex;
-			winIndex = determineWinner();
+		if(winIndex >= 0) {
 			
-	//		System.out.println("WinIndex: " + winIndex);
-			
-			if(winIndex >= 0) {
-				
-				Player winner = playerList.get(winIndex);
-				
-				System.out.println("\n\n" + winner.getName() 
+			Player winner = playerList.get(winIndex);
+			System.out.println("\n\n" + winner.getName() 
 				+ " wins with " + winner.getBookSize() + " booked pairs.\nPairs:");
-				print.println("\n\n" + winner.getName() 
+			print.println("\n\n" + winner.getName() 
 				+ " wins with " + winner.getBookSize() + " booked pairs.\nPairs:");
 				
-				System.out.println(winner.bookToString());
-				print.println(winner.bookToString());
+			System.out.println(winner.bookToString());
+			print.println(winner.bookToString());
 				
-				print.close();
-				return winner;
-			}		
+			print.close();
+			return winner;
+		}		
 		else {
 			System.out.println("\n\nThe game resulted in a tie!");
 			print.println("\n\nThe game resulted in a tie!");

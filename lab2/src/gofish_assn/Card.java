@@ -9,7 +9,7 @@ package gofish_assn;
 public class Card {
 	
 	/**
-	 * This enum enumerates all the possible suits that a
+	 * This enumerates all the possible suits that a
 	 * card in our deck can be.
 	 */
 	public enum Suits {club, diamond, heart, spade};
@@ -31,7 +31,7 @@ public class Card {
 	
 	/**
 	 * Constructor takes a rank and makes a "rank" of spades.
-	 * @param r
+	 * @param r integer rank
 	 */
 	public Card(int r) {
 		this.rank = r;
@@ -41,42 +41,37 @@ public class Card {
 	/**
 	 * This constructor creates a card of a specific
 	 * rank and suit.
-	 * @param r This parameter is an int, it defines the rank of the 
+	 * @param r This parameter is an integer, it defines the rank of the 
 	 * card being created. Rank 1 corresponds to an ace,
-	 * rank 11 -> Jack, rank 12 -> Queen, rank 13 -> King.
 	 * 
 	 * @param s This parameter is a single char, used as
 	 * shorthand to denote the desired suit. Either upper
-	 * or lower case can be used. s -> spades, d -> diamonds, 
-	 * c -> clubs, h -> hearts.
+	 * or lower case can be used. 
 	 */
 	public Card(int r, char s) {
 		this.rank = r;
 		this.suit = this.toSuit(s);
 	}
 	
-	///////////////////////Check this one.
 	/**
 	 * This constructor creates a card of a specific
 	 * rank and suit.
-	 * @param r This parameter is an int, it defines the rank of the 
+	 * @param r This parameter is an integer, it defines the rank of the 
 	 * card being created. Rank 1 corresponds to an ace,
-	 * rank 11 -> Jack, rank 12 -> Queen, rank 13 -> King.
 	 * 
-	 * @param s This parameter is an enum type, and it
-	 * assigns the proper enum to the card suit.
+	 * @param s This parameter is an enumerated type, and it
+	 * assigns the proper enumerated to the card suit.
 	 */
 	public Card(int r, Suits s) {
 		this.rank = r;
 		this.suit = s;
 	}
 	
-	/////////////////////check this one.
 	/**
 	 * This method converts a single char (upper or lower case) to
-	 * the appropriate suit. An exception is thrown if a char that
+	 * the appropriate enumerated suit. An exception is thrown if a char that
 	 * is not covered is passed in.
-	 * @param c
+	 * @param c char
 	 * @return Suit 
 	 */
 	private Suits toSuit(char c) {
@@ -92,7 +87,7 @@ public class Card {
 	
 	/**
 	 * This method prints the object's suit as a char
-	 * @param s
+	 * @param s suit enumerated type
 	 * @return String
 	 */
 	private String suitToString(Suits s)
@@ -108,7 +103,7 @@ public class Card {
 	
 	/**
 	 * This method prints the object's rank as a String.
-	 * @param r is the rank as an int
+	 * @param r is the rank as an integer
 	 * @return String is the actual rank
 	 */
 	private String rankToString(int r)
@@ -134,7 +129,7 @@ public class Card {
 		
 	/**
 	 * This method gets the rank of the card and returns it
-	 * @return int rank
+	 * @return integer rank
 	 */
 	public int getRank() {
 		return rank;
@@ -142,7 +137,7 @@ public class Card {
 	
 	/**
 	 * This method gets the suit of the card and returns it
-	 * @return Suits
+	 * @return Suits type
 	 */
 	public Suits getSuit() {
 		return suit;

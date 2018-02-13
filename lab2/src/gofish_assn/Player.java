@@ -18,7 +18,7 @@ public class Player {
 	
 	/**
 	 * Constructor takes a string and creates a player with that name.
-	 * @param name
+	 * @param name for players name
 	 */
 	public Player(String name) {
 		this.name = name;
@@ -93,7 +93,7 @@ public class Player {
 	
 	/**
 	 * Method to get number of cards in hand.
-	 * @return int for number of cards in hand.
+	 * @return integer for number of cards in hand.
 	 */
 	public int getHandSize() {
 		return hand.size();
@@ -101,7 +101,7 @@ public class Player {
 	
 	/**
 	 * Method to get number of books the player has.
-	 * @return int for number of books.
+	 * @return integer for number of books.
 	 */
 	public int getBookSize() {
 		return book.size();
@@ -143,7 +143,8 @@ public class Player {
 	 * This function searches an entire hand and removes only one book
 	 * of the given rank. This function assumes that you already checked
 	 * if there is a book.
-	 * @param Rank input tells the function what book to look for
+	 * @param rank Rank input tells the function what book to look for
+	 * @return CardPair my pair is a card pair 
 	 */
 	
     public CardPair removeBookFromHand(int rank) {   

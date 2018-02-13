@@ -13,6 +13,7 @@ public class Main {
 		 * Initialize File I/O
 		 */
 		File file = new File("GoFish_results.txt");
+		@SuppressWarnings("resource")
 		PrintWriter printWriter = new PrintWriter("GoFish_results.txt");
 		
 		/*
