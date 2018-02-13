@@ -11,7 +11,9 @@ public class Deck {
 	
 	char[] suits = new char[] {'s', 'd', 'c', 'h'};
 	
-	//creates a new sorted deck
+	/**
+	 * Default Constructor, makes deck sorted by suit, then rank.
+	 */
 	public Deck() {
 		
 		for(char suit : suits) {
@@ -23,6 +25,9 @@ public class Deck {
 		
 	}
 	
+	/**
+	 * Shuffle method fully shuffles a deck each time it is called.
+	 */
 	public void shuffle() {
 		Random rand = new Random();
 		int num_shuffles = 1000;
@@ -35,6 +40,9 @@ public class Deck {
 		}
 	}
 	
+	/**
+	 * Print Deck method will print the entire deck to standard I/O.
+	 */
 	
 	public void printDeck() {
 		for (Card card: deck) {
@@ -59,7 +67,10 @@ public class Deck {
 		
 	}
 	
-	// This function isnt needed is it??????//////////////////////////
+	/**
+	 * This method returns the top card in the deck.
+	 * @return Card that is the top of the deck.
+	 */
 	public Card getFirstCard() {
 		if (deck.isEmpty() == true) {
 			assert false;
@@ -68,6 +79,10 @@ public class Deck {
 		return c;
 	}
 	
+	/**
+	 * This method returns the number of cards left in the deck
+	 * @return int that is the number of cards left in the deck.
+	 */
 	public int getSize() {
 		return deck.size();
 	}

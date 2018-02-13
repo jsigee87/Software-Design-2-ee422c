@@ -9,18 +9,34 @@ public class Player {
 	
 	private String name;
 	
+	/**
+	 * Default Constructor sets player name to null.
+	 */
 	public Player() {
 		this.name = null;
 	}
 	
+	/**
+	 * Constructor takes a string and creates a player with that name.
+	 * @param name
+	 */
 	public Player(String name) {
 		this.name = name;
 	}
 	
+	/**
+	 * This method takes a Card and adds it to the player's hand.
+	 * @param c Card
+	 */
 	public void addCardToHand(Card c) {
 		hand.add(c);
 	}
 	
+	/**
+	 * This method takes a Card and removes it from a player's hand.
+	 * @param c Card to be removed.
+	 * @return Card that got removed.
+	 */
 	public Card removeCardFromHand(Card c) {
 		//find index of card
 		int index = hand.indexOf(c);
@@ -34,10 +50,18 @@ public class Player {
 		return retCard;
 	}
 	
+	/**
+	 * This method returns a string of the player's name.
+	 * @return String of player name.
+	 */
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * This method prints the players hand out as a string
+	 * @return String of cards in player's hand.
+	 */
 	public String handToString() {
 		String s = new String();
 		s = "";
@@ -49,6 +73,10 @@ public class Player {
 		return s;
 	}
 	
+	/**
+	 * This method prints out the players book as a string
+	 * @return String of cards in player's book.
+	 */
 	public String bookToString() {
 		String s = new String();
 		s = "";
@@ -63,14 +91,28 @@ public class Player {
 		return s;
 	}
 	
+	/**
+	 * Method to get number of cards in hand.
+	 * @return int for number of cards in hand.
+	 */
 	public int getHandSize() {
 		return hand.size();
 	}
 	
+	/**
+	 * Method to get number of books the player has.
+	 * @return int for number of books.
+	 */
 	public int getBookSize() {
 		return book.size();
 	}
 	
+	/**
+	 * This method takes a Card and checks to see if a card of the same rank
+	 * is in the player's hand.
+	 * @param c Card requested
+	 * @return Card if a card of same rank is present, Null otherwise.
+	 */
 	// Pass it the card you are requesting. It looks for a card with same rank
     // in the players hand. If the card is not there, it returns null.
     public Card sameRankInHand(Card c) {
@@ -152,6 +194,10 @@ public class Player {
     	}
     }
 
+    /**
+     * Adds a card pair to a player's book
+     * @param pair CardPair to be added.
+     */
     public void addPairToBook(CardPair pair) {
     	book.add(pair);
     }
