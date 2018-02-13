@@ -8,6 +8,10 @@ package gofish_assn;
  */
 public class Card {
 	
+	/**
+	 * This enum enumerates all the possible suits that a
+	 * card in our deck can be.
+	 */
 	public enum Suits {club, diamond, heart, spade};
 	
 	static int TOP_RANK = 13; //King
