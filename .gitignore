@@ -15,3 +15,9 @@ local
 lib
 share
 *selfcheck.json
+
+# Ignore log files
+*results.txt
+
+# Ignore javadoc
+*.html
