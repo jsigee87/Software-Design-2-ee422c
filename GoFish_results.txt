@@ -1,0 +1,196 @@
+Joe asks - Do you have a 4?
+Jane says - Yes. I have a 4.
+Joe books the 4.
+Jane asks - Do you have a 2?
+Joe says - Yes. I have a 2.
+Jane books the 2.
+Joe asks - Do you have a 13?
+Jane says - Yes. I have a 13.
+Joe books the 13.
+Jane asks - Do you have a 1?
+Joe says - Go Fish
+Jane draws Kd
+Joe asks - Do you have a 12?
+Jane says - Yes. I have a 12.
+Joe books the 12.
+Jane asks - Do you have a 13?
+Joe says - Go Fish
+Jane draws Jd
+Joe asks - Do you have a 9?
+Jane says - Go Fish
+Joe draws 10s
+Jane asks - Do you have a 1?
+Joe says - Go Fish
+Jane draws 3d
+Joe asks - Do you have a 10?
+Jane says - Go Fish
+Joe draws 3s
+Jane asks - Do you have a 11?
+Joe says - Go Fish
+Jane draws 6h
+Joe asks - Do you have a 9?
+Jane says - Go Fish
+Joe draws 3c
+Jane asks - Do you have a 11?
+Joe says - Go Fish
+Jane draws Qh
+Joe asks - Do you have a 6?
+Jane says - Yes. I have a 6.
+Joe books the 6.
+Jane asks - Do you have a 11?
+Joe says - Go Fish
+Jane draws 10d
+Joe asks - Do you have a 9?
+Jane says - Go Fish
+Joe draws 7s
+Jane asks - Do you have a 12?
+Joe says - Go Fish
+Jane draws 9s
+Joe asks - Do you have a 9?
+Jane says - Yes. I have a 9.
+Joe books the 9.
+Jane asks - Do you have a 11?
+Joe says - Go Fish
+Jane draws 5s
+Joe asks - Do you have a 10?
+Jane says - Yes. I have a 10.
+Joe books the 10.
+Jane asks - Do you have a 8?
+Joe says - Go Fish
+Jane draws Js
+Joe had no cards 
+Jane asks - Do you have a 5?
+Joe says - Go Fish
+Jane draws 2c
+Joe asks - Do you have a 7?
+Jane says - Go Fish
+Joe draws 5d
+Jane asks - Do you have a 5?
+Joe says - Yes. I have a 5.
+Jane books the 5.
+Joe asks - Do you have a 7?
+Jane says - Go Fish
+Joe draws 9c
+Jane asks - Do you have a 13?
+Joe says - Go Fish
+Jane draws Ks
+Joe asks - Do you have a 7?
+Jane says - Go Fish
+Joe draws 5c
+Jane asks - Do you have a 8?
+Joe says - Go Fish
+Jane draws 5h
+Joe asks - Do you have a 9?
+Jane says - Go Fish
+Joe draws 10h
+Jane asks - Do you have a 5?
+Joe says - Yes. I have a 5.
+Jane books the 5.
+Joe asks - Do you have a 9?
+Jane says - Go Fish
+Joe draws 8c
+Jane asks - Do you have a 8?
+Joe says - Yes. I have a 8.
+Jane books the 8.
+Joe asks - Do you have a 7?
+Jane says - Go Fish
+Joe draws As
+Jane asks - Do you have a 2?
+Joe says - Go Fish
+Jane draws 4s
+Joe asks - Do you have a 9?
+Jane says - Go Fish
+Joe draws Ah
+Jane asks - Do you have a 4?
+Joe says - Go Fish
+Jane draws 4d
+Joe asks - Do you have a 9?
+Jane says - Go Fish
+Joe draws Qc
+Jane asks - Do you have a 12?
+Joe says - Yes. I have a 12.
+Jane books the 12.
+Joe asks - Do you have a 10?
+Jane says - Go Fish
+Joe draws 8s
+Jane asks - Do you have a 2?
+Joe says - Go Fish
+Jane draws 8h
+Joe asks - Do you have a 9?
+Jane says - Go Fish
+Joe draws 7c
+Jane asks - Do you have a 2?
+Joe says - Go Fish
+Jane draws 10c
+Joe asks - Do you have a 10?
+Jane says - Yes. I have a 10.
+Joe books the 10.
+Jane asks - Do you have a 8?
+Joe says - Yes. I have a 8.
+Jane books the 8.
+Joe asks - Do you have a 9?
+Jane says - Go Fish
+Joe draws Jh
+Jane asks - Do you have a 2?
+Joe says - Go Fish
+Jane draws 9h
+Joe asks - Do you have a 9?
+Jane says - Yes. I have a 9.
+Joe books the 9.
+Jane asks - Do you have a 1?
+Joe says - Go Fish
+Jane draws 6s
+Joe asks - Do you have a 11?
+Jane says - Go Fish
+Joe draws 6d
+Jane asks - Do you have a 2?
+Joe says - Go Fish
+Jane draws Jc
+Joe asks - Do you have a 6?
+Jane says - Yes. I have a 6.
+Joe books the 6.
+Jane asks - Do you have a 2?
+Joe says - Go Fish
+Jane draws 2h
+Joe asks - Do you have a 11?
+Jane says - Yes. I have a 11.
+Joe books the 11.
+Jane asks - Do you have a 1?
+Joe says - Go Fish
+Jane draws Ac
+
+
+Joe wins with 14 booked pairs.
+Pairs:
+4c, 4h, 
+Kc, Kh, 
+Qs, Qd, 
+3s, 3c, 
+6c, 6h, 
+7d, 7s, 
+9d, 9s, 
+10s, 10d, 
+As, Ah, 
+7h, 7c, 
+10h, 10c, 
+9c, 9h, 
+6d, 6s, 
+Jh, Jc, 
+
+
+
+Jane has 12 booked pairs.
+Pairs:
+
+2d, 2s, 
+3h, 3d, 
+Jd, Js, 
+5s, 5d, 
+Kd, Ks, 
+5h, 5c, 
+8d, 8c, 
+4s, 4d, 
+Qh, Qc, 
+8h, 8s, 
+2c, 2h, 
+Ad, Ac, 

@@ -1,10 +1,20 @@
 package gofish_assn;
 
 import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Main {
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) throws FileNotFoundException {
+		
+		/*
+		 * Initialize File I/O
+		 */
+		File file = new File("GoFish_results.txt");
+		@SuppressWarnings("resource")
+		PrintWriter printWriter = new PrintWriter("GoFish_results.txt");
 		
 		/*
 		 * Initialize the game with as many players as we want
@@ -75,20 +85,26 @@ public class Main {
 					
 					System.out.println(game.playerList.get(turn).getName()
 							+ " asks - Do you have a " + requestedCard.getRank() + "?");
+					printWriter.println(game.playerList.get(turn).getName()
+							+ " asks - Do you have a " + requestedCard.getRank() + "?");
 					
 					boolean nextPlayerHadCard = game.requestCard(turn, requestedCard);
 					
 					System.out.print(game.playerList.get((turn+1)%game.getNumPlayers()).getName() + " says - ");
+					printWriter.print(game.playerList.get((turn+1)%game.getNumPlayers()).getName() + " says - ");
 					
 					if(nextPlayerHadCard) {
 						
 						System.out.println("Yes. I have a " + requestedCard.getRank() + ".");
+						printWriter.println("Yes. I have a " + requestedCard.getRank() + ".");
 						
 						System.out.println(game.playerList.get(turn).getName() + " books the " + requestedCard.getRank() + ".");
+						printWriter.println(game.playerList.get(turn).getName() + " books the " + requestedCard.getRank() + ".");
 					}
 					else { //if the next player did NOT have the requested Card
 						
 						System.out.println("Go Fish");
+						printWriter.println("Go Fish");
 						
 						/*
 						 * current player goes fishing
@@ -98,6 +114,7 @@ public class Main {
 							Card newCard = game.gameDeck.dealCard();
 							
 							System.out.println(game.playerList.get(turn).getName() + " draws " + newCard.toString());
+							printWriter.println(game.playerList.get(turn).getName() + " draws " + newCard.toString());
 							
 							game.playerList.get(turn).addCardToHand(newCard); //add card from gameDeck to hand
 						}
@@ -110,6 +127,7 @@ public class Main {
 				else {
 					
 					System.out.println(game.playerList.get(turn).getName() + " had no cards ");
+					printWriter.println(game.playerList.get(turn).getName() + " had no cards ");
 					
 					try {
 						
@@ -144,14 +162,37 @@ public class Main {
 			
 			Player winner = game.printWinner();
 			
-			game.printLosers(winner);
+			if(winner == null)
+			{
+				printWriter.print("\r\n\r\nThe game resulted in a tie!\r\n");
+			}
+			else {
+				printWriter.println("\r\n\r\n" + winner.getName() 
+				+ " wins with " + winner.getBookSize() + " booked pairs.\r\nPairs:");
+				
+				printWriter.println(winner.bookToString());
+			}
 			
+			for(Player player : game.playerList) {
+				
+				if(!player.equals(winner) || winner.equals(null) == true) {
+					
+					System.out.print("\r\n\r\n" + player.getName() 
+						+ " has " + player.getBookSize() + " booked pairs.\r\nPairs:\r\n");
+					printWriter.println("\r\n\r\n" + player.getName() 
+					+ " has " + player.getBookSize() + " booked pairs.\r\nPairs:\r\n");
+					
+					System.out.println(player.bookToString());
+					printWriter.print(player.bookToString());
+				}
+			}			
 			
 		}
 		catch (IllegalStateException ex){
 			
 			System.out.println(ex);
 		}
+		printWriter.close();
 		
 	}
 
