@@ -12,9 +12,11 @@ package assignment4;
  * Fall 2016
  */
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.io.*;
-
+import assignment4.Critter.TestCritter;
 
 /*
  * Usage: java <pkgname>.Main <input file> test
@@ -26,14 +28,14 @@ public class Main {
     static Scanner kb;	// scanner connected to keyboard input, or input file
     private static String inputFile;	// input file, used instead of keyboard input if specified
     static ByteArrayOutputStream testOutputString;	// if test specified, holds all console output
-    private static String myPackage;	// package of Critter file.  Critter cannot be in default pkg.
+    private static String assignment4;	// package of Critter file.  Critter cannot be in default pkg.
     private static boolean DEBUG = false; // Use it or not, as you wish!
     static PrintStream old = System.out;	// if you want to restore output to console
 
 
     // Gets the package name.  The usage assumes that Critter and its subclasses are all in the same package.
     static {
-        myPackage = Critter.class.getPackage().toString().split(" ")[1];
+        assignment4 = Critter.class.getPackage().toString().split(" ")[1];
     }
 
     /**
@@ -66,9 +68,52 @@ public class Main {
         } else { // if no arguments to main
             kb = new Scanner(System.in); // use keyboard and console
         }
-
+       
         /* Do not alter the code above for your submission. */
         /* Write your code below. */
+        
+        //TODO make this parser user safe
+        
+        /*
+         * Take in width and height of the world as an input 
+         */
+        System.out.println("Enter the width of the world: ");
+        if(!kb.hasNextInt()) {
+        	System.out.println("Please enter an integer:" ); 
+        }
+        
+        Params.world_width = kb.nextInt();
+        
+        System.out.println("Enter the height of the world: ");
+        if(!kb.hasNextInt()) {
+        	System.out.println("Please enter an integer:" ); 
+        }
+        
+        Params.world_height = kb.nextInt();
+        
+        //create test Craig and test Algae
+        Craig testCraig = new Craig();
+        testCraig.setX(1);
+        testCraig.setY(1);
+        
+        try {
+			TestCritter.makeCritter("CRAIG");
+		} catch (InvalidCritterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        Algae testAlgae = new Algae();
+        
+        testAlgae.setX(4);
+        testAlgae.setY(4);
+        
+        TestCritter.getPopulation().add(testAlgae);
+        TestCritter.getPopulation().add(testCraig);
+        
+        System.out.println("Population Size: " + TestCritter.getPopulation().size());
+        
+        TestCritter.displayWorld();
         
         // System.out.println("GLHF");
         
@@ -76,4 +121,8 @@ public class Main {
         System.out.flush();
 
     }
+    //TODO put parser functions here if possible
+    
+    
+    
 }

@@ -13,7 +13,9 @@ package assignment4;
  */
 
 
-import java.util.List;
+import java.io.File;
+import java.util.*;
+import assignment4.CritterWorld;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -23,43 +25,37 @@ import java.util.List;
 
 public abstract class Critter {
 	private static String myPackage;
-	private	static List<Critter> population = new java.util.ArrayList<Critter>();
-	private static List<Critter> babies = new java.util.ArrayList<Critter>();
-
-	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
-	static {
-		myPackage = Critter.class.getPackage().toString().split(" ")[1];
-	}
-	
-	private static java.util.Random rand = new java.util.Random();
-	public static int getRandomInt(int max) {
-		return rand.nextInt(max);
-	}
-	
-	public static void setSeed(long new_seed) {
-		rand = new java.util.Random(new_seed);
-	}
-	
-	
-	/* a one-character long string that visually depicts your critter in the ASCII interface */
-	public String toString() { return ""; }
-	
-	private int energy = 0;
-	protected int getEnergy() { return energy; }
+	private	static List<Critter> population = new ArrayList<Critter>();
+	private static List<Critter> babies = new ArrayList<Critter>();
 	
 	private int x_coord;
 	private int y_coord;
+	private int energy = 0;
+	private static Random rand = new Random();
+	
+	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
+	static {
+		myPackage = Critter.class.getPackage().toString().split(" ")[1];
+	}	
+	
+	/* a one-character long string that visually depicts your critter in the ASCII interface */
+	public String toString() { 
+		return ""; 
+	}
 	
 	protected final void walk(int direction) {
+		//TODO
 	}
 	
 	protected final void run(int direction) {
-		
+		//TODO
 	}
 	
 	protected final void reproduce(Critter offspring, int direction) {
+		//TODO
 	}
 
+	
 	public abstract void doTimeStep();
 	public abstract boolean fight(String oponent);
 	
@@ -74,6 +70,28 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
+		//TODO deal with upper/lower
+		critter_class_name = critter_class_name.toLowerCase();
+		String string = new String();
+		
+		char first = Character.toUpperCase(critter_class_name.charAt(0));
+		string = first + critter_class_name.substring(1);
+		
+		List<String> classList = new ArrayList<String>();
+		
+		classList.add("Craig");
+		classList.add("Algae");
+		
+		//TODO figure out why this generates a ClassNotFoundException
+		try {
+			if(classList.contains(string)) {
+				Class.forName(string);
+			}			
+		} 
+	catch( ClassNotFoundException e ) {
+		 throw new InvalidCritterException(string);
+	}
+	
 	}
 	
 	/**
@@ -83,7 +101,7 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
-		List<Critter> result = new java.util.ArrayList<Critter>();
+		List<Critter> result = new ArrayList<Critter>();
 	
 		return result;
 	}
@@ -111,6 +129,7 @@ public abstract class Critter {
 		}
 		System.out.println();		
 	}
+	
 	
 	/* the TestCritter class allows some critters to "cheat". If you want to 
 	 * create tests of your Critter model, you can create subclasses of this class
@@ -168,14 +187,53 @@ public abstract class Critter {
 	 * Clear the world of all critters, dead and alive
 	 */
 	public static void clearWorld() {
-		// Complete this method.
+		CritterWorld.clearWorld();
 	}
 	
 	public static void worldTimeStep() {
-		// Complete this method.
+		CritterWorld.worldTimeStep();
 	}
 	
 	public static void displayWorld() {
-		// Complete this method.
+		CritterWorld.displayWorld();
 	}
+	
+	
+	
+	/******************************************************/
+	// Getters and setters
+	/******************************************************/
+	public static int getRandomInt(int max) {
+		return rand.nextInt(max);
+	}
+	
+	public static void setSeed(long new_seed) {
+		rand = new java.util.Random(new_seed);
+	}
+	
+	protected int getEnergy() { 
+		return energy; 
+	}
+	
+	protected void setEnergy(int energy) {
+		this.energy=energy;
+	}
+	
+	protected int getX() {
+		return this.x_coord;
+	}
+	
+	protected void setX(int x) {
+		this.x_coord = x;
+	}
+	
+	protected int getY() {
+		return this.y_coord;
+	}
+	
+	protected void setY(int y) {
+
+		this.y_coord = y;
+	}
+	
 }
