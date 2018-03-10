@@ -160,7 +160,8 @@ public abstract class Critter {
 		
 		//TODO figure out why this generates a ClassNotFoundException
 		try {
-			if(classList.contains(string)) {
+			if(classList.contains(string)) {  
+				//I just noticed there are instructions for doing this in the lab document... nice
 				Class.forName(string);
 			}			
 		} 
@@ -295,6 +296,10 @@ public abstract class Critter {
 		this.energy=energy;
 	}
 
+	/*
+	 * We can't add private fields or private methods to critter per the instructions. The data structures in 
+	 * CritterWorld and the Location class were my way of working around this. I hope you're ok with it.
+	 */
 //	private int getX() {
 //		return this.x_coord;
 //	}

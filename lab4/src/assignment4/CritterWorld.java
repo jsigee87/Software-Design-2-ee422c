@@ -7,18 +7,34 @@ import assignment4.Critter.TestCritter;
 public class CritterWorld {
 
 	private boolean shouldQuit;
-	//virtual map
+	
+	/*
+	 * Virtual map. Holds the index of the critter that is to be displayed when displayWorld() is called.
+	 */
 	static ArrayList<ArrayList<Integer>> virtualMap = new ArrayList<ArrayList<Integer>>();
 	
-	//location of individual critters
+	/*
+	 * location of individual critters (we need this because multiple critters can be on the
+	 * same location pre-conflict resolution. Also, we need to store the critter locations
+	 * in order to implement their walk, run, and reproduce functions.
+	 */
 	static Hashtable<Critter,Location> locTable = new Hashtable<Critter,Location>();
 	
-	//baby location table
+	/*
+	 * baby location table: if some critter reproduces, the baby critter and its location
+	 * goes in this table. At first, the location of the baby is the same as that of its parent.
+	 * The location is later updated using the babyCritters walk function in the specified direction.
+	 * 
+	 * ***Note: This may only work correctly for Craigs. Need to test our own critters later.
+	 */
 	static Hashtable<Critter,Location> babyLocTable = new Hashtable<Critter,Location>();
 	
-	//constructor
+	/*
+	 * Constructor. Called at the beginning of the game. Creates a default world using the parameters
+	 * located in Params. For STAGE 3, we will have to update the controller (Main) to create the game
+	 * with the user parameters.
+	 */
 	public CritterWorld() {
-		//TODO create default virtual map using Params
 		shouldQuit = false;
 		
 		for(int i = 0; i < Params.world_height; i++) {
@@ -32,6 +48,19 @@ public class CritterWorld {
 		return TestCritter.getPopulation();
 	}
 	
+	/*
+	 * addCritter takes a critter and the location to where it will be inserted at.
+	 * 
+	 * Sets the inital energy level to the level specified in Params.
+	 * 
+	 * Adds the critter to the population collection in Critter.TestCritter, places said
+	 * critter on the virtual map for display, and adds the critter to the location hashtable (locTable).
+	 * 
+	 * ***NOTE: Even if there are multiple critters on the same location, per the instructions,
+	 * the virtualMap only has to hold one of the critters because only one critter may be displayed
+	 * at a time. So the virtualMap can be overwritten arbitrarily if we add multiple critters in the
+	 * same location. We can maintain the other critters and their locations in the location hashtable.
+	 */
 	public static void addCritter(Critter critter, int x, int y) {
 		
 		critter.setEnergy(Params.start_energy);
@@ -46,8 +75,14 @@ public class CritterWorld {
 		locTable.put(critter, loc);
 	}
 	
+	/*
+	 * clearWorld replaces all the integers in the virtualMap to -1. This should be called every time
+	 * before displaying the world.
+	 * 
+	 * Maybe there's a better way of doing this that's not O(m*n). I'm tired so I'm just gonna leave it for now.
+	 */
 	public static void clearWorld() {
-		//TODO 
+		//TODO make better if we can, though not a high priority right now.
 		for (int i = 0; i < virtualMap.size(); i++) {
 			for(int j = 0; j < virtualMap.get(i).size(); j++) {
 				virtualMap.get(i).set(j, -1);
@@ -55,6 +90,9 @@ public class CritterWorld {
 		}
 	}
 	
+	/*
+	 * perform a time step for each critter in the world
+	 */
 	public static void worldTimeStep() {
 		//TODO
 		
@@ -64,7 +102,9 @@ public class CritterWorld {
 			TestCritter.getPopulation().get(i).doTimeStep();
 		}
 	}
-	
+	/*
+	 * update the virtual map, and display the world on the console.
+	 */
 	public static void displayWorld() {
 		
 		updateMap();
@@ -75,13 +115,15 @@ public class CritterWorld {
 	
 	public static void updateMap() {
 		
-		clearWorld();
+		clearWorld(); //clear the world
 		
+		//if babies spawned during the last round, add the babies to the CritterWorld
 		if(TestCritter.getBabies().size() > 0) {
-			addBabies();
-			emptyBabyList();
+			addBabies(); //add
+			emptyBabyList(); //clear the list of babies for the next round
 		}
 		
+		//update the virtual map with all of the critters
 		Set<Critter> keySet = locTable.keySet();
 		
 		for(Critter critter : keySet) {
@@ -92,8 +134,10 @@ public class CritterWorld {
 		}
 	}
 	
+	/*
+	 * add babies to the Critter World
+	 */
 	public static void addBabies() {
-		System.out.println("addBabies");
 		for(Critter baby : TestCritter.getBabies()) {
 			
 			baby.walk(babyLocTable.get(baby).getDir());
@@ -104,6 +148,9 @@ public class CritterWorld {
 		}
 	}
 	
+	/*
+	 * Clear the list of babies
+	 */
 	public static void emptyBabyList()
 	{
 		babyLocTable.clear();
