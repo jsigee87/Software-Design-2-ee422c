@@ -13,7 +13,6 @@ package assignment4;
  */
 
 
-import java.io.File;
 import java.util.*;
 import assignment4.CritterWorld;
 
@@ -44,15 +43,92 @@ public abstract class Critter {
 	}
 	
 	protected final void walk(int direction) {
-		//TODO
+		//TODO need to implement energy level and all that fun jazz
+		int x = CritterWorld.locTable.get(this).getX();
+		int y = CritterWorld.locTable.get(this).getY();
+		
+		switch (direction) {
+			case 0:
+				
+				if(x < Params.world_width - 1) {
+					x = x + 1;
+				}
+				CritterWorld.locTable.put(this, new Location(x,y));
+				break;
+			case 1:
+				if(x < Params.world_width - 1) {
+					x = x + 1;
+				}
+				if(y > 0) {
+					y = y-1;
+				}
+				CritterWorld.locTable.put(this, new Location(x,y));
+				break;
+			case 2:
+				if(y > 0) {
+					y = y-1;
+				}
+				CritterWorld.locTable.put(this, new Location(x,y));
+				break;
+			case 3:
+				if(x > 0) {
+					x = x - 1;
+				}
+				if(y > 0) {
+					y = y-1;
+				}
+				CritterWorld.locTable.put(this, new Location(x,y));
+				break;
+			case 4:
+				if(x > 0) {
+					x = x - 1;
+				}
+				CritterWorld.locTable.put(this, new Location(x,y));
+				break;
+			case 5:
+				if(x > 0) {
+					x = x - 1;
+				}
+				if(y < Params.world_height) {
+					y = y + 1;
+				}
+				CritterWorld.locTable.put(this, new Location(x,y));
+				break;
+			case 6:
+				if(y < Params.world_height) {
+					y = y + 1;
+				}
+				CritterWorld.locTable.put(this, new Location(x,y));
+				break;
+			case 7:
+				if(x < Params.world_width - 1) {
+					x = x + 1;
+				}
+				if(y < Params.world_height) {
+					y = y + 1;
+				}
+				CritterWorld.locTable.put(this, new Location(x,y));
+				break;
+			default:
+				break;
+		}
 	}
 	
 	protected final void run(int direction) {
-		//TODO
+		//TODO check if functionality is correct
+		walk(direction);
+		walk(direction);
 	}
 	
 	protected final void reproduce(Critter offspring, int direction) {
-		//TODO
+		//TODO check if functionality is correct
+		TestCritter.getBabies().add(offspring);
+		int x = CritterWorld.locTable.get(this).getX();
+		int y = CritterWorld.locTable.get(this).getY();
+		Location loc = new Location(x,y, direction);
+		CritterWorld.babyLocTable.put(offspring, loc);
+		CritterWorld.locTable.put(offspring, new Location(x,y));
+		
 	}
 
 	
@@ -70,7 +146,7 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
-		//TODO deal with upper/lower
+		
 		critter_class_name = critter_class_name.toLowerCase();
 		String string = new String();
 		
@@ -88,9 +164,9 @@ public abstract class Critter {
 				Class.forName(string);
 			}			
 		} 
-	catch( ClassNotFoundException e ) {
-		 throw new InvalidCritterException(string);
-	}
+		catch( ClassNotFoundException e ) {
+			 throw new InvalidCritterException(string);
+		}
 	
 	}
 	
@@ -218,22 +294,22 @@ public abstract class Critter {
 	protected void setEnergy(int energy) {
 		this.energy=energy;
 	}
-	
-	protected int getX() {
-		return this.x_coord;
-	}
-	
-	protected void setX(int x) {
-		this.x_coord = x;
-	}
-	
-	protected int getY() {
-		return this.y_coord;
-	}
-	
-	protected void setY(int y) {
 
-		this.y_coord = y;
-	}
+//	private int getX() {
+//		return this.x_coord;
+//	}
+//	
+//	private void setX(int x) {
+//		this.x_coord = x;
+//	}
+//	
+//	private int getY() {
+//		return this.y_coord;
+//	}
+//	
+//	private void setY(int y) {
+//
+//		this.y_coord = y;
+//	}
 	
 }

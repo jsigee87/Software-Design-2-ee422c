@@ -73,47 +73,54 @@ public class Main {
         /* Write your code below. */
         
         //TODO make this parser user safe
-        
-        /*
-         * Take in width and height of the world as an input 
-         */
-        System.out.println("Enter the width of the world: ");
-        if(!kb.hasNextInt()) {
-        	System.out.println("Please enter an integer:" ); 
-        }
-        
-        Params.world_width = kb.nextInt();
-        
-        System.out.println("Enter the height of the world: ");
-        if(!kb.hasNextInt()) {
-        	System.out.println("Please enter an integer:" ); 
-        }
-        
-        Params.world_height = kb.nextInt();
+        //create new CritterWorld
+        CritterWorld world = new CritterWorld();
         
         //create test Craig and test Algae
-        Craig testCraig = new Craig();
-        testCraig.setX(1);
-        testCraig.setY(1);
-        
-        try {
-			TestCritter.makeCritter("CRAIG");
-		} catch (InvalidCritterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
+        Critter testCraig = new Craig();        
         Algae testAlgae = new Algae();
+        world.addCritter(testCraig, 4,4);
+        world.addCritter(testAlgae, 10,10);
         
-        testAlgae.setX(4);
-        testAlgae.setY(4);
+//        /*
+//         * Take in width and height of the world as an input 
+//         */
+//        System.out.println("Enter the width of the world: ");
+//        if(!kb.hasNextInt()) {
+//        	System.out.println("Please enter an integer:" ); 
+//        }
+//        
+//        Params.world_width = kb.nextInt();
+//        
+//        System.out.println("Enter the height of the world: ");
+//        if(!kb.hasNextInt()) {
+//        	System.out.println("Please enter an integer:" ); 
+//        }
+//        
+//        Params.world_height = kb.nextInt();
         
-        TestCritter.getPopulation().add(testAlgae);
-        TestCritter.getPopulation().add(testCraig);
         
-        System.out.println("Population Size: " + TestCritter.getPopulation().size());
+//        try {
+//			TestCritter.makeCritter("CRAIG");
+//		} catch (InvalidCritterException e) {
+//			// TODO make this safe instead of just printing out the stack trace
+//			e.printStackTrace();
+//		}
         
-        TestCritter.displayWorld();
+//        testAlgae.setX_coord(4);
+//        testAlgae.setY_coord(4);
+        
+        while(!world.shouldQuit()) {
+        	System.out.print("critters> ");
+        	if(kb.hasNextLine()) {
+        		String str = kb.nextLine();
+        		
+        		if(parse(str)) {
+        			world.quit();
+        		}
+        	}
+        	System.out.println();
+        }
         
         // System.out.println("GLHF");
         
@@ -121,8 +128,30 @@ public class Main {
         System.out.flush();
 
     }
-    //TODO put parser functions here if possible
-    
+    //TODO complete parser
+    public static boolean parse(String str) {
+    	
+    	str = str.toLowerCase();
+    	
+    	if(!str.contains(" ")) {
+    		switch (str) {
+    		case "show":
+    			TestCritter.displayWorld();
+    			return false;
+    		case "step":
+    			TestCritter.worldTimeStep();
+    			return false;
+    		case "quit":
+    			return true;
+    		default:
+    			return false;
+    		}
+    	}
+    	else {
+    		System.out.println("lol");
+    		return false;
+    	}
+    }
     
     
 }
