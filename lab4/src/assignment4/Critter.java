@@ -215,10 +215,7 @@ public abstract class Critter {
 		char first = Character.toUpperCase(critter_class_name.charAt(0));
 		string = myPackage + "." + first + critter_class_name.substring(1);
 		
-//		List<String> classList = new ArrayList<String>();
-//		classList.add("Craig");
-//		classList.add("Algae");
-		
+		@SuppressWarnings("rawtypes")
 		List<Class> classList = CritterWorld.getClassList(myPackage);
 		
 		try {
@@ -232,10 +229,8 @@ public abstract class Critter {
 				try {
 					newCritter = (Critter) newClass.newInstance();
 				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -403,6 +398,8 @@ public abstract class Critter {
 		 *        6         **(height-1)         *
 		 *****************************************
 		 ///////////////////////////////////////*/
+		
+		//TODO add cases for critter to wrap-around (i.e. world is a "torus" so we have to deal with that"
 		switch (direction) {
 			case 0:
 				if (y < width - 1) {

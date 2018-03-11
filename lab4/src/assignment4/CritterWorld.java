@@ -216,17 +216,15 @@ public class CritterWorld extends TestCritter{
 		shouldQuit = true;
 	}
 
-
 	@Override
 	public void doTimeStep() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
-
 	@Override
 	public boolean fight(String oponent) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 	
@@ -237,6 +235,7 @@ public class CritterWorld extends TestCritter{
 	 * @return list of all .class files located inside the package
 	 * @throws URISyntaxException 
 	 */
+	@SuppressWarnings({ "rawtypes", "unused" })
 	public static List<Class> getClassList(String myPackage) {
 
 	    List<Class> classList = new ArrayList<Class>();
@@ -251,7 +250,6 @@ public class CritterWorld extends TestCritter{
 	    try {
 			directory = new File(resource.toURI());
 		} catch (URISyntaxException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -267,7 +265,6 @@ public class CritterWorld extends TestCritter{
                 try {
 					classList.add(Class.forName(name));
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
             }

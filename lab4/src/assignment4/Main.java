@@ -99,25 +99,7 @@ public class Main {
 //    	// Prompts user for height and width.
 //    	setParams();
     	
-    	/********************************************************************
-    	 * TEST ZONE: MAKE A CRAIG AND AN ALGAE
-    	 ********************************************************************/
-    	new CritterWorld();
-    	
-    	//TODO this will be replaced with "make" commands from the command prompt
-    	try {
-    		TestCritter.makeCritter("CRAIG");
-    		TestCritter.makeCritter("alGae");
-    	} 
-    	catch (InvalidCritterException e) {
-    		// TODO make this safe instead of just printing out the stack trace
-    		e.printStackTrace();
-    	}
-    	
-    	/********************************************************************
-    	 * END TEST ZONE
-    	 ********************************************************************/
-    	
+    	new CritterWorld(); //no need to create CritterWorld world = new CritterWorld() - all static anyway
     	
     	// Sets up world, initializes virtual map.    	
     	System.out.println();
@@ -126,7 +108,7 @@ public class Main {
     	System.out.println(" help for a list of supported commands.");
     	System.out.println();
     	
-    	// seed, and stats. TODO
+    	// Stats. TODO
         //int blinker = 0; 
     	while(true) {
     		//if (blinker == 0) {
@@ -139,7 +121,9 @@ public class Main {
    
     		if(kb.hasNextLine()) {
         		String str = kb.nextLine();
-        		switch (parse(str)) {
+        		str = str.trim(); //remove extra spaces at beginning and end of string. Spaces in middle not affected.
+        		if(!multipleCommands(str)) {
+        			switch (str) {
         			case "quit":
         				CritterWorld.quit();
         				break;
@@ -151,50 +135,127 @@ public class Main {
         			case "step":
         				TestCritter.worldTimeStep();
         				break;
-        			case "seed":
-        				//int seed = 0; //TODO parse this correctly
-        				//TestCritter.setSeed(seed);
-        				break;
-        			case "make":
-        				//TODO
-        				break;
-        			case "stats":
-        				//TODO
-        				break;
         			case "help":
         				displayHelp();
         				break;
         			default:
         				displayHelp();
         				break;
+        			}
         		}
-        	}
-        	System.out.println();
-        	if (CritterWorld.shouldQuit()) {
-        		break;
-        	}
-        }
-        System.out.println("Quitting Critters...");
+        		else { //we have multiple commands
+        			
+        			if(str.contains("make")) {
+        				makeCommand(str);
+        			}
+        			else if(str.contains("step")) {
+        				stepCommand(str);
+        			}
+        			else if(str.contains("stats")) {
+        				//TODO statsCommand(str);
+        			}
+        			else if(str.contains("seed")) {
+        				seedCommand(str);
+        			}
+        			else { //invalid command... display help message
+        				displayHelp();
+        			}
+        		
+	        	}
+	        	System.out.println();
+	        	if (CritterWorld.shouldQuit()) {
+	        		break;
+	        	}
+    		}//end large if-block
+	        
+    	}//end while
+    	System.out.println("Quitting Critters...");
         System.out.flush();
-    }
+   }
     
-   public static String parse(String str) {
+   /**
+    * This function takes a command from the prompt to make either one or n critters,
+    * where n is specified in str after a " " delimiter.
+    * @param str argument to parse
+    */
+   public static void makeCommand(String str) {
+	   String className = str.substring(str.indexOf(" ")).trim();
+		int count;
+		if(multipleCommands(className)) {
+			count = Integer.parseInt(className.substring(className.indexOf(" ")).trim());
+			className = className.substring(0, className.indexOf(" ")).trim();
+		}
+		else {
+			count = 1;
+		}
+		for (int i = 0; i < count; i++) {
+			try {
+				CritterWorld.makeCritter(className);
+			} catch (InvalidCritterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+   }
+   
+   /**
+    * This function takes a command from the prompt to step either once or n times,
+    * where n is specified in str after a " " delimiter.
+    * @param str argument to parse
+    */
+   public static void stepCommand(String str) {
+	   int count;
+	   if(multipleCommands(str)) {
+			count = Integer.parseInt(str.substring(str.indexOf(" ")).trim());
+		}
+		else {
+			count = 1;
+		}
+		for (int i = 0; i < count; i++) {
+			TestCritter.worldTimeStep();
+		}
+   }
+   
+   /**
+    * This function takes a command from the prompt to set the seed of the random
+    * number generator to the long number specified in str.
+    * @param str argument to parse
+    */
+   public static void seedCommand(String str) {
+	   long seed = 0;
+	   if(multipleCommands(str)) {
+			seed = Long.parseLong(str.substring(str.indexOf(" ")).trim());
+		}
+	   TestCritter.setSeed(seed);	   
+   }
+   
+   /**
+    * This function provides an easy check to see if the command from the prompt
+    * is a single or multiple-word command.
+    * @param str argument to parse
+    * @return boolean specifying where the command is a single or multi-word command
+    */
+   public static boolean multipleCommands(String str) {
     	str = str.toLowerCase();
-    	//TODO Daniel is if statement needed?
-    	//if (!str.contains(" ")) {
-    	//	return str;
-    	//}
-		return str;
+    	
+    	if (str.contains(" ")) { //multiple commands
+    		
+    		return true;
+    	}
+		return false;
     }
     
+   /**
+    * This function provides the user with a useful legend of all the valid commands.
+    */
     public static void displayHelp() {
     	System.out.println();
     	System.out.println("Valid commands are:\n");
     	System.out.println("\t quit  \t:\t Quits the game.");
     	System.out.println("\t show  \t:\t Displays the game world.");
-    	System.out.println("\t step  \t:\t Implements a single time step of the"
-    			+ " world.");
-    	System.out.println("\t make  \t:\t doesnt work yet");
+    	System.out.println("\t step [<count>] \t:\t Implements time steps.");
+    	System.out.println("\t make <class_name> [<count>] \t:\t Creates Critters of type class"
+    			+ "name and adds the single or <count> critters to the world.");
     	System.out.println("\t stats \t:\t doesnt work yet");
     	System.out.println("\t seed  \t:\t Sets the random seed for the simulator.");
     	System.out.println("\t help  \t:\t Displays this help manual.\n");
