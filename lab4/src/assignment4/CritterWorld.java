@@ -8,31 +8,37 @@ public class CritterWorld extends TestCritter{
 
 	private static boolean shouldQuit;
 	
-	/*
+	/**
 	 * Virtual map. Holds the index of the critter that is to be displayed when
 	 *  displayWorld() is called. 'x' is a list, 'y' is a list in 'x', a member
-	 *  of 'y' is a list of critters.  
+	 *  of 'y' is a list of critters.
+	 *  
+	 *  Ex. Given x and y, to access the critters in that location, first check
+	 *  that virtual_map.get(x).get(y).isEmpty() is false. Then you can simply
+	 *  call virtual_map.get(x).get(y).get(i) to get the ith critter in that 
+	 *  spot. Calling for a third critter when there is only one will give
+	 *  an out of bounds exception.
 	 */
 	protected static ArrayList<ArrayList<ArrayList<Critter>>> virtual_map = 
 			new ArrayList<ArrayList<ArrayList<Critter>>>();
 	
-	/*
-	 * Holds offspring until the end of the turn when they get added.
+	/**
+	 * Holds offspring until the end of the turn when they get added to the
+	 * map. It is assumed that they already have their coordinates set.
 	 */
-	private static Queue<Critter> new_critters = new LinkedList<Critter>();
+	protected static Queue<Critter> new_critters = new LinkedList<Critter>();
 	
-	/*
-	 * When a conflict is detected, the critter is added to this queue. At the
-	 * end of the turn they are all checked in order to resolve any of the 
-	 * conflicts. TODO- should this just hold a list of coordinates? Then at 
-	 * the end of time step you can just check those coordinates and empty out the list?
-	 * I think that makes more sense.
+	/**
+	 * When a _possible_ conflict is detected, the coordinates are added to 
+	 * this queue. At the end of the turn they are all checked and resolved.
+	 * 
 	 */
-	private static Queue<Critter> conflicts = new LinkedList<Critter>();
+	protected static Queue<ArrayList<Integer>> conflicts = new LinkedList<ArrayList<Integer>>();
 
-	/*
+	/**
 	 * Constructor. Called at the beginning of the game. Creates a default 
-	 * world using the parameters located in Params. 
+	 * world using the parameters located in Params, and initializes the 
+	 * virtual map.
 	 */
 	public CritterWorld() {
 		shouldQuit = false;
@@ -47,31 +53,31 @@ public class CritterWorld extends TestCritter{
 		}
 	}
 	
-	/*//TODO
+	/**
 	 * This method takes a critter and the location to where it will be 
 	 * inserted.
 	 * 
+	 * This method assumes the critter's x and y coordinate are already set.
 	 * Sets the initial energy level to the level specified in Params.
+	 * 
+	 * @param critter is the Critter to be inserted.
+	 * @param x is the critter's x coordinate.
+	 * @param y is the critter's y coordinate.
 	 */
 	public static void addCritter(Critter critter, int x, int y) {
-		
 		critter.setEnergy(Params.start_energy);
-		//insert critter into population (in Critter class)
 		TestCritter.getPopulation().add(critter);
-		//TODO update this for 3d list
-		//put critter in virtual map
-		//virtualMap.get(x).set(y, TestCritter.getPopulation().indexOf(critter));
-		
+		virtual_map.get(x).get(y).add(critter);
 	}
 	
-	/*
+	/**
 	 * clearWorld replaces all the integers in the virtualMap to -1. This should be called every time
 	 * before displaying the world.
 	 * 
-	 * Maybe there's a better way of doing this that's not O(m*n). I'm tired so I'm just gonna leave it for now.
 	 */
 	public static void clearWorld() {
-		//TODO Daniel I commented this out- I am not sure what clearWorld is supposed to domake better if we can, though not a high priority right now.
+		//TODO Daniel I commented this out- I am not sure what clearWorld is 
+		//supposed to do, i asked on piazza to confirm
 		//for (int i = 0; i < virtualMap.size(); i++) {
 		//	for(int j = 0; j < virtualMap.get(i).size(); j++) {
 		//		virtualMap.get(i).set(j, -1);
@@ -80,7 +86,7 @@ public class CritterWorld extends TestCritter{
 	}
 	
 	/*
-	 * Perform a time step for each critter in the world
+	 * Perform a world time step.
 	 */
 	public static void worldTimeStep() {				
 		// Time step all the critters.
@@ -97,12 +103,11 @@ public class CritterWorld extends TestCritter{
 		// Generate algae.
 		genAlgae();
 		
-		// Add new critters to the map.
-		addNewCritters();
+		// Add new critters to the map is done inside Critter.
 	}
 	
 	/*
-	 * update the virtual map, and display the world on the console.
+	 * Display the world on the console.
 	 */
 	public static void displayWorld() {		
 		printEdge();
@@ -113,7 +118,7 @@ public class CritterWorld extends TestCritter{
 	
 	public static void resolveConflicts() {
 		//TODO Conflict Resolution only - garbage collection is dynamic
-		
+		// empty all coordinates from conflicts queue.
 		// algae must fight also
 	}	
 	
@@ -141,44 +146,22 @@ public class CritterWorld extends TestCritter{
 			}
 		}
 	}
-	
-	/*
-	 * Poll the next new critter that needs to be added to the world.
-	 */
-	private static Critter getNewCritter() {
-		return new_critters.poll();
-	}
-	
-	/*
-	 * This empties the queue of new critters and randomly puts them in the
-	 * world. Conflicts are to be dealt with at the end of the next time step,
-	 * not the current one.
-	 */
-	private static void addNewCritters() {
-		while (new_critters.isEmpty() == false) {
-			Critter head = getNewCritter();
-			
-			//TODO
-			
-		}
-	}
+
 	
 	/*
 	 * 
 	 */
-	public static void genAlgae() {
-		//TODO
+	protected static void genAlgae() {
+		for (int i = 0; i < Params.refresh_algae_count; i ++) {
+			Algae alg = new Algae();
+			int x = getRandomInt(Params.world_height);
+			int y = getRandomInt(Params.world_width);
+			alg.setX_coord(x);
+			alg.setY_coord(y);
+			addCritter(alg, x, y);
+			
+		}
 	}
-	
-	/*
-	 * Removes a critter from the virtual map.
-	 */
-	//private static void removeFromMap(Critter dead_critter, 
-	//		List<Integer> coords) {
-	//	int x = coords.get(0);
-	//	int y = coords.get(1);
-	//	CritterWorld.virtual_map.get(x).get(y).remove(dead_critter);
-	//}
 	
 	/*
 	 * Prints the map edge.

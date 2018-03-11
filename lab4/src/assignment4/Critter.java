@@ -28,8 +28,6 @@ public abstract class Critter {
 	private static String myPackage;
 	private	static List<Critter> population = new ArrayList<Critter>();
 	private static List<Critter> babies = new ArrayList<Critter>();
-
-	
 	
 	/*///////////////////
 	//	  	Map		   //
@@ -54,6 +52,7 @@ public abstract class Critter {
 	private int y_coord;
 	private int energy = 0;
 	private static Random rand = new Random();
+	private boolean hasmoved;
 	
 	/*
 	 *  Gets the package name. This assumes that Critter and its subclasses 
@@ -77,26 +76,43 @@ public abstract class Critter {
 	 * @param direction is an int between 0 and 7 that is parsed.
 	 */
 	protected final void walk(int direction) {
-		List<Integer> coords = new ArrayList<Integer>();
-
-		// First we remove the critter from the current position.
+		ArrayList<Integer> coords = new ArrayList<Integer>();
 		int x = this.x_coord;
 		int y = this.y_coord;
 		coords.add(x);
 		coords.add(y);
-		removeFromMap(coords);
 		
-		// Then we get the critter's new coordinates and update their position.
-		coords = parseDirection(direction);
-		updateMap(coords);
+		//TODO check hasmoved functionality.. in pdf ~ line 250 ish.
+		if (hasmoved == false) {
+			// First we remove the critter from the current position.
+			removeFromMap(coords);
+			
+			// Then we get the critter's new coordinates and update their position.
+			coords = parseDirection(direction);
+			updateMap(coords);
+		}
 		
-		// Set the critter's energy level.
+		// Set the critter's energy level no matter what.
 		this.setEnergy(this.getEnergy() - Params.walk_energy_cost);
 		
 		// If they are dead, kill them off.
 		if (dead()) {
 			population.remove(population.indexOf(this));
 			removeFromMap(coords);
+		}
+		else {
+			this.hasmoved = true;
+		
+			// Check if the critter's new spot is already occupied.
+			x = coords.get(0);
+			y = coords.get(1);
+			if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
+				return; //The critter is the only occupant.
+			}
+			else {
+				// Add the current spot to conflict list to check later.
+				CritterWorld.conflicts.add(coords);
+			}
 		}
 	}
 	
@@ -105,19 +121,22 @@ public abstract class Critter {
 	 * @param direction is an int between 0 and 7 that is parsed.
 	 */
 	protected final void run(int direction) {
-		List<Integer> coords = new ArrayList<Integer>();
-		
-		// First we remove the critter from the current position.
+		ArrayList<Integer> coords = new ArrayList<Integer>();
 		int x = this.x_coord;
 		int y = this.y_coord;
 		coords.add(x);
 		coords.add(y);
-		removeFromMap(coords);
-
-		// Then we get the critter's new coordinates and update their position.
-		coords = parseDirection(direction);
-		coords = parseDirection(direction);
-		updateMap(coords);
+		
+		//TODO check hasmoved functionality.. in pdf ~ line 250 ish.
+		if (hasmoved == false) {
+			// First we remove the critter from the current position.
+			removeFromMap(coords);
+	
+			// Then we get the critter's new coordinates and update their position.
+			coords = parseDirection(direction);
+			coords = parseDirection(direction);
+			updateMap(coords);
+		}
 		
 		// Set the critter's energy level.
 		this.setEnergy(this.getEnergy() - Params.run_energy_cost);
@@ -127,11 +146,29 @@ public abstract class Critter {
 			population.remove(population.indexOf(this));
 			removeFromMap(coords);
 		}
+		else {
+			this.hasmoved = true;
+		
+			// Check if the critter's new spot is already occupied.
+			x = coords.get(0);
+			y = coords.get(1);
+			if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
+				return; //The critter is the only occupant.
+			}
+			else {
+				// Add the current spot to conflict list to check later.
+				CritterWorld.conflicts.add(coords);
+			}
+		}
 	}
 	
 	//TODO where does offspring come from?? (where is it 'new'ed)	
 	protected final void reproduce(Critter offspring, int direction) {
 		if (this.getEnergy() > Params.min_reproduce_energy) {
+			//TODO is this right? is random OK? I think this is better than stackign them
+			// all up in the same spot? is this in the doc?
+			offspring.x_coord = rand.nextInt(Params.world_height);
+			offspring.y_coord = rand.nextInt(Params.world_width);
 			CritterWorld.queueNewCritter(offspring);		
 		}
 	}
@@ -161,7 +198,7 @@ public abstract class Critter {
 		char first = Character.toUpperCase(critter_class_name.charAt(0));
 		string = first + critter_class_name.substring(1);
 		
-		// TODO Daniel why is this here?
+		// TODO shouldnt this be dynamic?
 		List<String> classList = new ArrayList<String>();
 		classList.add("Craig");
 		classList.add("Algae");
@@ -226,7 +263,7 @@ public abstract class Critter {
 	 * structure in addition to the x_coord and y_coord functions, then you 
 	 * MUST update these setter functions so that they correctly update your 
 	 * grid/data structure.
-	 */
+	 *///TODO - make sure all this stuff works with our critter world
 	static abstract class TestCritter extends Critter {
 		protected void setEnergy(int new_energy_value) {
 			super.energy = new_energy_value;
@@ -270,26 +307,6 @@ public abstract class Critter {
 			return babies;
 		}
 	}
-
-	/**
-	 *  Update the virtual map, given new x and y coordinates.
-	 *  @param coords is the coordinates for critter
-	 */
-	private void updateMap(List<Integer> coords) {
-		int x = coords.get(0);
-		int y = coords.get(1);
-		removeFromMap
-	}
-	
-	/*
-	 * Removes a critter from the virtual map.
-	 */
-	private void removeFromMap(List<Integer> coords) {
-		int x = coords.get(0);
-		int y = coords.get(1);
-		CritterWorld.virtual_map.get(x).get(y).remove(this);
-	}
-	
 	
 	/**
 	 * Clear the world of all critters, dead and alive
@@ -297,11 +314,17 @@ public abstract class Critter {
 	public static void clearWorld() {
 		CritterWorld.clearWorld();
 	}
-	
+	/*
+	 * Executes world time step. Note: add new critters must be performed here.
+	 */
 	public static void worldTimeStep() {
 		CritterWorld.worldTimeStep();
+		addNewCritters();
 	}
 	
+	/*
+	 * Displays the world.
+	 */
 	public static void displayWorld() {
 		CritterWorld.displayWorld();
 	}
@@ -309,7 +332,14 @@ public abstract class Critter {
 	///////////////////////////////////////////////////////
 	// 				  Helper Methods					 //
 	///////////////////////////////////////////////////////
-	private List<Integer> parseDirection(int direction) {
+	
+	/**
+	 * This method parses the direction command and updates the
+	 * critter's location.
+	 * @param direction is a random integer from 0 to 7.
+	 * @return List of integers of the coordinates of the new location.
+	 */
+	private ArrayList<Integer> parseDirection(int direction) {
 		int x = this.x_coord;
 		int y = this.y_coord;
 		int width = Params.world_width;
@@ -433,7 +463,7 @@ public abstract class Critter {
 		
 		// Return a tuple of coordinates so the calling method can update the
 		// virtual map.
-		List<Integer> coords = new ArrayList<Integer>();
+		ArrayList<Integer> coords = new ArrayList<Integer>();
 		coords.add(this.x_coord);
 		coords.add(this.y_coord);
 		return coords;
@@ -449,6 +479,42 @@ public abstract class Critter {
 		return false;
 	}
 
+	/**
+	 * This empties the queue of new critters and puts them in the world. They
+	 * must be preassigned coordinates. Note: Conflicts are to be dealt with 
+	 * at the end of the next time step, not the current one.
+	 */
+	private static void addNewCritters() {
+		while (CritterWorld.new_critters.isEmpty() == false) {
+			Critter head = CritterWorld.new_critters.poll();
+			int x = head.x_coord;
+			int y = head.y_coord;
+			// Add them to the population, and the virtual map.
+			population.add(head);
+			CritterWorld.virtual_map.get(x).get(y).add(head);
+			
+		}
+	}
+	
+	/**
+	 *  Update the virtual map, given new x and y coordinates.
+	 *  @param coords is the coordinates for critter
+	 */
+	private void updateMap(List<Integer> coords) {
+		int x = coords.get(0);
+		int y = coords.get(1);
+		CritterWorld.virtual_map.get(x).get(y).add(this);
+	}
+	
+	/*
+	 * Removes a critter from the virtual map.
+	 */
+	private void removeFromMap(List<Integer> coords) {
+		int x = coords.get(0);
+		int y = coords.get(1);
+		CritterWorld.virtual_map.get(x).get(y).remove(this);
+	}	
+	
 	///////////////////////////////////////////////////////
 	// 				Getters and setters					 //
 	///////////////////////////////////////////////////////

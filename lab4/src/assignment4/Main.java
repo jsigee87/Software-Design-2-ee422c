@@ -119,23 +119,43 @@ public class Main {
     	
         // Daniel - flow of control seemed to make more sense to me here in the
     	// while loop. I also added a display help message to catch weird 
-    	//commands
-         while(true) {
-        	System.out.print("critters> ");
-        	if(kb.hasNextLine()) {
+    	//commands. i don't know if the switch is better here or inside parse ?
+    	//i guess at least here its easier to see what main is doing?
+    	// edit - i may be wrong, it may need to be parsed in the case of make, 
+    	// seed, and stats. TODO
+        //int blinker = 0; 
+    	while(true) {
+    		//if (blinker == 0) {
+    			System.out.print("critters> ");
+    		//}
+    		//if (blinker == 1) {
+    			//System.out.print("critters> |");
+    		//}
+    		//blinker ^= blinker;
+   
+    		if(kb.hasNextLine()) {
         		String str = kb.nextLine();
-        		// When new commands are added, add them to displayHelp
         		switch (parse(str)) {
         			case "quit":
         				CritterWorld.quit();
         				break;
         			case "show":
         		    	System.out.println();
-        				CritterWorld.displayWorld();
+        				TestCritter.displayWorld();
         		    	System.out.println();
         				break;
         			case "step":
-        				CritterWorld.worldTimeStep();
+        				TestCritter.worldTimeStep();
+        				break;
+        			case "seed":
+        				//int seed = 0; //TODO parse this correctly
+        				//TestCritter.setSeed(seed);
+        				break;
+        			case "make":
+        				//TODO
+        				break;
+        			case "stats":
+        				//TODO
         				break;
         			case "help":
         				displayHelp();
@@ -170,7 +190,10 @@ public class Main {
     	System.out.println("\t show  \t:\t Displays the game world.");
     	System.out.println("\t step  \t:\t Implements a single time step of the"
     			+ " world.");
-    	System.out.println("\t help  \t:\t Displays this help manual.\n\n");
+    	System.out.println("\t make  \t:\t doesnt work yet");
+    	System.out.println("\t stats \t:\t doesnt work yet");
+    	System.out.println("\t seed  \t:\t Sets the random seed for the simulator.");
+    	System.out.println("\t help  \t:\t Displays this help manual.\n");
     }
     
     /*
