@@ -219,12 +219,13 @@ public abstract class Critter {
 //		classList.add("Craig");
 //		classList.add("Algae");
 		
-		List<Class> classList = CritterWorld.getClassesForPackage(myPackage);
+		List<Class> classList = CritterWorld.getClassList(myPackage);
 		
 		try {
 			
 			Class<?> newClass = Class.forName(string); //get the class type or throw an exception
 			
+			//if the class exists, create a new critter using reflection
 			if(classList.contains(newClass)) {  
 				
 				Critter newCritter = null;
@@ -237,6 +238,7 @@ public abstract class Critter {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 				//set critter's initial energy
 				newCritter.setEnergy(Params.start_energy);
 				
@@ -245,7 +247,7 @@ public abstract class Critter {
 				newCritter.y_coord = TestCritter.getRandomInt(Params.world_width);
 				
 				//add new critter to the world
-				CritterWorld.queueNewCritter(newCritter);				
+				CritterWorld.addCritter(newCritter, newCritter.x_coord, newCritter.y_coord);				
 			}
 			else {
 				throw new ClassNotFoundException();

@@ -237,16 +237,16 @@ public class CritterWorld extends TestCritter{
 	 * @return list of all .class files located inside the package
 	 * @throws URISyntaxException 
 	 */
-	public static List<Class> getClassesForPackage(String pkgname) {
+	public static List<Class> getClassList(String myPackage) {
 
-	    List<Class> classes = new ArrayList<Class>();
+	    List<Class> classList = new ArrayList<Class>();
 
 	    // Get a File object for the package
 	    File directory = null;
 	    String fullPath;
-	    String relPath = pkgname.replace('.', '/');
+	    String relativePath = myPackage.replace('.', '/');
 
-	    URL resource = ClassLoader.getSystemClassLoader().getResource(relPath);
+	    URL resource = ClassLoader.getSystemClassLoader().getResource(relativePath);
 	    fullPath = resource.getFile();
 	    try {
 			directory = new File(resource.toURI());
@@ -255,29 +255,25 @@ public class CritterWorld extends TestCritter{
 			e1.printStackTrace();
 		}
 
-	    if (directory != null && directory.exists()) {
+	    String[] files = directory.list();
+        for (int i = 0; i < files.length; i++) {
 
-	        // Get the list of the files contained in the package
-	        String[] files = directory.list();
-	        for (int i = 0; i < files.length; i++) {
+            // we are only interested in .class files
+            if (files[i].endsWith(".class")) {
 
-	            // we are only interested in .class files
-	            if (files[i].endsWith(".class")) {
-
-	                // removes the .class extension
-	                String className = pkgname + '.' + files[i].substring(0, files[i].length() - 6);
-
-	                //System.out.println("ClassDiscovery: className = " + className);
-
-	                try {
-	                    classes.add(Class.forName(className));
-	                } catch (ClassNotFoundException e) {
-	                    throw new RuntimeException("ClassNotFoundException loading " + className);
-	                }
-	            }
-	        }
-	    } 
-	    return classes;
+                // removes the .class extension
+                String name = myPackage + '.' + files[i].substring(0, files[i].length() - 6);
+                
+                try {
+					classList.add(Class.forName(name));
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        }
+        
+	    return classList;
 	}
 /***************************************************/
 	
