@@ -36,7 +36,8 @@ public class CritterWorld extends TestCritter{
 	 * this queue. At the end of the turn they are all checked and resolved.
 	 * 
 	 */
-	protected static Queue<ArrayList<Integer>> conflicts = new LinkedList<ArrayList<Integer>>();
+	protected static Queue<ArrayList<Integer>> conflicts = 
+			new LinkedList<ArrayList<Integer>>();
 
 	/**
 	 * Constructor. Called at the beginning of the game. Creates a default 
@@ -47,7 +48,8 @@ public class CritterWorld extends TestCritter{
 		shouldQuit = false;
 		// Populate the virtual map.
 		for(int i = 0; i < Params.world_height; i++) {
-			ArrayList<ArrayList<Critter>> outer_list = new ArrayList<ArrayList<Critter>>();
+			ArrayList<ArrayList<Critter>> outer_list = 
+					new ArrayList<ArrayList<Critter>>();
 			for (int j = 0; j < Params.world_width; j ++) {
 				ArrayList<Critter> inner_list = new ArrayList<Critter>();
 				outer_list.add(inner_list);
@@ -88,7 +90,7 @@ public class CritterWorld extends TestCritter{
 		//}
 	}
 	
-	/*
+	/**
 	 * Perform a world time step.
 	 */
 	public static void worldTimeStep() {				
@@ -109,7 +111,7 @@ public class CritterWorld extends TestCritter{
 		// Add new critters to the map is done inside Critter.
 	}
 	
-	/*
+	/**
 	 * Display the world on the console.
 	 */
 	public static void displayWorld() {		
@@ -133,7 +135,7 @@ public class CritterWorld extends TestCritter{
 		new_critters.add(new_critter);
 	}
 	
-	/*
+	/**
 	 * Update rest energy for all critters.
 	 */
 	private static void updateRestEnergy() {
@@ -151,8 +153,8 @@ public class CritterWorld extends TestCritter{
 	}
 
 	
-	/*
-	 * 
+	/**
+	 * Generate algae at the end of every turn as specified by params.
 	 */
 	protected static void genAlgae() {
 		for (int i = 0; i < Params.refresh_algae_count; i ++) {
@@ -161,8 +163,7 @@ public class CritterWorld extends TestCritter{
 			int y = getRandomInt(Params.world_width);
 			alg.setX_coord(x);
 			alg.setY_coord(y);
-			addCritter(alg, x, y);
-			
+			addCritter(alg, x, y);	
 		}
 	}
 	
@@ -218,13 +219,12 @@ public class CritterWorld extends TestCritter{
 
 	@Override
 	public void doTimeStep() {
-		
-		
+		//not used
 	}
 
 	@Override
 	public boolean fight(String oponent) {
-		
+		// not used
 		return false;
 	}
 	
@@ -256,10 +256,10 @@ public class CritterWorld extends TestCritter{
 	    String[] files = directory.list();
         for (int i = 0; i < files.length; i++) {
 
-            // we are only interested in .class files
+            // We are only interested in .class files
             if (files[i].endsWith(".class")) {
 
-                // removes the .class extension
+                // Removes the .class extension
                 String name = myPackage + '.' + files[i].substring(0, files[i].length() - 6);
                 
                 try {
@@ -272,101 +272,7 @@ public class CritterWorld extends TestCritter{
         
 	    return classList;
 	}
-/***************************************************/
-	
-		// Dead Code //
-
-/***************************************************/
-	
-	/* Daniel I'm not clear on what update Map is supposed to do. Critter 
-	 locations should be updated dynamically.
-	public static void updateMap() {
-		
-		clearWorld(); //clear the world
-		
-		// This shouldnt be done here
-		//if babies spawned during the last round, add the babies to the CritterWorld
-		//if(TestCritter.getBabies().size() > 0) {
-		//	addBabies(); //add
-		//	emptyBabyList(); //clear the list of babies for the next round
-		//}
-		
-		//update the virtual map with all of the critters
-		Set<Critter> keySet = locTable.keySet();
-		
-		for(Critter critter : keySet) {
-			int x = locTable.get(critter).getX();
-			int y = locTable.get(critter).getY();
-			
-			virtualMap.get(x).set(y, TestCritter.getPopulation().indexOf(critter));
-		}
-	}
-	*/
-	
-	/*****************************
-	 * I think these should be implemented in Critter.java 
-	 *
-	 * add babies to the Critter World
-	 
-	public static void addBabies() {
-		for(Critter baby : TestCritter.getBabies()) {
-			
-			baby.walk(babyLocTable.get(baby).getDir());
-			int x = babyLocTable.get(baby).getX();
-			int y = babyLocTable.get(baby).getY();
-			
-			addCritter(baby,x,y);
-		}
-	}
-	
-	/*
-	 * Clear the list of babies
-	 
-	public static void emptyBabyList(){
-		babyLocTable.clear();
-		TestCritter.getBabies().clear();;
-	}
-	*************************************/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//setting up bitmap of critters
-	
-//	ArrayList<ArrayList<Integer>> virtual_map = new ArrayList<ArrayList<Integer>>();
-//	
-//	for(int k = 0; k < Params.world_height; k++) {
-//		ArrayList<Integer> list  = new ArrayList<Integer>(Collections.nCopies(Params.world_width, -1));
-//		virtual_map.add(list);
-//	}
-//
-//	for (Critter critter : TestCritter.getPopulation()) {
-//		int x = critter.getX();
-//		int y = critter.getY();
-//		virtual_map.get(x).set(y, TestCritter.getPopulation().indexOf(critter));
-//	}
-//	
-//	for (i = 0; i < Params.world_height; i++) {
-//		System.out.print("|");
-//		for(j = 0; j < Params.world_width; j++) {
-//			if (!virtual_map.get(i).get(j).equals(-1)) {
-//				
-//				System.out.print(TestCritter.getPopulation().get(virtual_map.get(i).get(j)).toString());
-//			}
-//			else {
-//				System.out.print(" "); //print an empty space
-//			}
-//			
-//		}
-//		
-//		System.out.println("|");
-//	}
-
 }
+
+
+	

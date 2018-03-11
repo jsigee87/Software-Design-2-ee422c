@@ -54,7 +54,7 @@ public abstract class Critter {
 	private static Random rand = new Random();
 	private boolean hasMoved;
 	
-	/*
+	/**
 	 *  Gets the package name. This assumes that Critter and its subclasses 
 	 *  are all in the same package.
 	 */
@@ -62,7 +62,7 @@ public abstract class Critter {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
 	}	
 	
-	/*
+	/**
 	 * A one-character long string that visually depicts your critter 
 	 * in the ASCII interface .
 	 *  
@@ -117,7 +117,7 @@ public abstract class Critter {
 	
 	/**
 	 * Run just walks in some direction twice.
-	 * @param direction is an int between 0 and 7 that is parsed.
+	 * @param direction is an integer between 0 and 7 that is parsed.
 	 */
 	protected final void run(int direction) {
 		ArrayList<Integer> coords = new ArrayList<Integer>();
@@ -160,89 +160,87 @@ public abstract class Critter {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param offspring: is created in a Critter's doTimeStep() and/or their fight() method
-	 * @param direction: the direction is also determined in a critter's doTimeStep and/or fight() method.
-	 */
-	protected final void reproduce(Critter offspring, int direction) {
-		if (this.getEnergy() > Params.min_reproduce_energy) {
-			
-//			offspring.x_coord = rand.nextInt(Params.world_height);
-//			offspring.y_coord = rand.nextInt(Params.world_width);
-//			CritterWorld.queueNewCritter(offspring);		
-			
-			//Changes made per the document
-			
-			//Assign child 1/2 the parent's energy (round down)
-			offspring.setEnergy(this.getEnergy()/2); // an int divided by an int rounds down
-			
-			//Assign parent 1/2 of its energy (round up)
-			// taking the ceiling of energy/2.0 and casting to an int will round up
-			this.setEnergy((int)Math.ceil(this.getEnergy()/2.0));
-			
-			//Assign the child's position immediately adjacent to the parent in the specified direction.
-			offspring.x_coord = this.x_coord;
-			offspring.y_coord = this.y_coord;
-			offspring.parseDirection(direction);
-			CritterWorld.queueNewCritter(offspring);
-		}
-	}
-
-	
-	public abstract void doTimeStep();
-	public abstract boolean fight(String oponent);
-	
-	/**
-	 * create and initialize a Critter subclass.
-	 * critter_class_name must be the unqualified name of a concrete subclass 
-	 * of Critter, if not, an InvalidCritterException must be thrown.
-	 * (Java weirdness: Exception throwing does not work properly if the 
-	 * parameter has lower-case instead of upper. For example, if craig is 
-	 * supplied instead of Craig, an error is thrown instead of an Exception.)
-	 * @param critter_class_name
-	 * @throws InvalidCritterException
-	 */
-	@SuppressWarnings("deprecation")
-	public static void makeCritter(String critter_class_name) 
-								throws InvalidCritterException {
-		// Take the given class name and convert it
-		// ex. craig -> Craig
-		// ex. CrAiG -> Craig
-		// ex. CRAIG -> Craig
-		critter_class_name = critter_class_name.toLowerCase();
-		String string = new String();
-		char first = Character.toUpperCase(critter_class_name.charAt(0));
-		string = myPackage + "." + first + critter_class_name.substring(1);
-		
-		@SuppressWarnings("rawtypes")
-		List<Class> classList = CritterWorld.getClassList(myPackage);
-		
-		try {
-			
-			Class<?> newClass = Class.forName(string); //get the class type or throw an exception
-			
-			//if the class exists, create a new critter using reflection
-			if(classList.contains(newClass)) {  
+	/**																			//
+	 * 																			//
+	 * @param offspring: is created in a Critter's doTimeStep() and/or their 	//
+	 * fight() method															//
+	 * @param direction: the direction is also determined in a critter's 		//
+	 * doTimeStep and/or fight() method.										//
+	 */																			//
+	protected final void reproduce(Critter offspring, int direction) {			//
+		if (this.getEnergy() > Params.min_reproduce_energy) {					//
+			// Assign child 1/2 the parent's energy (round down)				//
+			offspring.setEnergy(this.getEnergy()/2); 							//
+																				//
+			// Assign parent 1/2 of its energy (round up)						//
+			this.setEnergy((int)Math.ceil(this.getEnergy()/2.0));				//
+																				//
+			// Assign the child's position immediately adjacent to the parent 	//
+			// in the specified direction.										//
+			offspring.x_coord = this.x_coord;									//
+			offspring.y_coord = this.y_coord;									//
+			offspring.parseDirection(direction);								//
+			CritterWorld.queueNewCritter(offspring);							//
+		}																		//
+	}																			//
+																				//
+																				//
+	public abstract void doTimeStep();											//
+	public abstract boolean fight(String oponent);								//
+																				//
+	/**																			//
+	 * create and initialize a Critter subclass.								//
+	 * critter_class_name must be the unqualified name of a concrete subclass 	//
+	 * of Critter, if not, an InvalidCritterException must be thrown.			//
+	 * (Java weirdness: Exception throwing does not work properly if the 		//
+	 * parameter has lower-case instead of upper. For example, if craig is 		//
+	 * supplied instead of Craig, an error is thrown instead of an Exception.)	//
+	 * @param critter_class_name												//
+	 * @throws InvalidCritterException											//
+	 */																			//
+	@SuppressWarnings("deprecation")											//
+	public static void makeCritter(String critter_class_name) 					//
+								throws InvalidCritterException {				//
+		// Take the given class name and convert it								//
+		// ex. craig -> Craig													//
+		// ex. CrAiG -> Craig													//
+		// ex. CRAIG -> Craig													//
+		critter_class_name = critter_class_name.toLowerCase();					//
+		String string = new String();											//
+		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
+		string = myPackage + "." + first + critter_class_name.substring(1);		//
+																				//
+		@SuppressWarnings("rawtypes")											//
+		List<Class> classList = CritterWorld.getClassList(myPackage);			//
+																				//
+		try {																	//
+			// Get the class type or throw an exception							//
+			Class<?> newClass = Class.forName(string); 							//
+																				//
+			// If the class exists, create a new critter using reflection		//
+			if(classList.contains(newClass)) {  								//
 				
 				Critter newCritter = null;
 				try {
 					newCritter = (Critter) newClass.newInstance();
 				} catch (InstantiationException e) {
 					e.printStackTrace();
-				} catch (IllegalAccessException e) {
+				} catch (IllegalAccessException e) {//TODO 2 catchs?
 					e.printStackTrace();
 				}
 				
-				//set critter's initial energy
+				// Set critter's initial energy
 				newCritter.setEnergy(Params.start_energy);
 				
-				//set critter's initial position at random
-				newCritter.x_coord = TestCritter.getRandomInt(Params.world_height);
-				newCritter.y_coord = TestCritter.getRandomInt(Params.world_width);
+				// Set critter's initial position at random
+				newCritter.x_coord = TestCritter.getRandomInt(
+						Params.world_height);
+				newCritter.y_coord = TestCritter.getRandomInt(
+						Params.world_width);
 				
-				//add new critter to the world
-				CritterWorld.addCritter(newCritter, newCritter.x_coord, newCritter.y_coord);				
+				// Add new critter to the world
+				CritterWorld.addCritter(newCritter, newCritter.x_coord, 
+						newCritter.y_coord);				
 			}
 			else {
 				throw new ClassNotFoundException();
@@ -353,6 +351,7 @@ public abstract class Critter {
 	public static void clearWorld() {
 		CritterWorld.clearWorld();
 	}
+	
 	/*
 	 * Executes world time step. Note: add new critters must be performed here.
 	 */
@@ -399,7 +398,6 @@ public abstract class Critter {
 		 *****************************************
 		 ///////////////////////////////////////*/
 		
-		//TODO add cases for critter to wrap-around (i.e. world is a "torus" so we have to deal with that"
 		switch (direction) {
 			case 0:
 				if (y < width - 1) {
@@ -533,7 +531,6 @@ public abstract class Critter {
 			// Add them to the population, and the virtual map.
 			population.add(head);
 			CritterWorld.virtual_map.get(x).get(y).add(head);
-			
 		}
 	}
 	

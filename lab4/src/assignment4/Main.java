@@ -21,7 +21,8 @@ import assignment4.Critter.TestCritter;
 
 /*
  * Usage: java <pkgname>.Main <input file> test
- * input file is optional.  If input file is specified, the word 'test' is optional.
+ * input file is optional. If input file is specified, the word 'test' is 
+ * optional.
  * May not use 'test' argument without specifying input file.
  */
 public class Main {
@@ -47,8 +48,9 @@ public class Main {
 
     /**
      * Main method.
-     * @param args args can be empty.  If not empty, provide two parameters -- the first is a file name, 
-     * and the second is test (for test output, where all output to be directed to a String), or nothing.
+     * @param args args can be empty.  If not empty, provide two parameters: 
+     * the first is a file name, and the second is test (for test output, where
+     *  all output to be directed to a String), or nothing.
      */
     public static void main(String[] args) { 
         //////////////////////////////////////////////////////////////////////////
@@ -90,25 +92,15 @@ public class Main {
         // Do not alter the code above. 										//
     	//////////////////////////////////////////////////////////////////////////
     	// Write your code below. 
-        
-    	//Create the world.
     	
-    	//TODO John note this cannot exist in our final submission (cannot modify Params)
-//    	System.out.println("Let's get some parameters to create a Critters "
-//    			+ "world...");
-//    	// Prompts user for height and width.
-//    	setParams();
-    	
-    	new CritterWorld(); //no need to create CritterWorld world = new CritterWorld() - all static anyway
-    	
-    	// Sets up world, initializes virtual map.    	
+    	// Sets up world, initializes virtual map.  
+    	new CritterWorld();
     	System.out.println();
     	System.out.println("Your world has been created. Enter some commands"
     			+ " to manipulate your world, or type");
     	System.out.println(" help for a list of supported commands.");
     	System.out.println();
     	
-    	// Stats. TODO
         //int blinker = 0; 
     	while(true) {
     		//if (blinker == 0) {
@@ -157,7 +149,7 @@ public class Main {
         			else if(str.contains("seed")) {
         				seedCommand(str);
         			}
-        			else { //invalid command... display help message
+        			else { // Invalid command... display help message
         				displayHelp();
         			}
         		
@@ -166,7 +158,7 @@ public class Main {
 	        	if (CritterWorld.shouldQuit()) {
 	        		break;
 	        	}
-    		}//end large if-block
+    		}//end if-block
 	        
     	}//end while
     	System.out.println("Quitting Critters...");
@@ -192,8 +184,8 @@ public class Main {
 			try {
 				CritterWorld.makeCritter(className);
 			} catch (InvalidCritterException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Invalid Critter!");
+				return;	//TODO Daniel is this right?
 			}
 		}
    }
@@ -217,8 +209,8 @@ public class Main {
    }
    
    /**
-    * This function takes a command from the prompt to set the seed of the random
-    * number generator to the long number specified in str.
+    * This function takes a command from the prompt to set the seed of the 
+    * random number generator to the long number specified in str.
     * @param str argument to parse
     */
    public static void seedCommand(String str) {
@@ -233,20 +225,22 @@ public class Main {
     * This function provides an easy check to see if the command from the prompt
     * is a single or multiple-word command.
     * @param str argument to parse
-    * @return boolean specifying where the command is a single or multi-word command
+    * @return boolean specifying where the command is a single or multi-word 
+    * command
     */
    public static boolean multipleCommands(String str) {
     	str = str.toLowerCase();
     	
-    	if (str.contains(" ")) { //multiple commands
-    		
+    	// Multiple commands
+    	if (str.contains(" ")) { 
     		return true;
     	}
 		return false;
     }
     
    /**
-    * This function provides the user with a useful legend of all the valid commands.
+    * This function provides the user with a useful legend of all the valid 
+    * commands.
     */
     public static void displayHelp() {
     	System.out.println();
@@ -254,18 +248,18 @@ public class Main {
     	System.out.println("\t quit  \t:\t Quits the game.");
     	System.out.println("\t show  \t:\t Displays the game world.");
     	System.out.println("\t step [<count>] \t:\t Implements time steps.");
-    	System.out.println("\t make <class_name> [<count>] \t:\t Creates Critters of type class"
-    			+ "name and adds the single or <count> critters to the world.");
+    	System.out.println("\t make <class_name> [<count>] \t:\t Creates "
+    			+ "Critters of type class name and adds the single or <count>"
+    			+ " critters to the world.");
     	System.out.println("\t stats \t:\t doesnt work yet");
-    	System.out.println("\t seed  \t:\t Sets the random seed for the simulator.");
+    	System.out.println("\t seed  \t:\t Sets the random seed for the "
+    			+ "simulator.");
     	System.out.println("\t help  \t:\t Displays this help manual.\n");
     }
     
     /*
      * Takes user input String and sets height parameter.
      */
-    //TODO John note this method cannot exist in our final submission (cannot modify Params)
-    /*
     public static boolean setHeight(String height_str) {
     	int height = Integer.parseInt(height_str);
     	if (height > 0) {
@@ -273,13 +267,12 @@ public class Main {
     		return true;
     	}
     	return false;
-    }*/
+    }
     
     /*
      * Takes user input String and sets width parameter.
      */
-  //TODO John note this method cannot exist in our final submission (cannot modify Params)
-    /*
+
     public static boolean setWidth(String width_str) {
     	int width = Integer.parseInt(width_str);
     	if (width > 0) {
@@ -287,13 +280,11 @@ public class Main {
     		return true;
     	}
     	return false;
-    }*/
+    }
     
     /*
      * Prompts the user and sets height and weight parameters.
      */
-  //TODO John note this method cannot exist in our final submission (cannot modify Params)
-    /*
     public static void setParams() {
     	
     	try {
@@ -331,7 +322,79 @@ public class Main {
 	    		}
 	    	}
 		}
+    }
+
+
+/***************************************************/
+
+// Dead Code //
+
+/***************************************************/
+
+    /*
+     * Takes user input String and sets height parameter.
+     */
+/*    public static boolean setHeight(String height_str) {
+    	int height = Integer.parseInt(height_str);
+    	if (height > 0) {
+    		Params.world_height = height;
+    		return true;
+    	}
+    	return false;
+    }*/
     
+    /*
+     * Takes user input String and sets width parameter.
+     */
+/*
+    public static boolean setWidth(String width_str) {
+    	int width = Integer.parseInt(width_str);
+    	if (width > 0) {
+    		Params.world_width = width;
+    		return true;
+    	}
+    	return false;
+    }*/
+    
+    /*
+     * Prompts the user and sets height and weight parameters.
+     *//*
+    public static void setParams() {
+    	
+    	try {
+			TimeUnit.SECONDS.sleep(1);
+    	}
+		catch(InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+    	
+    	HEIGHT: {//restart if bad input
+    	System.out.println("Please enter the desired world height...");
+    	System.out.print("critters> ");
+    	
+    	if(kb.hasNextLine()) {
+    		if(!setHeight(kb.nextLine())) {
+    			break HEIGHT;
+    		}
+    	}
+		}
+    	
+    
+    	try {
+			TimeUnit.SECONDS.sleep(1);
+    	}
+		catch(InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+    	WIDTH: {//restart if bad input
+	    	System.out.println("Please enter the desired world width...");
+	    	System.out.print("critters> ");
+	    	
+	    	if(kb.hasNextLine()) {
+	    		if(!setWidth(kb.nextLine())) {
+	    			break WIDTH;
+	    		}
+	    	}
+		}
     }*/
 }
-
