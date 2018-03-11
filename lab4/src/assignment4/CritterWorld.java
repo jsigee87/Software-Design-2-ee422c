@@ -1,5 +1,8 @@
 package assignment4;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 import assignment4.Critter.TestCritter;
 // This is the model
@@ -227,6 +230,55 @@ public class CritterWorld extends TestCritter{
 		return false;
 	}
 	
+	/**
+	 * This method gets the classes inside a package and returns in a list
+	 * all of the files located inside that package.
+	 * @param pkg is assignment4
+	 * @return list of all .class files located inside the package
+	 * @throws URISyntaxException 
+	 */
+	public static List<Class> getClassesForPackage(String pkgname) {
+
+	    List<Class> classes = new ArrayList<Class>();
+
+	    // Get a File object for the package
+	    File directory = null;
+	    String fullPath;
+	    String relPath = pkgname.replace('.', '/');
+
+	    URL resource = ClassLoader.getSystemClassLoader().getResource(relPath);
+	    fullPath = resource.getFile();
+	    try {
+			directory = new File(resource.toURI());
+		} catch (URISyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	    if (directory != null && directory.exists()) {
+
+	        // Get the list of the files contained in the package
+	        String[] files = directory.list();
+	        for (int i = 0; i < files.length; i++) {
+
+	            // we are only interested in .class files
+	            if (files[i].endsWith(".class")) {
+
+	                // removes the .class extension
+	                String className = pkgname + '.' + files[i].substring(0, files[i].length() - 6);
+
+	                //System.out.println("ClassDiscovery: className = " + className);
+
+	                try {
+	                    classes.add(Class.forName(className));
+	                } catch (ClassNotFoundException e) {
+	                    throw new RuntimeException("ClassNotFoundException loading " + className);
+	                }
+	            }
+	        }
+	    } 
+	    return classes;
+	}
 /***************************************************/
 	
 		// Dead Code //
@@ -295,7 +347,6 @@ public class CritterWorld extends TestCritter{
 	
 	//setting up bitmap of critters
 	
-	//TODO any way to make this better?
 //	ArrayList<ArrayList<Integer>> virtual_map = new ArrayList<ArrayList<Integer>>();
 //	
 //	for(int k = 0; k < Params.world_height; k++) {
@@ -304,7 +355,6 @@ public class CritterWorld extends TestCritter{
 //	}
 //
 //	for (Critter critter : TestCritter.getPopulation()) {
-//		//TODO: check if dead
 //		int x = critter.getX();
 //		int y = critter.getY();
 //		virtual_map.get(x).set(y, TestCritter.getPopulation().indexOf(critter));
@@ -314,7 +364,7 @@ public class CritterWorld extends TestCritter{
 //		System.out.print("|");
 //		for(j = 0; j < Params.world_width; j++) {
 //			if (!virtual_map.get(i).get(j).equals(-1)) {
-//				//TODO print out what the critter looks like
+//				
 //				System.out.print(TestCritter.getPopulation().get(virtual_map.get(i).get(j)).toString());
 //			}
 //			else {

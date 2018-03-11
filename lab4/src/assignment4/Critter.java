@@ -6,8 +6,8 @@ package assignment4;
  * <js85773>
  * <.......>
  * <Daniel Diamont> //TODO
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * <dd28977>
+ * <15455>
  * Slip days used: <0>
  * Spring 2018
  */
@@ -52,7 +52,7 @@ public abstract class Critter {
 	private int y_coord;
 	private int energy = 0;
 	private static Random rand = new Random();
-	private boolean hasmoved;
+	private boolean hasMoved;
 	
 	/*
 	 *  Gets the package name. This assumes that Critter and its subclasses 
@@ -82,8 +82,7 @@ public abstract class Critter {
 		coords.add(x);
 		coords.add(y);
 		
-		//TODO check hasmoved functionality.. in pdf ~ line 250 ish.
-		if (hasmoved == false) {
+		if (hasMoved == false) {
 			// First we remove the critter from the current position.
 			removeFromMap(coords);
 			
@@ -101,7 +100,7 @@ public abstract class Critter {
 			removeFromMap(coords);
 		}
 		else {
-			this.hasmoved = true;
+			this.hasMoved = true;
 		
 			// Check if the critter's new spot is already occupied.
 			x = coords.get(0);
@@ -127,8 +126,7 @@ public abstract class Critter {
 		coords.add(x);
 		coords.add(y);
 		
-		//TODO check hasmoved functionality.. in pdf ~ line 250 ish.
-		if (hasmoved == false) {
+		if (hasMoved == false) {
 			// First we remove the critter from the current position.
 			removeFromMap(coords);
 	
@@ -147,7 +145,7 @@ public abstract class Critter {
 			removeFromMap(coords);
 		}
 		else {
-			this.hasmoved = true;
+			this.hasMoved = true;
 		
 			// Check if the critter's new spot is already occupied.
 			x = coords.get(0);
@@ -162,14 +160,32 @@ public abstract class Critter {
 		}
 	}
 	
-	//TODO where does offspring come from?? (where is it 'new'ed)	
+	/**
+	 * 
+	 * @param offspring: is created in a Critter's doTimeStep() and/or their fight() method
+	 * @param direction: the direction is also determined in a critter's doTimeStep and/or fight() method.
+	 */
 	protected final void reproduce(Critter offspring, int direction) {
 		if (this.getEnergy() > Params.min_reproduce_energy) {
-			//TODO is this right? is random OK? I think this is better than stackign them
-			// all up in the same spot? is this in the doc?
-			offspring.x_coord = rand.nextInt(Params.world_height);
-			offspring.y_coord = rand.nextInt(Params.world_width);
-			CritterWorld.queueNewCritter(offspring);		
+			
+//			offspring.x_coord = rand.nextInt(Params.world_height);
+//			offspring.y_coord = rand.nextInt(Params.world_width);
+//			CritterWorld.queueNewCritter(offspring);		
+			
+			//Changes made per the document
+			
+			//Assign child 1/2 the parent's energy (round down)
+			offspring.setEnergy(this.getEnergy()/2); // an int divided by an int rounds down
+			
+			//Assign parent 1/2 of its energy (round up)
+			// taking the ceiling of energy/2.0 and casting to an int will round up
+			this.setEnergy((int)Math.ceil(this.getEnergy()/2.0));
+			
+			//Assign the child's position immediately adjacent to the parent in the specified direction.
+			offspring.x_coord = this.x_coord;
+			offspring.y_coord = this.y_coord;
+			offspring.parseDirection(direction);
+			CritterWorld.queueNewCritter(offspring);
 		}
 	}
 
@@ -187,6 +203,7 @@ public abstract class Critter {
 	 * @param critter_class_name
 	 * @throws InvalidCritterException
 	 */
+	@SuppressWarnings("deprecation")
 	public static void makeCritter(String critter_class_name) 
 								throws InvalidCritterException {
 		// Take the given class name and convert it
@@ -196,20 +213,45 @@ public abstract class Critter {
 		critter_class_name = critter_class_name.toLowerCase();
 		String string = new String();
 		char first = Character.toUpperCase(critter_class_name.charAt(0));
-		string = first + critter_class_name.substring(1);
+		string = myPackage + "." + first + critter_class_name.substring(1);
 		
-		// TODO shouldnt this be dynamic?
-		List<String> classList = new ArrayList<String>();
-		classList.add("Craig");
-		classList.add("Algae");
+//		List<String> classList = new ArrayList<String>();
+//		classList.add("Craig");
+//		classList.add("Algae");
 		
-		//TODO figure out why this generates a ClassNotFoundException
+		List<Class> classList = CritterWorld.getClassesForPackage(myPackage);
+		
 		try {
-			if(classList.contains(string)) {  
-				//I just noticed there are instructions for doing this in the lab document... nice
-				Class.forName(string);
-			}			
-		} 
+			
+			Class<?> newClass = Class.forName(string); //get the class type or throw an exception
+			
+			if(classList.contains(newClass)) {  
+				
+				Critter newCritter = null;
+				try {
+					newCritter = (Critter) newClass.newInstance();
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//set critter's initial energy
+				newCritter.setEnergy(Params.start_energy);
+				
+				//set critter's initial position at random
+				newCritter.x_coord = TestCritter.getRandomInt(Params.world_height);
+				newCritter.y_coord = TestCritter.getRandomInt(Params.world_width);
+				
+				//add new critter to the world
+				CritterWorld.queueNewCritter(newCritter);				
+			}
+			else {
+				throw new ClassNotFoundException();
+			}
+					
+		}			 
 		catch( ClassNotFoundException e ) {
 			 throw new InvalidCritterException(string);
 		}

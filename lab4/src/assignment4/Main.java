@@ -91,37 +91,41 @@ public class Main {
     	//////////////////////////////////////////////////////////////////////////
     	// Write your code below. 
         
-        /*create new CritterWorld
-        CritterWorld world = new CritterWorld();
-        
-        //create test Craig and test Algae
-        Critter testCraig = new Craig();        
-        Algae testAlgae = new Algae();
-        CritterWorld.addCritter(testCraig, 4,4);
-        CritterWorld.addCritter(testAlgae, 10,10);
-          */ 
-         
     	//Create the world.
-    	System.out.println("Let's get some parameters to create a Critters "
-    			+ "world...");
-    	// Prompts user for height and width.
-    	setParams();
-    	// Sets up world, initializes virtual map.
-    	CritterWorld world = new CritterWorld();
+    	
+    	//TODO John note this cannot exist in our final submission (cannot modify Params)
+//    	System.out.println("Let's get some parameters to create a Critters "
+//    			+ "world...");
+//    	// Prompts user for height and width.
+//    	setParams();
+    	
+    	/********************************************************************
+    	 * TEST ZONE: MAKE A CRAIG AND AN ALGAE
+    	 ********************************************************************/
+    	new CritterWorld();
+    	
+    	//TODO this will be replaced with "make" commands from the command prompt
+    	try {
+    		TestCritter.makeCritter("CRAIG");
+    		TestCritter.makeCritter("alGae");
+    	} 
+    	catch (InvalidCritterException e) {
+    		// TODO make this safe instead of just printing out the stack trace
+    		e.printStackTrace();
+    	}
+    	
+    	/********************************************************************
+    	 * END TEST ZONE
+    	 ********************************************************************/
+    	
+    	
+    	// Sets up world, initializes virtual map.    	
     	System.out.println();
     	System.out.println("Your world has been created. Enter some commands"
     			+ " to manipulate your world, or type");
     	System.out.println(" help for a list of supported commands.");
     	System.out.println();
     	
-    	
-    	
-    	
-        // Daniel - flow of control seemed to make more sense to me here in the
-    	// while loop. I also added a display help message to catch weird 
-    	//commands. i don't know if the switch is better here or inside parse ?
-    	//i guess at least here its easier to see what main is doing?
-    	// edit - i may be wrong, it may need to be parsed in the case of make, 
     	// seed, and stats. TODO
         //int blinker = 0; 
     	while(true) {
@@ -199,6 +203,8 @@ public class Main {
     /*
      * Takes user input String and sets height parameter.
      */
+    //TODO John note this method cannot exist in our final submission (cannot modify Params)
+    /*
     public static boolean setHeight(String height_str) {
     	int height = Integer.parseInt(height_str);
     	if (height > 0) {
@@ -206,11 +212,13 @@ public class Main {
     		return true;
     	}
     	return false;
-    }
+    }*/
     
     /*
      * Takes user input String and sets width parameter.
      */
+  //TODO John note this method cannot exist in our final submission (cannot modify Params)
+    /*
     public static boolean setWidth(String width_str) {
     	int width = Integer.parseInt(width_str);
     	if (width > 0) {
@@ -218,11 +226,13 @@ public class Main {
     		return true;
     	}
     	return false;
-    }
+    }*/
     
     /*
      * Prompts the user and sets height and weight parameters.
      */
+  //TODO John note this method cannot exist in our final submission (cannot modify Params)
+    /*
     public static void setParams() {
     	
     	try {
@@ -261,36 +271,6 @@ public class Main {
 	    	}
 		}
     
-    }
+    }*/
 }
 
-
-
-
-
-// Take in width and height of the world as an input 
-//
-//System.out.println("Enter the width of the world: ");
-//if(!kb.hasNextInt()) {
-//	System.out.println("Please enter an integer:" ); 
-//}
-//
-//Params.world_width = kb.nextInt();
-//
-//System.out.println("Enter the height of the world: ");
-//if(!kb.hasNextInt()) {
-//	System.out.println("Please enter an integer:" ); 
-//}
-//
-//Params.world_height = kb.nextInt();
-
-
-//try {
-//	TestCritter.makeCritter("CRAIG");
-//} catch (InvalidCritterException e) {
-//	// TODO make this safe instead of just printing out the stack trace
-//	e.printStackTrace();
-//}
-
-//testAlgae.setX_coord(4);
-//testAlgae.setY_coord(4);
