@@ -2,14 +2,14 @@ package assignment4;
 /* CRITTERS Main.java
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
- * <Student1 Name>
+ * <Student1 Name> //TODO John
  * <Student1 EID>
  * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * <Daniel Diamont>
+ * <dd28977>
+ * <15455>
  * Slip days used: <0>
- * Fall 2016
+ * Spring 2018
  */
 
 import java.util.ArrayList;
@@ -204,7 +204,7 @@ public class Main {
 			count = 1;
 		}
 		for (int i = 0; i < count; i++) {
-			TestCritter.worldTimeStep();
+			CritterWorld.worldTimeStep();
 		}
    }
    
@@ -249,7 +249,7 @@ public class Main {
     	System.out.println("\t show  \t:\t Displays the game world.");
     	System.out.println("\t step [<count>] \t:\t Implements time steps.");
     	System.out.println("\t make <class_name> [<count>] \t:\t Creates "
-    			+ "Critters of type class name and adds the single or <count>"
+    			+ "Critters of type class name\n\t\t and adds the single or <count>"
     			+ " critters to the world.");
     	System.out.println("\t stats \t:\t doesnt work yet");
     	System.out.println("\t seed  \t:\t Sets the random seed for the "

@@ -551,7 +551,7 @@ public abstract class Critter {
 		int x = coords.get(0);
 		int y = coords.get(1);
 		CritterWorld.virtual_map.get(x).get(y).remove(this);
-	}	
+	}
 	
 	///////////////////////////////////////////////////////
 	// 				Getters and setters					 //

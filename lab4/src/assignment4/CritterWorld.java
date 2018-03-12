@@ -88,6 +88,12 @@ public class CritterWorld extends TestCritter{
 		//		virtualMap.get(i).set(j, -1);
 		//	}
 		//}
+		
+		//I think this makes sense given the context of the problem. I asked on piazza.
+		TestCritter.getPopulation().clear();
+		virtual_map.clear();
+		new_critters.clear();
+		conflicts.clear();
 	}
 	
 	/**
@@ -122,9 +128,78 @@ public class CritterWorld extends TestCritter{
 	
 	
 	public static void resolveConflicts() {
-		//TODO Conflict Resolution only - garbage collection is dynamic
-		// empty all coordinates from conflicts queue.
-		// algae must fight also
+		//TODO John can you look this over and check functionality with a fresh pair of eyes?
+		
+		//resolve conflicts if they exist
+		while(!conflicts.isEmpty()) { //we have potential conflicts to resolve
+			
+			ArrayList<Integer> coords = conflicts.poll(); //remove coordinate with a potetntial conflict from the Queue
+			
+			int x = coords.get(0);
+			int y = coords.get(1);
+			
+			ArrayList<Critter> list = virtual_map.get(x).get(y);
+			
+			//while there is more than one critter on that coordinate
+			while(list.size() > 1) {
+				
+				//do choose two critters A and B
+				Critter A = list.get(0);
+				Critter B = list.get(1);
+				
+				//fight or flight flags (true == fight; false == flight)
+				boolean fightA;
+				boolean fightB;
+				
+				//challenge and response to determine action sequence during encounter
+				fightA = A.fight(B.toString());
+				fightB = B.fight(A.toString());
+				
+				//check status of Critters post-fight
+				boolean aliveA = dead(A);
+				boolean aliveB = dead(B);
+				
+				//if both are still alive and in the same position
+				if(aliveA && aliveB && list.contains(A) && list.contains(B)) {
+					
+					int rollA;
+					int rollB;
+					
+					if(fightA) { //if A elected to fight
+						rollA = getRandomInt(A.getEnergy());
+					}
+					else {
+						rollA = 0;
+					}
+					if(fightB) { //if B elected to fight
+						rollB = getRandomInt(B.getEnergy());
+					}
+					else {
+						rollB = 0;
+					}
+					
+					//determine winner
+					Critter winner;
+					Critter loser;
+					
+					if(rollA >= rollB) {
+						winner = A;
+						loser = B;
+					}
+					else {
+						winner = B;
+						loser = A;
+					}
+					
+					//award winner his energy bonus from winning the fight
+					int energyToAdd = loser.getEnergy()/2;
+					winner.setEnergy(winner.getEnergy() + energyToAdd);
+					
+					//set loser's energy to a negative number so it can be removed
+					loser.setEnergy(-1);
+				}				
+			}			
+		}
 	}	
 	
 	/*
@@ -225,6 +300,16 @@ public class CritterWorld extends TestCritter{
 	@Override
 	public boolean fight(String oponent) {
 		// not used
+		return false;
+	}
+	
+	/*
+	 * For readability, this function checks if critter is dead.
+	 */
+	public static boolean dead(Critter critter) {
+		if (critter.getEnergy() <= 0) {
+			return true;
+		}
 		return false;
 	}
 	
