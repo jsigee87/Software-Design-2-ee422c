@@ -164,7 +164,7 @@ public class Main {
     	}//end while
     	System.out.println("Quitting Critters...");
         System.out.flush();
-   }
+    }
     
    /**
     * This function takes a command from the prompt to make either one or n critters,
@@ -173,7 +173,7 @@ public class Main {
     */
    public static void makeCommand(String str) {
 	   String className = str.substring(str.indexOf(" ")).trim();
-		int count;
+	   int count;
 		if(multipleCommands(className)) {
 			count = Integer.parseInt(className.substring(className.indexOf(" ")).trim());
 			className = className.substring(0, className.indexOf(" ")).trim();
@@ -223,15 +223,14 @@ public class Main {
    }
    
    public static void statsCommand(String str) {
-	   String className = str.substring(str.indexOf(" ")).trim();
-	   
-	   try {
-		CritterWorld.runStats(CritterWorld.getInstances(className));
-	   } 
-	   catch (InvalidCritterException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	   }
+	  String className = str.substring(str.indexOf(" ")).trim();
+	  try {
+		  CritterWorld.runStats(CritterWorld.getInstances(className));
+	  } 
+	  catch (InvalidCritterException e) {
+		  System.out.println("Invalid Critter!");
+		  return;
+	  }
    }
    
    /**

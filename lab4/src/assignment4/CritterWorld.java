@@ -116,14 +116,16 @@ public class CritterWorld extends TestCritter{
 		printEdge();
 	}
 	
-	
+	/**
+	 * 
+	 */
 	public static void resolveConflicts() {
-		//TODO John can you look this over and check functionality with a fresh pair of eyes?
-		
+
 		//resolve conflicts if they exist
 		while(!conflicts.isEmpty()) { //we have potential conflicts to resolve
 			
-			ArrayList<Integer> coords = conflicts.poll(); //remove coordinate with a potetntial conflict from the Queue
+			ArrayList<Integer> coords = conflicts.poll(); 
+			//remove coordinate with a potential conflict from the Queue
 			
 			int x = coords.get(0);
 			int y = coords.get(1);
@@ -145,6 +147,16 @@ public class CritterWorld extends TestCritter{
 				fightA = A.fight(B.toString());
 				fightB = B.fight(A.toString());
 				
+				if (fightA == false) {
+					
+					A.walk(getRandomInt(8));
+				}
+				if (fightB == false) {
+					
+				}
+				
+				
+				//TODO
 				//check status of Critters post-fight
 				boolean aliveA = dead(A);
 				boolean aliveB = dead(B);
@@ -201,7 +213,7 @@ public class CritterWorld extends TestCritter{
 	}
 	
 	/**
-	 * Update rest energy for all critters.
+	 * Update rest energy for all critters. Reset hasmoved flag.
 	 */
 	private static void updateRestEnergy() {
 		for (int i = 0; i < getPopulation().size(); i ++) {

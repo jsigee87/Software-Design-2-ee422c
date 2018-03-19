@@ -52,7 +52,7 @@ public abstract class Critter {
 	private int y_coord;
 	private int energy = 0;
 	private static Random rand = new Random();
-	private boolean hasMoved;
+	private boolean hasMoved = false;
 	
 	/**
 	 *  Gets the package name. This assumes that Critter and its subclasses 
@@ -183,8 +183,7 @@ public abstract class Critter {
 			CritterWorld.queueNewCritter(offspring);							//
 		}																		//
 	}																			//
-																				//
-																				//
+																				//																			//
 	public abstract void doTimeStep();											//
 	public abstract boolean fight(String oponent);								//
 																				//
@@ -223,11 +222,9 @@ public abstract class Critter {
 				Critter newCritter = null;
 				try {
 					newCritter = (Critter) newClass.newInstance();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {//TODO 2 catchs?
-					e.printStackTrace();
-				}
+				} catch (InstantiationException | IllegalAccessException e) {
+					throw new ClassNotFoundException();
+				} 
 				
 				// Set critter's initial energy
 				newCritter.setEnergy(Params.start_energy);
@@ -369,6 +366,8 @@ public abstract class Critter {
 		 * the end of every time step.
 		 */
 		protected static List<Critter> getBabies() {
+			@SuppressWarnings("unchecked")
+			List<Critter> babies = (List<Critter>) CritterWorld.new_critters;
 			return babies;
 		}
 	}
@@ -386,8 +385,18 @@ public abstract class Critter {
 	public static void worldTimeStep() {
 		CritterWorld.worldTimeStep();
 		addNewCritters();
+		resetHasMoved();
 	}
 	
+	/**
+	 * This resets all the has moved flags in the critter population.
+	 */
+	private static void resetHasMoved() {
+		for (int i = 0; i < population.size(); i ++ ) {
+			population.get(i).hasMoved = false;
+		}
+	}
+
 	/*
 	 * Displays the world.
 	 */
