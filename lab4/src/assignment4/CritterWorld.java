@@ -76,20 +76,10 @@ public class CritterWorld extends TestCritter{
 	}
 	
 	/**
-	 * clearWorld replaces all the integers in the virtualMap to -1. This should be called every time
-	 * before displaying the world.
+	 * clearWorld resets the baby, population, and conflict lists, and clears the virtual map
 	 * 
 	 */
 	public static void clearWorld() {
-		//TODO Daniel I commented this out- I am not sure what clearWorld is 
-		//supposed to do, i asked on piazza to confirm
-		//for (int i = 0; i < virtualMap.size(); i++) {
-		//	for(int j = 0; j < virtualMap.get(i).size(); j++) {
-		//		virtualMap.get(i).set(j, -1);
-		//	}
-		//}
-		
-		//I think this makes sense given the context of the problem. I asked on piazza.
 		TestCritter.getPopulation().clear();
 		virtual_map.clear();
 		new_critters.clear();

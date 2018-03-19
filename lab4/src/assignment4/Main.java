@@ -14,6 +14,7 @@ package assignment4;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
@@ -144,7 +145,7 @@ public class Main {
         				stepCommand(str);
         			}
         			else if(str.contains("stats")) {
-        				//TODO statsCommand(str);
+        				statsCommand(str);
         			}
         			else if(str.contains("seed")) {
         				seedCommand(str);
@@ -221,6 +222,18 @@ public class Main {
 	   TestCritter.setSeed(seed);	   
    }
    
+   public static void statsCommand(String str) {
+	   String className = str.substring(str.indexOf(" ")).trim();
+	   
+	   try {
+		CritterWorld.runStats(CritterWorld.getInstances(className));
+	   } 
+	   catch (InvalidCritterException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	   }
+   }
+   
    /**
     * This function provides an easy check to see if the command from the prompt
     * is a single or multiple-word command.
@@ -251,7 +264,7 @@ public class Main {
     	System.out.println("\t make <class_name> [<count>] \t:\t Creates "
     			+ "Critters of type class name\n\t\t and adds the single or <count>"
     			+ " critters to the world.");
-    	System.out.println("\t stats \t:\t doesnt work yet");
+    	System.out.println("\t stats \t:\t returns the number of critters of the specified class");
     	System.out.println("\t seed  \t:\t Sets the random seed for the "
     			+ "simulator.");
     	System.out.println("\t help  \t:\t Displays this help manual.\n");

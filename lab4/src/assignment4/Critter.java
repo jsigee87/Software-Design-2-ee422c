@@ -262,6 +262,34 @@ public abstract class Critter {
 	public static List<Critter> getInstances(String critter_class_name) 
 									throws InvalidCritterException {
 		List<Critter> result = new ArrayList<Critter>();
+		
+		critter_class_name = critter_class_name.toLowerCase();					//
+		String string = new String();											//
+		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
+		string = myPackage + "." + first + critter_class_name.substring(1);	
+																				//
+		@SuppressWarnings("rawtypes")											//
+		List<Class> classList = CritterWorld.getClassList(myPackage);			//
+																				//
+		try {																	//
+			// Get the class type or throw an exception							//
+			Class<?> newClass = Class.forName(string); 							//
+																				//
+			// If the class exists, add to list									//
+			if(classList.contains(newClass)) {  
+				for(Critter crit : CritterWorld.getPopulation()) {
+					result.add(crit);
+				}
+			}
+			else {
+				throw new ClassNotFoundException();
+			}
+					
+		}			 
+		catch( ClassNotFoundException e ) {
+			 throw new InvalidCritterException(string);
+		}
+		
 		return result;
 	}
 	
