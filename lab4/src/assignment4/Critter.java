@@ -82,6 +82,14 @@ public abstract class Critter {
 		coords.add(x);
 		coords.add(y);
 		
+		// If they are dead, kill them off. (This one just avoids
+		// the parsing in case we call walk on an already dead 
+		// critter.)
+		if (dead()) {
+			population.remove(population.indexOf(this));
+			removeFromMap(coords);
+		}
+		
 		if (hasMoved == false) {
 			// First we remove the critter from the current position.
 			removeFromMap(coords);
@@ -126,6 +134,14 @@ public abstract class Critter {
 		coords.add(x);
 		coords.add(y);
 		
+		// If they are dead, kill them off. (This one just avoids
+		// the parsing in case we call walk on an already dead 
+		// critter.)
+		if (dead()) {
+			population.remove(population.indexOf(this));
+			removeFromMap(coords);
+		}
+				
 		if (hasMoved == false) {
 			// First we remove the critter from the current position.
 			removeFromMap(coords);
