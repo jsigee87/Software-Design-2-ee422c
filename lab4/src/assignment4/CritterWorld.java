@@ -130,7 +130,20 @@ public class CritterWorld extends TestCritter{
 			int x = coords.get(0);
 			int y = coords.get(1);
 			
-			ArrayList<Critter> list = virtual_map.get(x).get(y);
+			ArrayList<Critter> list = new ArrayList<Critter>();
+
+			try {
+				 list = virtual_map.get(x).get(y);
+			}
+			catch (ArrayIndexOutOfBoundsException e) {
+				System.out.print("You have tried to access the virtual map");
+				System.out.print(" out of bounds.\n");
+				System.out.println("x is:\t" + x);
+				System.out.println("y is:\t" + y);
+				System.out.println("Here is the stack trace:");
+				e.printStackTrace();
+				System.exit(1);
+			}
 			
 			//while there is more than one critter on that coordinate
 			while(list.size() > 1) {
@@ -139,51 +152,56 @@ public class CritterWorld extends TestCritter{
 				Critter A = list.get(0);
 				Critter B = list.get(1);
 				
-				//fight or flight flags (true == fight; false == flight)
-				boolean fightA;
-				boolean fightB;
+				//fight or flight flags (true == fight; false == run away)
+				boolean fightA = A.fight(B.toString());
+				boolean fightB = B.fight(A.toString());
 				
-				//challenge and response to determine action sequence during encounter
-				fightA = A.fight(B.toString());
-				fightB = B.fight(A.toString());
-				
+				boolean ran_away;
 				if (fightA == false) {
-					
-					A.walk(getRandomInt(8));
+					ran_away = tryToRunAway(A, x, y);
+					if (ran_away == true) {
+						list.remove(A);
+					}
+					else {
+						// TODO do nothing?
+					}
 				}
+				
 				if (fightB == false) {
-					
+					ran_away = tryToRunAway(B, x, y);
+					if (ran_away == true) {
+						list.remove(B);
+					}
+					else {
+						// TODO do nothing?
+					}
 				}
-				
-				
-				//TODO
-				//check status of Critters post-fight
-				boolean aliveA = dead(A);
-				boolean aliveB = dead(B);
-				
+	
 				//if both are still alive and in the same position
-				if(aliveA && aliveB && list.contains(A) && list.contains(B)) {
+				if(list.contains(A) && list.contains(B)) {
 					
 					int rollA;
 					int rollB;
 					
+					// Assumes bounds are inclusive
 					if(fightA) { //if A elected to fight
-						rollA = getRandomInt(A.getEnergy());
+						rollA = getRandomInt(A.getEnergy() + 1);
 					}
 					else {
 						rollA = 0;
 					}
 					if(fightB) { //if B elected to fight
-						rollB = getRandomInt(B.getEnergy());
+						rollB = getRandomInt(B.getEnergy() + 1);
 					}
 					else {
 						rollB = 0;
 					}
 					
-					//determine winner
+					// Determine winner
 					Critter winner;
 					Critter loser;
 					
+					// B wins all ties
 					if(rollA >= rollB) {
 						winner = A;
 						loser = B;
@@ -193,12 +211,24 @@ public class CritterWorld extends TestCritter{
 						loser = A;
 					}
 					
-					//award winner his energy bonus from winning the fight
-					int energyToAdd = loser.getEnergy()/2;
-					winner.setEnergy(winner.getEnergy() + energyToAdd);
+					// Award winner his energy bonus from winning the fight
+					int energy_to_add = loser.getEnergy()/2;
+					winner.setEnergy(winner.getEnergy() + energy_to_add);
 					
-					//set loser's energy to a negative number so it can be removed
+					// Set loser's energy to a negative number so it can be removed
 					loser.setEnergy(-1);
+					try {
+						loser.walk(0);
+					}
+					catch (ArrayIndexOutOfBoundsException e) {
+						System.out.print("You have tried to access the virtual map");
+						System.out.print(" out of bound while killing a critter.\n");
+						System.out.println("x is:\t" + x);
+						System.out.println("y is:\t" + y);
+						System.out.println("Here is the stack trace:");
+						e.printStackTrace();
+						System.exit(1);
+					}
 				}				
 			}			
 		}
@@ -359,7 +389,163 @@ public class CritterWorld extends TestCritter{
         
 	    return classList;
 	}
+
+	/**
+	 *  Used in resolving conflicts. Calling walk will update the virtual map
+	 *  and kill off the critter if needed. Returns a boolean for success.
+	 * @param c Critter trying to run away
+	 * @param x Critter's x location
+	 * @param y Critter's y location
+	 */
+	public static boolean tryToRunAway(Critter c, int x, int y) {
+		ArrayList<Integer> new_coords = new ArrayList<Integer>();
+		for (int i = 0; i < 8; i ++) {
+			new_coords = parseDirection(i, x, y);
+			int x_new = new_coords.get(0);
+			int y_new = new_coords.get(1);
+			// If the spot is empty, then go there
+			if (virtual_map.get(x_new).get(y_new).size() == 0) {
+				c.walk(i);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * This method parses the direction command and updates the
+	 * critter's location.
+	 * @param direction is a random integer from 0 to 7.
+	 * @return List of integers of the coordinates of the new location.
+	 */
+	private static ArrayList<Integer> parseDirection(int direction, int x, int y) {
+		int width = Params.world_width;
+		int height = Params.world_height;
+		
+		/*////////////////////////////////////////
+		//	  Directions   /////	  	Map		//
+		 *****************************************
+		 * 		  2         ** y012...  (width-1)*
+		 *   3    |    1    **x                  *
+		 *     \  |  /      **0 			     *
+		 *      \ | /       **1 			     *
+		 * 4 ----------- 0  **2 		         *
+		 *      / | \       **. 		         *
+		 *     /  |  \      **. 		         *
+		 *   5    |    7    **. 		         *
+		 *        6         **(height-1)         *
+		 *****************************************
+		 ///////////////////////////////////////*/
+		
+		switch (direction) {
+			case 0:
+				if (y < width - 1) {
+					y += 1;
+				}
+				else {
+					y = 0;
+				}
+				break;
+			
+			case 1:
+				if (y < width - 1) {
+					 y += 1;
+				}
+				else {
+					y = 0;
+				}
+				if (x > 0) {
+					x -= 1;
+				}
+				else {
+					x = height - 1;
+				}
+				break;
+			
+			case 2:
+				if (x > 0) {
+					x -= 1;
+				}
+				else {
+					x = height - 1;
+				}
+				break;
+			
+			case 3:
+				if(x > 0) {
+					x -= 1;
+				}
+				else {
+					x = height - 1;
+				}
+				if (y > 0) {
+					y -= 1;
+				}
+				else {
+					y = width - 1;
+				}
+				break;
+			
+			case 4:
+				if (y > 0) {
+					y -= 1;
+				}
+				else {
+					y = width - 1;
+				}
+				break;
+			
+			case 5:
+				if (x < height - 1) {
+					x += 1;
+				}
+				else {
+					x = 0;
+				}
+				if (y < 0 ) {
+					y -= 1;
+				}
+				else {
+					y = width - 1;
+				}
+				break;
+			
+			case 6:
+				if (x < height - 1) {
+					x += 1;
+				}
+				else {
+					x = 0;
+				}
+				break;
+			
+			case 7:
+				if (x < height - 1) {
+					x += 1;
+				}
+				else {
+					x = 0;
+				}
+				if (y < width - 1) {
+					y += 1;
+				}
+				else {
+					y = 0;
+				}
+				break;
+			
+			default:
+				// TODO should this throw an error? assertion? exception?
+				break;
+		}
+		
+		// Return a tuple of coordinates so the calling method can update the
+		// virtual map.
+		ArrayList<Integer> coords = new ArrayList<Integer>();
+		coords.add(x);
+		coords.add(y);
+		return coords;
+	}
 }
-
-
 	
