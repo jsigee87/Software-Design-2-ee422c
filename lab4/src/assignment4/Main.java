@@ -12,8 +12,6 @@ package assignment4;
  * Spring 2018
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -135,7 +133,7 @@ public class Main {
         				displayHelp();
         				break;
         			default:
-        				displayHelp();
+        				System.out.println("invalid command: " + str);
         				break;
         			}
         		}
@@ -154,7 +152,7 @@ public class Main {
         				seedCommand(str);
         			}
         			else { // Invalid command... display help message
-        				displayHelp();
+        				System.out.println("invalid command: " + str);
         			}
         		
 	        	}
@@ -176,9 +174,15 @@ public class Main {
     */
    public static void makeCommand(String str) {
 	   String className = str.substring(str.indexOf(" ")).trim();
-	   int count;
+	   int count = 0;
 		if(multipleCommands(className)) {
-			count = Integer.parseInt(className.substring(className.indexOf(" ")).trim());
+			try {
+				count = Integer.parseInt(className.substring(className.indexOf(" ")).trim());
+			}
+			catch(NumberFormatException e) {
+				System.out.println("error processing: " + str);
+			}
+			
 			className = className.substring(0, className.indexOf(" ")).trim();
 		}
 		else {
@@ -189,7 +193,7 @@ public class Main {
 				CritterWorld.makeCritter(className);
 			} catch (InvalidCritterException e) {
 				System.out.println("Invalid Critter!");
-				return;	//TODO Daniel is this right?
+				return;
 			}
 		}
    }
@@ -200,9 +204,14 @@ public class Main {
     * @param str argument to parse
     */
    public static void stepCommand(String str) {
-	   int count;
+	   int count = 0;
 	   if(multipleCommands(str)) {
+		   try {
 			count = Integer.parseInt(str.substring(str.indexOf(" ")).trim());
+		   }
+		   catch(NumberFormatException e) {
+				System.out.println("error processing: " + str);
+			}
 		}
 		else {
 			count = 1;
@@ -220,7 +229,12 @@ public class Main {
    public static void seedCommand(String str) {
 	   long seed = 0;
 	   if(multipleCommands(str)) {
+		   try {
 			seed = Long.parseLong(str.substring(str.indexOf(" ")).trim());
+		   }
+		   catch(NumberFormatException e) {
+				System.out.println("error processing: " + str);
+			}
 		}
 	   TestCritter.setSeed(seed);	   
    }
