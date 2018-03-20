@@ -229,19 +229,20 @@ public class Main {
 	  String className = str.substring(str.indexOf(" ")).trim();
 	  try {
 		  List<Critter> list = CritterWorld.getInstances(className);
-		  
-		  Class<?> c = list.get(0).getClass();
-//		  @SuppressWarnings("deprecation")
-//		  Object o = c.newInstance();
-//		  
-//		  List<Critter> critterList;
-		  @SuppressWarnings("rawtypes")
-		  Class[] cArg = new Class[1];
-	      cArg[0] = List.class;
-		  Method m = c.getMethod("runStats", cArg);
-		  
-		  m.invoke(c, list);
-		  
+
+		  className = className.toLowerCase();
+		  if(className.equals("critter")) {
+			  CritterWorld.runStats(list);
+		  }
+		  else {
+			  Class<?> c = list.get(0).getClass();
+			  @SuppressWarnings("rawtypes")
+			  Class[] cArg = new Class[1];
+		      cArg[0] = List.class;
+			  Method m = c.getMethod("runStats", cArg);
+			  
+			  m.invoke(c, list);
+		  }  
 		  
 	  } 
 	  catch (InvalidCritterException | IllegalAccessException e) {
