@@ -275,7 +275,9 @@ public abstract class Critter {
 			// If the class exists, add to list									//
 			if(classList.contains(newClass)) {  
 				for(Critter crit : CritterWorld.getPopulation()) {
-					result.add(crit);
+					if(crit.getClass().equals(newClass) || string.equals(myPackage + "." + "Critter")) {
+						result.add(crit);
+					}
 				}
 			}
 			else {
