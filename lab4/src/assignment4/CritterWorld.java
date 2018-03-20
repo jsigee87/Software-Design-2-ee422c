@@ -1,9 +1,13 @@
 package assignment4;
 
+// Per Piazza, do not use import*
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.List;
 import assignment4.Critter.TestCritter;
 // This is the model
 
@@ -105,6 +109,7 @@ public class CritterWorld extends TestCritter{
 		genAlgae();
 		
 		// Add new critters to the map is done inside Critter.
+		//TODO do we need to clear anything else here??
 	}
 	
 	/**
@@ -117,13 +122,13 @@ public class CritterWorld extends TestCritter{
 	}
 	
 	/**
-	 * 
+	 * This method is called at the end of each world time step. It 
+	 * empties out the list of potential conflicts
 	 */
 	public static void resolveConflicts() {
 
 		//resolve conflicts if they exist
 		while(!conflicts.isEmpty()) { //we have potential conflicts to resolve
-			
 			ArrayList<Integer> coords = conflicts.poll(); 
 			//remove coordinate with a potential conflict from the Queue
 			
@@ -131,18 +136,23 @@ public class CritterWorld extends TestCritter{
 			int y = coords.get(1);
 			
 			ArrayList<Critter> list = new ArrayList<Critter>();
-
-			try {
-				 list = virtual_map.get(x).get(y);
+			// If there is still a conflict in this spot
+			if (virtual_map.get(x).get(y).size() > 1) {
+				try {
+					 list = virtual_map.get(x).get(y);
+				}
+				catch (ArrayIndexOutOfBoundsException e) {
+					System.out.print("You have tried to access the virtual map");
+					System.out.print(" out of bounds.\n");
+					System.out.println("x is:\t" + x);
+					System.out.println("y is:\t" + y);
+					System.out.println("Here is the stack trace:");
+					e.printStackTrace();
+					System.exit(1);
+				}
 			}
-			catch (ArrayIndexOutOfBoundsException e) {
-				System.out.print("You have tried to access the virtual map");
-				System.out.print(" out of bounds.\n");
-				System.out.println("x is:\t" + x);
-				System.out.println("y is:\t" + y);
-				System.out.println("Here is the stack trace:");
-				e.printStackTrace();
-				System.exit(1);
+			else {
+				break; // The conflict must have resolved itself
 			}
 			
 			//while there is more than one critter on that coordinate
@@ -234,9 +244,11 @@ public class CritterWorld extends TestCritter{
 		}
 	}	
 	
-	/*
+	/**
 	 * Queue a new critter to be added to the world at the end of the time
 	 * step.
+	 * @param Critter to be added to the babies list for additon to the 
+	 * map later.
 	 */
 	public static void queueNewCritter(Critter new_critter) {
 		new_critters.add(new_critter);
@@ -274,7 +286,7 @@ public class CritterWorld extends TestCritter{
 		}
 	}
 	
-	/*
+	/**
 	 * Prints the map edge.
 	 */
 	public static void printEdge() {
@@ -286,7 +298,7 @@ public class CritterWorld extends TestCritter{
 		System.out.println();
 	}
 	
-	/*
+	/**
 	 * Prints the map body via the virtual map.
 	 */
 	public static void printBody() {
@@ -310,14 +322,14 @@ public class CritterWorld extends TestCritter{
 		}
 	}
 	
-	/*
+	/**
 	 * Accesses the quit game flag.
 	 */
 	public static boolean shouldQuit() {
 		return shouldQuit;
 	}
 	
-	/*
+	/**
 	 * Sets the quit game flag to true.
 	 */
 	protected static void quit() {
@@ -335,8 +347,9 @@ public class CritterWorld extends TestCritter{
 		return false;
 	}
 	
-	/*
+	/**
 	 * For readability, this function checks if critter is dead.
+	 * @return true if critter is dead, false if alive.
 	 */
 	public static boolean dead(Critter critter) {
 		if (critter.getEnergy() <= 0) {

@@ -4,16 +4,21 @@ package assignment4;
  * Replace <...> with your actual data.
  * <John Sigmon>
  * <js85773>
- * <.......>
- * <Daniel Diamont> //TODO
+ * <15455>
+ * <Daniel Diamont>
  * <dd28977>
  * <15455>
  * Slip days used: <0>
  * Spring 2018
  */
 
-
-import java.util.*;
+// Per Piazza do not use import *
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.Map;
 import assignment4.CritterWorld;
 
 /* 
