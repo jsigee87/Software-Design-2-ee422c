@@ -14,6 +14,7 @@ package assignment4;
 
 // Per Piazza do not use import *
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.List;
