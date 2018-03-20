@@ -2,6 +2,13 @@ package assignment4;
 
 import assignment4.Critter;
 
+/**
+ * Spinner is a critter that only moves in a box shaped pattern.
+ * It walks once per time step. It will cycle through directions: right, up, 
+ * left, and down in order to make the box pattern
+ * @author Daniel Diamont
+ *
+ */
 public class Spinner extends Critter {
 	
 	private int [] dir = {0,2,4,6};
