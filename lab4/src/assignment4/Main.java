@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import assignment4.Critter.TestCritter;
 
 /*
@@ -225,10 +228,29 @@ public class Main {
    public static void statsCommand(String str) {
 	  String className = str.substring(str.indexOf(" ")).trim();
 	  try {
-		  CritterWorld.runStats(CritterWorld.getInstances(className));
+		  List<Critter> list = CritterWorld.getInstances(className);
+		  
+		  Class<?> c = list.get(0).getClass();
+//		  @SuppressWarnings("deprecation")
+//		  Object o = c.newInstance();
+//		  
+//		  List<Critter> critterList;
+		  @SuppressWarnings("rawtypes")
+		  Class[] cArg = new Class[1];
+	      cArg[0] = List.class;
+		  Method m = c.getMethod("runStats", cArg);
+		  
+		  m.invoke(c, list);
+		  
+		  
 	  } 
-	  catch (InvalidCritterException e) {
+	  catch (InvalidCritterException | IllegalAccessException e) {
 		  System.out.println("Invalid Critter!");
+		  return;
+	  }
+	  catch (InvocationTargetException | NoSuchMethodException | SecurityException e)
+	  {
+		  e.printStackTrace();
 		  return;
 	  }
    }
