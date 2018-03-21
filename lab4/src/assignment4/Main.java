@@ -150,6 +150,9 @@ public class Main {
         			else if(str.contains("seed")) {
         				seedCommand(str);
         			}
+        			else if (str.contains("show")) {
+        				System.out.println("error processing: " + str);
+        			}
         			else { // Invalid command... display help message
         				System.out.println("invalid command: " + str);
         			}
