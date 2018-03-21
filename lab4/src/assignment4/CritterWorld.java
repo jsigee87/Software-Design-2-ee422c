@@ -14,7 +14,6 @@ import assignment4.Critter.TestCritter;
 public class CritterWorld extends TestCritter{
 
 	private static boolean shouldQuit;
-	//TODO are the x-y coordinates assigned correctly? Refer to JUNIT test case testWalk
 	/**
 	 * Virtual map. Holds the index of the critter that is to be displayed when
 	 *  displayWorld() is called. 'x' is a list, 'y' is a list in 'x', a member
@@ -439,8 +438,8 @@ public class CritterWorld extends TestCritter{
 		/*////////////////////////////////////////
 		//	  Directions   /////	  	Map		//
 		 *****************************************
-		 * 		  2         ** y012...  (width-1)*
-		 *   3    |    1    **x                  *
+		 * 		  2         ** x012...  (width-1)*
+		 *   3    |    1    **y                  *
 		 *     \  |  /      **0 			     *
 		 *      \ | /       **1 			     *
 		 * 4 ----------- 0  **2 		         *
@@ -453,94 +452,79 @@ public class CritterWorld extends TestCritter{
 		
 		switch (direction) {
 			case 0:
-				if (y < width - 1) {
-					y += 1;
+				if (x < width - 1) {
+					x += 1;
 				}
 				else {
-					y = 0;
+					x = 0;
 				}
 				break;
 			
 			case 1:
-				if (y < width - 1) {
-					 y += 1;
+				if (x < width - 1) {
+					 x += 1;
 				}
 				else {
-					y = 0;
+					x = 0;
 				}
-				if (x > 0) {
-					x -= 1;
+				if (y > 0) {
+					y -= 1;
 				}
 				else {
-					x = height - 1;
+					y = height - 1;
 				}
 				break;
 			
 			case 2:
-				if (x > 0) {
-					x -= 1;
+				if (y > 0) {
+					y -= 1;
 				}
 				else {
-					x = height - 1;
+					y = height - 1;
 				}
 				break;
 			
 			case 3:
-				if(x > 0) {
-					x -= 1;
-				}
-				else {
-					x = height - 1;
-				}
-				if (y > 0) {
+				if(y > 0) {
 					y -= 1;
 				}
 				else {
-					y = width - 1;
+					y = height - 1;
+				}
+				if (x > 0) {
+					x -= 1;
+				}
+				else {
+					x = width - 1;
 				}
 				break;
 			
 			case 4:
-				if (y > 0) {
-					y -= 1;
+				if (x > 0) {
+					x -= 1;
 				}
 				else {
-					y = width - 1;
+					x = width - 1;
 				}
 				break;
 			
 			case 5:
-				if (x < height - 1) {
-					x += 1;
+				if (y < height - 1) {
+					y += 1;
 				}
 				else {
-					x = 0;
+					y = 0;
 				}
-				if (y < 0 ) {
-					y -= 1;
+				if (x < 0 ) {
+					x -= 1;
 				}
 				else {
-					y = width - 1;
+					x = width - 1;
 				}
 				break;
 			
 			case 6:
-				if (x < height - 1) {
-					x += 1;
-				}
-				else {
-					x = 0;
-				}
-				break;
-			
-			case 7:
-				if (x < height - 1) {
-					x += 1;
-				}
-				else {
-					x = 0;
-				}
-				if (y < width - 1) {
+				if (y < height - 1) {
 					y += 1;
 				}
 				else {
@@ -548,8 +532,29 @@ public class CritterWorld extends TestCritter{
 				}
 				break;
 			
+			case 7:
+				if (y < height - 1) {
+					y += 1;
+				}
+				else {
+					y = 0;
+				}
+				if (x < width - 1) {
+					x += 1;
+				}
+				else {
+					x = 0;
+				}
+				break;
+			
 			default:
-				// TODO should this throw an error? assertion? exception?
+				System.out.println("I don't know how you reached this );"
+						+ "error message.");
+				System.out.println("You probably tried to choose an unsupported"
+						+ "direction number.");
+				System.out.println("Here is your stack trace:");
+				new Exception().printStackTrace();
+				System.exit(1);
 				break;
 		}
 		
