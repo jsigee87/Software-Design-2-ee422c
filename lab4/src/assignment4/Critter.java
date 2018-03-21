@@ -31,6 +31,7 @@ import assignment4.CritterWorld;
 public abstract class Critter {
 	private static String myPackage;
 	private	static List<Critter> population = new ArrayList<Critter>();
+	@SuppressWarnings("unused")
 	private static List<Critter> babies = new ArrayList<Critter>();
 	
 	/*///////////////////
@@ -247,7 +248,6 @@ public abstract class Critter {
 	 * @param critter_class_name
 	 * @throws InvalidCritterException
 	 */
-	@SuppressWarnings("deprecation")											//
 	public static void makeCritter(String critter_class_name) 					//
 								throws InvalidCritterException {				//
 		// Take the given class name and convert it								//
@@ -259,7 +259,6 @@ public abstract class Critter {
 		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
 		string = myPackage + "." + first + critter_class_name.substring(1);		//
 																				//
-		@SuppressWarnings("rawtypes")											//
 		List<String> classList = CritterWorld.getClassList(myPackage);			//
 		
 		List<String> lowerClassList = new ArrayList<String>();
