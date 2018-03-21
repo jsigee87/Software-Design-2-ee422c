@@ -21,7 +21,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class A4SampleTest{
 
-	private static String TESTSRCDIR = "test_sample/";
+	private static String TESTSRCDIR = "lab4/test_sample/";
 	private static  ByteArrayOutputStream outContent;
 
 	@BeforeClass

@@ -179,38 +179,39 @@ public abstract class Critter {
 		if (dead()) {
 			population.remove(population.indexOf(this));
 			removeFromMap(coords);
-		}
-				
-		if (hasMoved == false) {
-			// First we remove the critter from the current position.
-			removeFromMap(coords);
-	
-			// Then we get the critter's new coordinates and update their position.
-			coords = parseDirection(direction);
-			coords = parseDirection(direction);
-			updateMap(coords);
-		}
-		
-		// Set the critter's energy level.
-		this.setEnergy(this.getEnergy() - Params.run_energy_cost);
-		
-		// If they are dead, kill them off.
-		if (dead()) {
-			population.remove(population.indexOf(this));
-			removeFromMap(coords);
-		}
+		}				
 		else {
-			this.hasMoved = true;
+			if (hasMoved == false) {
+				// First we remove the critter from the current position.
+				removeFromMap(coords);
 		
-			// Check if the critter's new spot is already occupied.
-			x = coords.get(0);
-			y = coords.get(1);
-			if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
-				return; //The critter is the only occupant.
+				// Then we get the critter's new coordinates and update their position.
+				coords = parseDirection(direction);
+				coords = parseDirection(direction);
+				updateMap(coords);
+			}
+			
+			// Set the critter's energy level.
+			this.setEnergy(this.getEnergy() - Params.run_energy_cost);
+			
+			// If they are dead, kill them off.
+			if (dead()) {
+				population.remove(population.indexOf(this));
+				removeFromMap(coords);
 			}
 			else {
-				// Add the current spot to conflict list to check later.
-				CritterWorld.conflicts.add(coords);
+				this.hasMoved = true;
+			
+				// Check if the critter's new spot is already occupied.
+				x = coords.get(0);
+				y = coords.get(1);
+				if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
+					return; //The critter is the only occupant.
+				}
+				else {
+					// Add the current spot to conflict list to check later.
+					CritterWorld.conflicts.add(coords);
+				}
 			}
 		}
 	}
@@ -265,15 +266,20 @@ public abstract class Critter {
 		string = myPackage + "." + first + critter_class_name.substring(1);		//
 																				//
 		@SuppressWarnings("rawtypes")											//
-		List<Class> classList = CritterWorld.getClassList(myPackage);			//
-																				//
-		try {																	//
-			// Get the class type or throw an exception							//
-			Class<?> newClass = Class.forName(string); 							//
-																				//
-			// If the class exists, create a new critter using reflection		//
-			if(classList.contains(newClass)) {  								//
-				
+		List<String> classList = CritterWorld.getClassList(myPackage);			//
+		
+		List<String> lowerClassList = new ArrayList<String>();
+		
+		for(String str : classList) {
+			lowerClassList.add(str.toLowerCase());
+		}
+		
+		if(lowerClassList.contains(string.toLowerCase())){
+			try {																	//
+				// Get the class type or throw an exception							//
+				int idx = lowerClassList.indexOf(string.toLowerCase());
+				Class<?> newClass = Class.forName(classList.get(idx)); 							//
+																					//
 				Critter newCritter = null;
 				try {
 					newCritter = (Critter) newClass.newInstance();
@@ -292,16 +298,17 @@ public abstract class Critter {
 				
 				// Add new critter to the world
 				CritterWorld.addCritter(newCritter, newCritter.x_coord, 
-						newCritter.y_coord);				
+						newCritter.y_coord);	
+						
+			}			 
+			catch( ClassNotFoundException e ) {
+				 throw new InvalidCritterException(string);
 			}
-			else {
-				throw new ClassNotFoundException();
-			}
-					
-		}			 
-		catch( ClassNotFoundException e ) {
-			 throw new InvalidCritterException(string);
 		}
+		else {
+			throw new InvalidCritterException(string);
+		}
+		
 	}
 	
 	/**
@@ -318,14 +325,20 @@ public abstract class Critter {
 		String string = returnClassName(critter_class_name);	
 																				//
 		@SuppressWarnings("rawtypes")											//
-		List<Class> classList = CritterWorld.getClassList(myPackage);			//
-																				//
-		try {																	//
-			// Get the class type or throw an exception							//
-			Class<?> newClass = Class.forName(string); 							//
-																				//
-			// If the class exists, add to list									//
-			if(classList.contains(newClass)) {  
+		List<String> classList = CritterWorld.getClassList(myPackage);			//
+		
+		List<String> lowerClassList = new ArrayList<String>();
+		
+		for(String str : classList) {
+			lowerClassList.add(str.toLowerCase());
+		}
+		
+		if(lowerClassList.contains(string.toLowerCase())) {
+			try {																	//
+				// Get the class type or throw an exception							//
+				int idx = lowerClassList.indexOf(string.toLowerCase());
+				Class<?> newClass = Class.forName(classList.get(idx)); 							//
+																					//
 				for(Critter crit : CritterWorld.getPopulation()) {
 					if(string.equals(myPackage + "." + "Critter"))
 					{
@@ -337,14 +350,14 @@ public abstract class Critter {
 						}
 					}
 				}
+						
+			}			 
+			catch( ClassNotFoundException e ) {
+				 throw new InvalidCritterException(string);
 			}
-			else {
-				throw new ClassNotFoundException();
-			}
-					
-		}			 
-		catch( ClassNotFoundException e ) {
-			 throw new InvalidCritterException(string);
+		}
+		else {
+			throw new InvalidCritterException(string);
 		}
 		
 		return result;
@@ -437,6 +450,7 @@ public abstract class Critter {
 	 */
 	public static void clearWorld() {
 		CritterWorld.clearWorld();
+		new CritterWorld();
 	}
 	
 	/*

@@ -13,7 +13,7 @@ import java.awt.Point;
 import java.util.List;
 public class A4SampleTest2 {
 
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

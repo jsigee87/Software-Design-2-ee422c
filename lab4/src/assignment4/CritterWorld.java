@@ -14,7 +14,7 @@ import assignment4.Critter.TestCritter;
 public class CritterWorld extends TestCritter{
 
 	private static boolean shouldQuit;
-	
+	//TODO are the x-y coordinates assigned correctly? Refer to JUNIT test case testWalk
 	/**
 	 * Virtual map. Holds the index of the critter that is to be displayed when
 	 *  displayWorld() is called. 'x' is a list, 'y' is a list in 'x', a member
@@ -167,6 +167,8 @@ public class CritterWorld extends TestCritter{
 				boolean fightB = B.fight(A.toString());
 				
 				boolean ran_away;
+				
+				//TODO JUNIT test shows that the runner does not have the appropriate energy cost deducted
 				if (fightA == false) {
 					ran_away = tryToRunAway(A, x, y);
 					if (ran_away == true) {
@@ -365,10 +367,10 @@ public class CritterWorld extends TestCritter{
 	 * @return list of all .class files located inside the package
 	 * @throws URISyntaxException 
 	 */
-	@SuppressWarnings({ "rawtypes", "unused" })
-	public static List<Class> getClassList(String myPackage) {
+	@SuppressWarnings({ "unused" })
+	public static List<String> getClassList(String myPackage) {
 
-	    List<Class> classList = new ArrayList<Class>();
+	    List<String> classList = new ArrayList<String>();
 
 	    // Get a File object for the package
 	    File directory = null;
@@ -392,11 +394,7 @@ public class CritterWorld extends TestCritter{
                 // Removes the .class extension
                 String name = myPackage + '.' + files[i].substring(0, files[i].length() - 6);
                 
-                try {
-					classList.add(Class.forName(name));
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
+                classList.add(name);
             }
         }
         
@@ -418,9 +416,12 @@ public class CritterWorld extends TestCritter{
 			int y_new = new_coords.get(1);
 			// If the spot is empty, then go there
 			if (virtual_map.get(x_new).get(y_new).size() == 0) {
-				c.walk(i);
+				c.run(i);
 				return true;
 			}
+//			else {
+//				c.setEnergy(c.getEnergy() - Params.run_energy_cost);
+//			}
 		}
 		return false;
 	}

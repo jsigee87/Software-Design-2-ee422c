@@ -96,11 +96,11 @@ public class Main {
     	
     	// Sets up world, initializes virtual map.  
     	new CritterWorld();
-    	System.out.println();
-    	System.out.println("Your world has been created. Enter some commands"
-    			+ " to manipulate your world, or type");
-    	System.out.println(" help for a list of supported commands.");
-    	System.out.println();
+//    	System.out.println();
+//    	System.out.println("Your world has been created. Enter some commands"
+//    			+ " to manipulate your world, or type");
+//    	System.out.println(" help for a list of supported commands.");
+//    	System.out.println();
     	
         //int blinker = 0; 
     	while(true) {
@@ -111,7 +111,7 @@ public class Main {
     			//System.out.print("critters> |");
     		//}
     		//blinker ^= blinker;
-   
+    		//TODO fix parser to match up exactly with JUNIT test
     		if(kb.hasNextLine()) {
         		String str = kb.nextLine();
         		str = str.trim(); //remove extra spaces at beginning and end of string. Spaces in middle not affected.
@@ -151,21 +151,21 @@ public class Main {
         				seedCommand(str);
         			}
         			else if (str.contains("show")) {
-        				System.out.println("error processing: " + str);
+        				System.out.print("error processing: " + str);
         			}
         			else { // Invalid command... display help message
-        				System.out.println("invalid command: " + str);
+        				System.out.print("invalid command: " + str);
         			}
         		
 	        	}
-	        	System.out.println();
+//	        	System.out.println();
 	        	if (CritterWorld.shouldQuit()) {
 	        		break;
 	        	}
     		}//end if-block
 	        
     	}//end while
-    	System.out.println("Quitting Critters...");
+//    	System.out.println("Quitting Critters...");
         System.out.flush();
     }
     
@@ -251,7 +251,7 @@ public class Main {
 		  if(unqualifiedClassName.toLowerCase().equals("critter")) {
 			  CritterWorld.runStats(list);
 		  }
-		  else {
+		  else { //TODO fix command to exactly match up with JUNIT test case
 			  Class<?> c = Class.forName(returnClassName(unqualifiedClassName));
 			  @SuppressWarnings("rawtypes")
 			  Class[] cArg = new Class[1];
