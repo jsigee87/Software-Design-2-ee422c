@@ -41,7 +41,6 @@ public class Main {
     // If you want to restore output to console
     static PrintStream old = System.out;	
 
-
     // Gets the package name.  The usage assumes that Critter and its sub-
     //classes are all in the same package.
     static {
@@ -240,16 +239,17 @@ public class Main {
    }
    
    public static void statsCommand(String str) {
-	  String className = str.substring(str.indexOf(" ")).trim();
+	  String unqualifiedClassName = str.substring(str.indexOf(" ")).trim();
+	  
+	  
 	  try {
-		  List<Critter> list = CritterWorld.getInstances(className);
+		  List<Critter> list = CritterWorld.getInstances(unqualifiedClassName);
 
-		  className = className.toLowerCase();
-		  if(className.equals("critter")) {
+		  if(unqualifiedClassName.toLowerCase().equals("critter")) {
 			  CritterWorld.runStats(list);
 		  }
 		  else {
-			  Class<?> c = list.get(0).getClass();
+			  Class<?> c = Class.forName(returnClassName(unqualifiedClassName));
 			  @SuppressWarnings("rawtypes")
 			  Class[] cArg = new Class[1];
 		      cArg[0] = List.class;
@@ -267,7 +267,10 @@ public class Main {
 	  {
 		  e.printStackTrace();
 		  return;
-	  }
+	  } catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
    }
    
    /**
@@ -373,7 +376,13 @@ public class Main {
 		}
     }
 
-
+    private static String returnClassName(String critter_class_name) {
+		critter_class_name = critter_class_name.toLowerCase();					//
+		String string = new String();											//
+		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
+		string = assignment4 + "." + first + critter_class_name.substring(1);	
+		return string;
+	}
 /***************************************************/
 
 // Dead Code //

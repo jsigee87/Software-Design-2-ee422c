@@ -95,38 +95,71 @@ public abstract class Critter {
 			population.remove(population.indexOf(this));
 			removeFromMap(coords);
 		}
-		
-		if (hasMoved == false) {
-			// First we remove the critter from the current position.
-			removeFromMap(coords);
-			
-			// Then we get the critter's new coordinates and update their position.
-			coords = parseDirection(direction);
-			updateMap(coords);
-		}
-		
-		// Set the critter's energy level no matter what.
-		this.setEnergy(this.getEnergy() - Params.walk_energy_cost);
-		
-		// If they are dead, kill them off.
-		if (dead()) {
-			population.remove(population.indexOf(this));
-			removeFromMap(coords);
-		}
 		else {
-			this.hasMoved = true;
-		
-			// Check if the critter's new spot is already occupied.
-			x = coords.get(0);
-			y = coords.get(1);
-			if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
-				return; //The critter is the only occupant.
+			if (hasMoved == false) {
+				// First we remove the critter from the current position.
+				removeFromMap(coords);
+				
+				// Then we get the critter's new coordinates and update their position.
+				coords = parseDirection(direction);
+				updateMap(coords);
+			}
+			
+			// Set the critter's energy level no matter what.
+			this.setEnergy(this.getEnergy() - Params.walk_energy_cost);
+			
+			// If they are dead, kill them off.
+			if (dead()) {
+				population.remove(population.indexOf(this));
+				removeFromMap(coords);
 			}
 			else {
-				// Add the current spot to conflict list to check later.
-				CritterWorld.conflicts.add(coords);
+				this.hasMoved = true;
+			
+				// Check if the critter's new spot is already occupied.
+				x = coords.get(0);
+				y = coords.get(1);
+				if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
+					return; //The critter is the only occupant.
+				}
+				else {
+					// Add the current spot to conflict list to check later.
+					CritterWorld.conflicts.add(coords);
+				}
 			}
 		}
+		
+//		if (hasMoved == false) {
+//			// First we remove the critter from the current position.
+//			removeFromMap(coords);
+//			
+//			// Then we get the critter's new coordinates and update their position.
+//			coords = parseDirection(direction);
+//			updateMap(coords);
+//		}
+//		
+//		// Set the critter's energy level no matter what.
+//		this.setEnergy(this.getEnergy() - Params.walk_energy_cost);
+//		
+//		// If they are dead, kill them off.
+//		if (dead()) {
+//			population.remove(population.indexOf(this));
+//			removeFromMap(coords);
+//		}
+//		else {
+//			this.hasMoved = true;
+//		
+//			// Check if the critter's new spot is already occupied.
+//			x = coords.get(0);
+//			y = coords.get(1);
+//			if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
+//				return; //The critter is the only occupant.
+//			}
+//			else {
+//				// Add the current spot to conflict list to check later.
+//				CritterWorld.conflicts.add(coords);
+//			}
+//		}
 	}
 	
 	/**
@@ -282,10 +315,7 @@ public abstract class Critter {
 									throws InvalidCritterException {
 		List<Critter> result = new ArrayList<Critter>();
 		
-		critter_class_name = critter_class_name.toLowerCase();					//
-		String string = new String();											//
-		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
-		string = myPackage + "." + first + critter_class_name.substring(1);	
+		String string = returnClassName(critter_class_name);	
 																				//
 		@SuppressWarnings("rawtypes")											//
 		List<Class> classList = CritterWorld.getClassList(myPackage);			//
@@ -618,6 +648,14 @@ public abstract class Critter {
 		int x = coords.get(0);
 		int y = coords.get(1);
 		CritterWorld.virtual_map.get(x).get(y).remove(this);
+	}
+	
+	private static String returnClassName(String critter_class_name) {
+		critter_class_name = critter_class_name.toLowerCase();					//
+		String string = new String();											//
+		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
+		string = myPackage + "." + first + critter_class_name.substring(1);	
+		return string;
 	}
 	
 	///////////////////////////////////////////////////////

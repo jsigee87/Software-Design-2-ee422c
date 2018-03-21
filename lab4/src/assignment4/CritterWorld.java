@@ -425,7 +425,6 @@ public class CritterWorld extends TestCritter{
 		return false;
 	}
 	
-	
 	/**
 	 * This method parses the direction command and updates the
 	 * critter's location.
