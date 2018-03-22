@@ -261,6 +261,11 @@ public abstract class Critter {
 				newCritter.y_coord = TestCritter.getRandomInt(
 						Params.world_width);
 				
+//				/*
+//				 * Test
+//				 */
+//				System.out.println("(" + newCritter.x_coord + "," + newCritter.y_coord + ")");
+
 				// Add new critter to the world
 				CritterWorld.addCritter(newCritter, newCritter.x_coord, 
 						newCritter.y_coord);	
@@ -425,6 +430,49 @@ public abstract class Critter {
 	 * due to the pdf restrictions on public/private methods.
 	 */
 	public static void worldTimeStep() {
+		
+		ArrayList<Integer> coords = new ArrayList<Integer>();
+		ArrayList<Integer> oldCoords = new ArrayList<Integer>();
+		//in case coordinates were set externally...
+		for(Critter crit : population) {
+			int x = crit.x_coord;
+			int y = crit.y_coord;
+			coords.add(x);
+			coords.add(y);
+			
+//			System.out.println("new: (" + x + "," + y + ")");
+			//get old coords
+			int oldX;
+			int oldY;
+			for(ArrayList<ArrayList<Critter>> xList : CritterWorld.virtual_map) {
+				oldX = CritterWorld.virtual_map.indexOf(xList);
+				for(ArrayList<Critter> yList :
+					CritterWorld.virtual_map.get(oldX)) {
+					oldY = xList.indexOf(yList);
+					if(CritterWorld.virtual_map.get(oldX).get(oldY).contains(crit)
+							) {
+						oldCoords.add(oldX);
+						oldCoords.add(oldY);
+//						System.out.println("old: (" + oldX + "," + oldY + ")");
+						crit.removeFromMap(oldCoords);
+						crit.updateMap(coords);
+					}
+				}
+			}
+			
+		}
+		
+		//check for conflicts
+		for(Critter crit1 : population) {
+			for(Critter crit2 : population) {
+				if(!crit2.equals(crit1) && (crit1.x_coord == crit2.x_coord &&
+						crit1.y_coord == crit2.y_coord)) {
+					
+					CritterWorld.conflicts.add(coords);
+				}
+			}
+		}
+		
 		CritterWorld.worldTimeStep();
 		addNewCritters();
 		resetHasMoved();
@@ -630,6 +678,8 @@ public abstract class Critter {
 		int x = coords.get(0);
 		int y = coords.get(1);
 		CritterWorld.virtual_map.get(x).get(y).add(this);
+		x_coord = x;
+		y_coord = y;
 	}
 	
 	/**

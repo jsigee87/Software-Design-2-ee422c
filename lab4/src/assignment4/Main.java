@@ -106,7 +106,7 @@ public class Main {
         //int blinker = 0; 
     	while(true) {
     		//if (blinker == 0) {
-    			System.out.print("critters> ");
+    			System.out.print("critters>");
     		//}
     		//if (blinker == 1) {
     			//System.out.print("critters> |");
@@ -133,7 +133,7 @@ public class Main {
         				displayHelp();
         				break;
         			default:
-        				System.out.print("invalid command: " + str);
+        				System.out.println("invalid command: " + str);
         				break;
         			}
         		}
@@ -152,10 +152,10 @@ public class Main {
         				seedCommand(str);
         			}
         			else if (str.contains("show")) {
-        				System.out.print("error processing: " + str);
+        				System.out.println("error processing: " + str);
         			}
         			else { // Invalid command... display help message
-        				System.out.print("invalid command: " + str);
+        				System.out.println("invalid command: " + str);
         			}
         		
 	        	}
@@ -183,7 +183,7 @@ public class Main {
 				count = Integer.parseInt(className.substring(className.indexOf(" ")).trim());
 			}
 			catch(NumberFormatException e) {
-				System.out.print("error processing: " + str);
+				System.out.println("error processing: " + str);
 			}
 			
 			className = className.substring(0, className.indexOf(" ")).trim();
@@ -195,7 +195,7 @@ public class Main {
 			try {
 				CritterWorld.makeCritter(className);
 			} catch (InvalidCritterException e) {
-				System.out.print("Invalid Critter!");
+				System.out.println("Invalid Critter!");
 				return;
 			}
 		}
@@ -213,7 +213,7 @@ public class Main {
 			count = Integer.parseInt(str.substring(str.indexOf(" ")).trim());
 		   }
 		   catch(NumberFormatException e) {
-				System.out.print("error processing: " + str);
+				System.out.println("error processing: " + str);
 			}
 		}
 		else {
@@ -236,7 +236,7 @@ public class Main {
 			seed = Long.parseLong(str.substring(str.indexOf(" ")).trim());
 		   }
 		   catch(NumberFormatException e) {
-				System.out.print("error processing: " + str);
+				System.out.println("error processing: " + str);
 			}
 		}
 	   TestCritter.setSeed(seed);	   
@@ -263,7 +263,7 @@ public class Main {
 		  
 	  } 
 	  catch (InvalidCritterException | IllegalAccessException e) {
-		  System.out.print("Invalid Critter!");
+		  System.out.println("Invalid Critter!");
 		  return;
 	  }
 	  catch (InvocationTargetException | NoSuchMethodException | SecurityException e)
