@@ -309,9 +309,9 @@ public class CritterWorld extends TestCritter{
 			for(j = 0; j < Params.world_width; j++) {
 				
 				//if the spot (i,j) is occupied
-				if(virtual_map.get(i).get(j).isEmpty() == false) {
+				if(virtual_map.get(j).get(i).isEmpty() == false) {
 					//print out the critter
-					System.out.print(virtual_map.get(i).get(j).get(0));					
+					System.out.print(virtual_map.get(j).get(i).get(0));					
 				}
 				else {
 					System.out.print(" "); //print an empty space

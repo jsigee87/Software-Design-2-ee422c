@@ -199,7 +199,8 @@ public abstract class Critter {
 			// Assign the child's position immediately adjacent to the parent 	//
 			// in the specified direction.										//
 			offspring.x_coord = this.x_coord;									//
-			offspring.y_coord = this.y_coord;									//
+			offspring.y_coord = this.y_coord;	
+			//TODO what happens to the return of parse direction?//
 			offspring.parseDirection(direction);
 			CritterWorld.queueNewCritter(offspring);							//
 		}																		//
