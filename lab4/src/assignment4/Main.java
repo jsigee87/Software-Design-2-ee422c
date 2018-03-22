@@ -12,6 +12,7 @@ package assignment4;
  * Spring 2018
  */
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -382,7 +383,19 @@ public class Main {
 		critter_class_name = critter_class_name.toLowerCase();					//
 		String string = new String();											//
 		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
-		string = assignment4 + "." + first + critter_class_name.substring(1);	
+		string = assignment4 + "." + first + critter_class_name.substring(1);
+		
+		List<String> classList = CritterWorld.getClassList(assignment4);
+		
+		List<String> lowClassList = new ArrayList<String>();
+		
+		for(String s : classList) {
+			lowClassList.add(s.toLowerCase());
+		}
+		if(lowClassList.contains(string.toLowerCase())) {
+			int idx = lowClassList.indexOf(string.toLowerCase());
+			return classList.get(idx);
+		}
 		return string;
 	}
 /***************************************************/
