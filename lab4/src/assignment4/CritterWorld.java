@@ -170,9 +170,10 @@ public class CritterWorld extends TestCritter{
 					if (ran_away == true) {
 						list.remove(A);
 					}
-					else if (dead(A)) {
-						list.remove(A);
-					}
+				}
+				
+				if (dead(A)) {
+					list.remove(A);
 				}
 				
 				if (fightB == false) {
@@ -180,62 +181,65 @@ public class CritterWorld extends TestCritter{
 					if (ran_away == true) {
 						list.remove(B);
 					}
-					else if (dead(B)) {
-						list.remove(B);
-					}
 				}
 				
-				// If both are in the same position and are still alive
-				if (list.contains(A) && list.contains(B)) {
-					
-					int rollA;
-					int rollB;
-					
-					// Assumes bounds are inclusive
-					if(fightA) { //if A elected to fight
-						rollA = getRandomInt(A.getEnergy() + 1);
-					}
-					else {
-					rollA = 0;
-					}
-					if(fightB) { //if B elected to fight
-						rollB = getRandomInt(B.getEnergy() + 1);
-					}
-					else {
-						rollB = 0;
-					}
-					
-					// Determine winner
-					Critter winner;
-					Critter loser;
+				if (dead(B)) {
+					list.remove(B);
+				}
 				
-					// A wins all ties
-					if(rollA >= rollB) {
-						winner = A;
-						loser = B;
-					}
-					else {
-						winner = B;
-						loser = A;
-					}
+				if (!dead(A) && !dead(B)) {
+					// If both are in the same position and are still alive
+					if (list.contains(A) && list.contains(B)) {
+						
+						int rollA;
+						int rollB;
+						
+						// Assumes bounds are inclusive
+						if(fightA) { //if A elected to fight
+							rollA = getRandomInt(A.getEnergy() + 1);
+						}
+						else {
+						rollA = 0;
+						}
+						if(fightB) { //if B elected to fight
+							rollB = getRandomInt(B.getEnergy() + 1);
+						}
+						else {
+							rollB = 0;
+						}
+						
+						// Determine winner
+						Critter winner;
+						Critter loser;
 					
-					// Award winner his energy bonus from winning the fight
-					int energy_to_add = loser.getEnergy()/2;
-					winner.setEnergy(winner.getEnergy() + energy_to_add);
-					
-					// Set loser's energy to a negative number so it can be removed
-					loser.setEnergy(-1);
-					try {
-						loser.walk(0);
-					}
-					catch (ArrayIndexOutOfBoundsException e) {
-						System.out.print("You have tried to access the virtual map");
-						System.out.print(" out of bound while killing a critter.\n");
-						System.out.println("x is:\t" + x);
-						System.out.println("y is:\t" + y);
-						System.out.println("Here is the stack trace:");
-						e.printStackTrace();
-					System.exit(1);
+						// A wins all ties
+						if(rollA >= rollB) {
+							winner = A;
+							loser = B;
+						}
+						else {
+							winner = B;
+							loser = A;
+						}
+						
+						// Award winner his energy bonus from winning the fight
+						int energy_to_add = loser.getEnergy()/2;
+						winner.setEnergy(winner.getEnergy() + energy_to_add);
+						
+						// Set loser's energy to a negative number so it can be removed
+						loser.setEnergy(-1);
+						try {
+							loser.walk(0);
+						}
+						catch (ArrayIndexOutOfBoundsException e) {
+							System.out.print("You have tried to access the virtual map");
+							System.out.print(" out of bound while killing a critter.\n");
+							System.out.println("x is:\t" + x);
+							System.out.println("y is:\t" + y);
+							System.out.println("Here is the stack trace:");
+							e.printStackTrace();
+						System.exit(1);
+						}
 					}
 				}
 			}	
