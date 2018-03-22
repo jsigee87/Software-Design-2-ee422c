@@ -31,7 +31,6 @@ import assignment4.CritterWorld;
 public abstract class Critter {
 	private static String myPackage;
 	private	static List<Critter> population = new ArrayList<Critter>();
-	@SuppressWarnings("unused")
 	private static List<Critter> babies = new ArrayList<Critter>();
 	
 	/*///////////////////

@@ -96,7 +96,6 @@ public class CritterWorld extends TestCritter{
 		// Time step all the critters.
 		for (int i = 0; i < getPopulation().size(); i++) {
 			getPopulation().get(i).doTimeStep();
-			getPopulation().get(i).setEnergy(getPopulation().get(i).getEnergy() - Params.rest_energy_cost);
 		}
 		
 		// Resolve conflicts.
@@ -151,9 +150,6 @@ public class CritterWorld extends TestCritter{
 					System.exit(1);
 				}
 			}
-			else {
-				break; // The conflict must have resolved itself
-			}
 			
 			//while there is more than one critter on that coordinate
 			while(list.size() > 1) {
@@ -168,14 +164,14 @@ public class CritterWorld extends TestCritter{
 				
 				boolean ran_away;
 				
-				//TODO JUNIT test shows that the runner does not have the appropriate energy cost deducted
+				
 				if (fightA == false) {
 					ran_away = tryToRunAway(A, x, y);
 					if (ran_away == true) {
 						list.remove(A);
 					}
-					else {
-						// TODO do nothing?
+					else if (dead(A)) {
+						list.remove(A);
 					}
 				}
 				
@@ -184,15 +180,13 @@ public class CritterWorld extends TestCritter{
 					if (ran_away == true) {
 						list.remove(B);
 					}
-					else {
-						// TODO do nothing?
+					else if (dead(B)) {
+						list.remove(B);
 					}
 				}
 				
-				///if both are in the same position and are still alive
-				if(list.contains(A) && list.contains(B) && 
-						TestCritter.getPopulation().contains(A) &&
-						TestCritter.getPopulation().contains(B)) {
+				// If both are in the same position and are still alive
+				if (list.contains(A) && list.contains(B)) {
 					
 					int rollA;
 					int rollB;
@@ -202,7 +196,7 @@ public class CritterWorld extends TestCritter{
 						rollA = getRandomInt(A.getEnergy() + 1);
 					}
 					else {
-						rollA = 0;
+					rollA = 0;
 					}
 					if(fightB) { //if B elected to fight
 						rollB = getRandomInt(B.getEnergy() + 1);
@@ -214,7 +208,7 @@ public class CritterWorld extends TestCritter{
 					// Determine winner
 					Critter winner;
 					Critter loser;
-					
+				
 					// A wins all ties
 					if(rollA >= rollB) {
 						winner = A;
@@ -241,26 +235,9 @@ public class CritterWorld extends TestCritter{
 						System.out.println("y is:\t" + y);
 						System.out.println("Here is the stack trace:");
 						e.printStackTrace();
-						System.exit(1);
+					System.exit(1);
 					}
 				}
-				//if both are in the same position but either or both of them died
-				else if(list.contains(A) && list.contains(B) && 
-						(!TestCritter.getPopulation().contains(A) ||
-								!TestCritter.getPopulation().contains(B))) {
-					//figure out who died and remove them from the list
-					if(!TestCritter.getPopulation().contains(A)) {
-						list.remove(A);
-					}
-					if(!TestCritter.getPopulation().contains(B)) {
-						list.remove(B);
-					}
-					
-				}
-				else {
-					//do nothing... the conflict has been resolved
-				}
-				
 			}	
 		}
 	}	
@@ -268,7 +245,7 @@ public class CritterWorld extends TestCritter{
 	/**
 	 * Queue a new critter to be added to the world at the end of the time
 	 * step.
-	 * @param Critter to be added to the babies list for additon to the 
+	 * @param Critter to be added to the babies list for addition to the 
 	 * map later.
 	 */
 	public static void queueNewCritter(Critter new_critter) {
@@ -277,7 +254,7 @@ public class CritterWorld extends TestCritter{
 	}
 	
 	/**
-	 * Update rest energy for all critters. Reset hasmoved flag.
+	 * Update rest energy for all critters. Reset hasMoved flag.
 	 */
 	private static void updateRestEnergy() {
 		for (int i = 0; i < getPopulation().size(); i ++) {
