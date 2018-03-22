@@ -1,11 +1,21 @@
 package assignment4;
 
-import assignment4.Critter.TestCritter;
+import java.util.List;
 
-public class JohnCritter extends TestCritter{
+import assignment4.Critter;
+
+/**
+ * This is my first critter. It runs north all
+ * the time and always runs away.
+ * @author John Sigmon
+ *
+ */
+
+
+public class JohnCritter extends Critter{
+	
 	/**
-	 * @return 
-	 * 
+	 * @return string representing the Critter.
 	 */
 	@Override
 	public String toString() {
@@ -14,21 +24,33 @@ public class JohnCritter extends TestCritter{
 	}
 	
 	/**
-	 * 
+	 *  The Critter always runs north.
 	 */
 	@Override
 	public void doTimeStep() {
-		// TODO Auto-generated method stub
-		
+		run(2);
 	}
 
 	/**
-	 * 
+	 * @param boolean returns false to run away instead of fighting.
 	 */
 	@Override
 	public boolean fight(String oponent) {
-		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	/**
+	 * Displays the critter's stats, per pdf
+	 * @param johns a list of all the John critters
+	 */
+	public static void runStats(List<Critter> johns) {
+		if (johns.size() > 1) {
+			System.out.print(johns.size() + " total Johns    ");
+			System.out.println();
+		}
+		else {
+			System.out.println("There is only one John");
+		}
 	}
 
 }

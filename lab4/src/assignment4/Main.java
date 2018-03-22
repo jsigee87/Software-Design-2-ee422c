@@ -12,6 +12,7 @@ package assignment4;
  * Spring 2018
  */
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +41,6 @@ public class Main {
     private static boolean DEBUG = false; 
     // If you want to restore output to console
     static PrintStream old = System.out;	
-
 
     // Gets the package name.  The usage assumes that Critter and its sub-
     //classes are all in the same package.
@@ -97,22 +97,22 @@ public class Main {
     	
     	// Sets up world, initializes virtual map.  
     	new CritterWorld();
-    	System.out.println();
-    	System.out.println("Your world has been created. Enter some commands"
-    			+ " to manipulate your world, or type");
-    	System.out.println(" help for a list of supported commands.");
-    	System.out.println();
+//    	System.out.println();
+//    	System.out.println("Your world has been created. Enter some commands"
+//    			+ " to manipulate your world, or type");
+//    	System.out.println(" help for a list of supported commands.");
+//    	System.out.println();
     	
         //int blinker = 0; 
     	while(true) {
     		//if (blinker == 0) {
-    			System.out.print("critters> ");
+    			System.out.print("critters>");
     		//}
     		//if (blinker == 1) {
     			//System.out.print("critters> |");
     		//}
     		//blinker ^= blinker;
-   
+    		//TODO fix parser to match up exactly with JUNIT test
     		if(kb.hasNextLine()) {
         		String str = kb.nextLine();
         		str = str.trim(); //remove extra spaces at beginning and end of string. Spaces in middle not affected.
@@ -151,19 +151,22 @@ public class Main {
         			else if(str.contains("seed")) {
         				seedCommand(str);
         			}
+        			else if (str.contains("show")) {
+        				System.out.println("error processing: " + str);
+        			}
         			else { // Invalid command... display help message
         				System.out.println("invalid command: " + str);
         			}
         		
 	        	}
-	        	System.out.println();
+//	        	System.out.println();
 	        	if (CritterWorld.shouldQuit()) {
 	        		break;
 	        	}
     		}//end if-block
 	        
     	}//end while
-    	System.out.println("Quitting Critters...");
+//    	System.out.println("Quitting Critters...");
         System.out.flush();
     }
     
@@ -240,16 +243,16 @@ public class Main {
    }
    
    public static void statsCommand(String str) {
-	  String className = str.substring(str.indexOf(" ")).trim();
+	  String unqualifiedClassName = str.substring(str.indexOf(" ")).trim();	  
+	  
 	  try {
-		  List<Critter> list = CritterWorld.getInstances(className);
+		  List<Critter> list = CritterWorld.getInstances(unqualifiedClassName);
 
-		  className = className.toLowerCase();
-		  if(className.equals("critter")) {
+		  if(unqualifiedClassName.toLowerCase().equals("critter")) {
 			  CritterWorld.runStats(list);
 		  }
-		  else {
-			  Class<?> c = list.get(0).getClass();
+		  else { //TODO fix command to exactly match up with JUNIT test case
+			  Class<?> c = Class.forName(returnClassName(unqualifiedClassName));
 			  @SuppressWarnings("rawtypes")
 			  Class[] cArg = new Class[1];
 		      cArg[0] = List.class;
@@ -267,7 +270,10 @@ public class Main {
 	  {
 		  e.printStackTrace();
 		  return;
-	  }
+	  } catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
    }
    
    /**
@@ -373,7 +379,25 @@ public class Main {
 		}
     }
 
-
+    private static String returnClassName(String critter_class_name) {
+		critter_class_name = critter_class_name.toLowerCase();					//
+		String string = new String();											//
+		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
+		string = assignment4 + "." + first + critter_class_name.substring(1);
+		
+		List<String> classList = CritterWorld.getClassList(assignment4);
+		
+		List<String> lowClassList = new ArrayList<String>();
+		
+		for(String s : classList) {
+			lowClassList.add(s.toLowerCase());
+		}
+		if(lowClassList.contains(string.toLowerCase())) {
+			int idx = lowClassList.indexOf(string.toLowerCase());
+			return classList.get(idx);
+		}
+		return string;
+	}
 /***************************************************/
 
 // Dead Code //

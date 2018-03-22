@@ -14,8 +14,7 @@ package assignment4;
 
 // Per Piazza do not use import *
 import java.util.ArrayList;
-import java.util.Queue;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Map;
@@ -37,8 +36,8 @@ public abstract class Critter {
 	/*///////////////////
 	//	  	Map		   //
 	*********************
-	* y012...  (width-1)*
-	*x                  *
+	* x012...  (width-1)*
+	*y                  *
 	*0 			        *
 	*1      			*
 	*2  				*
@@ -46,13 +45,7 @@ public abstract class Critter {
 	*.  				*
 	*.    				*
 	*(height-1)			*
-	*********************
-	///////////////////////////////////////////////////////////////////////////
-	/ We use the x and y as matrix accessors. i.e. x ~ i, y ~ j such that	  /
-	/ the map is thought of as a matrix. You then access the ith row and jth  /
-	/ column via A[i][j]. The edge of the map is then width - 1 on the right  /
-	/ hand side, height - 1 on the bottom side, and 0 on the other two sides. /
-	/////////////////////////////////////////////////////////////////////////*/
+	*********************/
 	private int x_coord;
 	private int y_coord;
 	private int energy = 0;
@@ -68,7 +61,7 @@ public abstract class Critter {
 	}	
 	
 	/**
-	 * A one-character long string that visually depicts your critter 
+	 * A one character long string that visually depicts your critter 
 	 * in the ASCII interface .
 	 *  
 	*/
@@ -78,7 +71,7 @@ public abstract class Critter {
 	
 	/**
 	 * Walk in some direction.
-	 * @param direction is an int between 0 and 7 that is parsed.
+	 * @param direction is an integer between 0 and 7 that is parsed.
 	 */
 	protected final void walk(int direction) {
 		ArrayList<Integer> coords = new ArrayList<Integer>();
@@ -90,40 +83,43 @@ public abstract class Critter {
 		// If they are dead, kill them off. (This one just avoids
 		// the parsing in case we call walk on an already dead 
 		// critter.)
-		if (dead()) {
-			population.remove(population.indexOf(this));
-			removeFromMap(coords);
-		}
-		
-		if (hasMoved == false) {
-			// First we remove the critter from the current position.
-			removeFromMap(coords);
-			
-			// Then we get the critter's new coordinates and update their position.
-			coords = parseDirection(direction);
-			updateMap(coords);
-		}
-		
-		// Set the critter's energy level no matter what.
-		this.setEnergy(this.getEnergy() - Params.walk_energy_cost);
-		
-		// If they are dead, kill them off.
-		if (dead()) {
-			population.remove(population.indexOf(this));
-			removeFromMap(coords);
-		}
-		else {
-			this.hasMoved = true;
-		
-			// Check if the critter's new spot is already occupied.
-			x = coords.get(0);
-			y = coords.get(1);
-			if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
-				return; //The critter is the only occupant.
+		if(population.contains(this)) {
+			if (dead()) {
+				population.remove(population.indexOf(this));
+				removeFromMap(coords);
 			}
 			else {
-				// Add the current spot to conflict list to check later.
-				CritterWorld.conflicts.add(coords);
+				if (hasMoved == false) {
+					// First we remove the critter from the current position.
+					removeFromMap(coords);
+					
+					// Then we get the critter's new coordinates and update their position.
+					coords = parseDirection(direction);
+					updateMap(coords);
+				}
+				
+				// Set the critter's energy level no matter what.
+				this.setEnergy(this.getEnergy() - Params.walk_energy_cost);
+				
+				// If they are dead, kill them off.
+				if (dead()) {
+					population.remove(population.indexOf(this));
+					removeFromMap(coords);
+				}
+				else {
+					this.hasMoved = true;
+				
+					// Check if the critter's new spot is already occupied.
+					x = coords.get(0);
+					y = coords.get(1);
+					if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
+						return; //The critter is the only occupant.
+					}
+					else {
+						// Add the current spot to conflict list to check later.
+						CritterWorld.conflicts.add(coords);
+					}
+				}
 			}
 		}
 	}
@@ -142,46 +138,50 @@ public abstract class Critter {
 		// If they are dead, kill them off. (This one just avoids
 		// the parsing in case we call walk on an already dead 
 		// critter.)
-		if (dead()) {
-			population.remove(population.indexOf(this));
-			removeFromMap(coords);
-		}
-				
-		if (hasMoved == false) {
-			// First we remove the critter from the current position.
-			removeFromMap(coords);
-	
-			// Then we get the critter's new coordinates and update their position.
-			coords = parseDirection(direction);
-			coords = parseDirection(direction);
-			updateMap(coords);
-		}
-		
-		// Set the critter's energy level.
-		this.setEnergy(this.getEnergy() - Params.run_energy_cost);
-		
-		// If they are dead, kill them off.
-		if (dead()) {
-			population.remove(population.indexOf(this));
-			removeFromMap(coords);
-		}
-		else {
-			this.hasMoved = true;
-		
-			// Check if the critter's new spot is already occupied.
-			x = coords.get(0);
-			y = coords.get(1);
-			if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
-				return; //The critter is the only occupant.
-			}
+		if(population.contains(this)) {
+			if (dead()) {
+				population.remove(population.indexOf(this));
+				removeFromMap(coords);
+			}				
 			else {
-				// Add the current spot to conflict list to check later.
-				CritterWorld.conflicts.add(coords);
+				if (hasMoved == false) {
+					// First we remove the critter from the current position.
+					removeFromMap(coords);
+			
+					// Then we get the critter's new coordinates and update their position.
+					coords = parseDirection(direction);
+					coords = parseDirection(direction);
+					updateMap(coords);
+				}
+				
+				// Set the critter's energy level.
+				this.setEnergy(this.getEnergy() - Params.run_energy_cost);
+				
+				// If they are dead, kill them off.
+				if (dead()) {
+					population.remove(population.indexOf(this));
+					removeFromMap(coords);
+				}
+				else {
+					this.hasMoved = true;
+				
+					// Check if the critter's new spot is already occupied.
+					x = coords.get(0);
+					y = coords.get(1);
+					if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
+						return; //The critter is the only occupant.
+					}
+					else {
+						// Add the current spot to conflict list to check later.
+						CritterWorld.conflicts.add(coords);
+					}
+				}
 			}
 		}
 	}
 	
 	/**																			//
+	 * 	This method provides a way for the critters to reproduce.				//
 	 * 																			//
 	 * @param offspring: is created in a Critter's doTimeStep() and/or their 	//
 	 * fight() method															//
@@ -199,26 +199,27 @@ public abstract class Critter {
 			// Assign the child's position immediately adjacent to the parent 	//
 			// in the specified direction.										//
 			offspring.x_coord = this.x_coord;									//
-			offspring.y_coord = this.y_coord;									//
-			offspring.parseDirection(direction);								//
+			offspring.y_coord = this.y_coord;	
+			//TODO what happens to the return of parse direction?//
+			offspring.parseDirection(direction);
 			CritterWorld.queueNewCritter(offspring);							//
 		}																		//
 	}																			//
-																				//																			//
+																				//
 	public abstract void doTimeStep();											//
 	public abstract boolean fight(String oponent);								//
 																				//
-	/**																			//
-	 * create and initialize a Critter subclass.								//
-	 * critter_class_name must be the unqualified name of a concrete subclass 	//
-	 * of Critter, if not, an InvalidCritterException must be thrown.			//
-	 * (Java weirdness: Exception throwing does not work properly if the 		//
-	 * parameter has lower-case instead of upper. For example, if craig is 		//
-	 * supplied instead of Craig, an error is thrown instead of an Exception.)	//
-	 * @param critter_class_name												//
-	 * @throws InvalidCritterException											//
-	 */																			//
-	@SuppressWarnings("deprecation")											//
+	/**				
+	 * Create and initialize a Critter subclass.
+	 * critter_class_name must be the unqualified name of a concrete subclass
+	 * of Critter, if not, an InvalidCritterException must be thrown.
+	 * (Java weirdness: Exception throwing does not work properly if the
+	 * parameter has lower case instead of upper. For example, if craig is 
+	 * supplied instead of Craig, an error is thrown instead of an Exception.)
+	 * 															
+	 * @param critter_class_name
+	 * @throws InvalidCritterException
+	 */
 	public static void makeCritter(String critter_class_name) 					//
 								throws InvalidCritterException {				//
 		// Take the given class name and convert it								//
@@ -230,16 +231,20 @@ public abstract class Critter {
 		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
 		string = myPackage + "." + first + critter_class_name.substring(1);		//
 																				//
-		@SuppressWarnings("rawtypes")											//
-		List<Class> classList = CritterWorld.getClassList(myPackage);			//
-																				//
-		try {																	//
-			// Get the class type or throw an exception							//
-			Class<?> newClass = Class.forName(string); 							//
-																				//
-			// If the class exists, create a new critter using reflection		//
-			if(classList.contains(newClass)) {  								//
-				
+		List<String> classList = CritterWorld.getClassList(myPackage);			//
+		
+		List<String> lowerClassList = new ArrayList<String>();
+		
+		for(String str : classList) {
+			lowerClassList.add(str.toLowerCase());
+		}
+		
+		if(lowerClassList.contains(string.toLowerCase())){
+			try {																	//
+				// Get the class type or throw an exception							//
+				int idx = lowerClassList.indexOf(string.toLowerCase());
+				Class<?> newClass = Class.forName(classList.get(idx)); 				//
+																					//
 				Critter newCritter = null;
 				try {
 					newCritter = (Critter) newClass.newInstance();
@@ -256,18 +261,24 @@ public abstract class Critter {
 				newCritter.y_coord = TestCritter.getRandomInt(
 						Params.world_width);
 				
+//				/*
+//				 * Test
+//				 */
+//				System.out.println("(" + newCritter.x_coord + "," + newCritter.y_coord + ")");
+
 				// Add new critter to the world
 				CritterWorld.addCritter(newCritter, newCritter.x_coord, 
-						newCritter.y_coord);				
+						newCritter.y_coord);	
+						
+			}			 
+			catch( ClassNotFoundException e ) {
+				 throw new InvalidCritterException(string);
 			}
-			else {
-				throw new ClassNotFoundException();
-			}
-					
-		}			 
-		catch( ClassNotFoundException e ) {
-			 throw new InvalidCritterException(string);
 		}
+		else {
+			throw new InvalidCritterException(string);
+		}
+		
 	}
 	
 	/**
@@ -281,20 +292,22 @@ public abstract class Critter {
 									throws InvalidCritterException {
 		List<Critter> result = new ArrayList<Critter>();
 		
-		critter_class_name = critter_class_name.toLowerCase();					//
-		String string = new String();											//
-		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
-		string = myPackage + "." + first + critter_class_name.substring(1);	
+		String string = returnClassName(critter_class_name);	
 																				//
-		@SuppressWarnings("rawtypes")											//
-		List<Class> classList = CritterWorld.getClassList(myPackage);			//
+		List<String> classList = CritterWorld.getClassList(myPackage);			//
+		
+		List<String> lowerClassList = new ArrayList<String>();
+		
+		for(String str : classList) {
+			lowerClassList.add(str.toLowerCase());
+		}
+		
+		if(lowerClassList.contains(string.toLowerCase())) {
+			try {																//
+				// Get the class type or throw an exception						//
+				int idx = lowerClassList.indexOf(string.toLowerCase());
+				Class<?> newClass = Class.forName(classList.get(idx)); 			//
 																				//
-		try {																	//
-			// Get the class type or throw an exception							//
-			Class<?> newClass = Class.forName(string); 							//
-																				//
-			// If the class exists, add to list									//
-			if(classList.contains(newClass)) {  
 				for(Critter crit : CritterWorld.getPopulation()) {
 					if(string.equals(myPackage + "." + "Critter"))
 					{
@@ -306,14 +319,14 @@ public abstract class Critter {
 						}
 					}
 				}
+						
+			}			 
+			catch( ClassNotFoundException e ) {
+				 throw new InvalidCritterException(string);
 			}
-			else {
-				throw new ClassNotFoundException();
-			}
-					
-		}			 
-		catch( ClassNotFoundException e ) {
-			 throw new InvalidCritterException(string);
+		}
+		else {
+			throw new InvalidCritterException(string);
 		}
 		
 		return result;
@@ -354,7 +367,7 @@ public abstract class Critter {
 	 * structure in addition to the x_coord and y_coord functions, then you 
 	 * MUST update these setter functions so that they correctly update your 
 	 * grid/data structure.
-	 *///TODO - make sure all this stuff works with our critter world
+	 */
 	static abstract class TestCritter extends Critter {
 		protected void setEnergy(int new_energy_value) {
 			super.energy = new_energy_value;
@@ -377,22 +390,25 @@ public abstract class Critter {
 		}
 		
 
-		/*
+		/**
 		 * This method getPopulation has to be modified by you if you are not
 		 * using the population ArrayList that has been provided in the starter
 		 * code. In any case, it has to be implemented for grading tests to 
 		 * work.
+		 * @return population is the Critter population.
 		 */
 		protected static List<Critter> getPopulation() {
 			return population;
 		}
 		
-		/*
+		/**
 		 * This method getBabies has to be modified by you if you are not using
 		 * the babies ArrayList that has been provided in the starter code. In 
 		 * any case, it has to be implemented for grading tests to work. Babies
 		 * should be added to the general population at either the beginning OR
 		 * the end of every time step.
+		 * 
+		 * @return This method returns a list of new critters (babies).
 		 */
 		protected static List<Critter> getBabies() {
 			@SuppressWarnings("unchecked")
@@ -406,19 +422,64 @@ public abstract class Critter {
 	 */
 	public static void clearWorld() {
 		CritterWorld.clearWorld();
+		new CritterWorld();
 	}
 	
-	/*
-	 * Executes world time step. Note: add new critters must be performed here.
+	/**
+	 * Executes world time step. Note: add new critters must be performed here
+	 * due to the pdf restrictions on public/private methods.
 	 */
 	public static void worldTimeStep() {
+		
+		ArrayList<Integer> coords = new ArrayList<Integer>();
+		ArrayList<Integer> oldCoords = new ArrayList<Integer>();
+		//in case coordinates were set externally...
+		for(Critter crit : population) {
+			int x = crit.x_coord;
+			int y = crit.y_coord;
+			coords.add(x);
+			coords.add(y);
+			
+//			System.out.println("new: (" + x + "," + y + ")");
+			//get old coords
+			int oldX;
+			int oldY;
+			for(ArrayList<ArrayList<Critter>> xList : CritterWorld.virtual_map) {
+				oldX = CritterWorld.virtual_map.indexOf(xList);
+				for(ArrayList<Critter> yList :
+					CritterWorld.virtual_map.get(oldX)) {
+					oldY = xList.indexOf(yList);
+					if(CritterWorld.virtual_map.get(oldX).get(oldY).contains(crit)
+							) {
+						oldCoords.add(oldX);
+						oldCoords.add(oldY);
+//						System.out.println("old: (" + oldX + "," + oldY + ")");
+						crit.removeFromMap(oldCoords);
+						crit.updateMap(coords);
+					}
+				}
+			}
+			
+		}
+		
+		//check for conflicts
+		for(Critter crit1 : population) {
+			for(Critter crit2 : population) {
+				if(!crit2.equals(crit1) && (crit1.x_coord == crit2.x_coord &&
+						crit1.y_coord == crit2.y_coord)) {
+					
+					CritterWorld.conflicts.add(coords);
+				}
+			}
+		}
+		
 		CritterWorld.worldTimeStep();
 		addNewCritters();
 		resetHasMoved();
 	}
 	
 	/**
-	 * This resets all the has moved flags in the critter population.
+	 * This resets all the 'hasMoved' flags in the critter population.
 	 */
 	private static void resetHasMoved() {
 		for (int i = 0; i < population.size(); i ++ ) {
@@ -426,8 +487,8 @@ public abstract class Critter {
 		}
 	}
 
-	/*
-	 * Displays the world.
+	/**
+	 * Displays the world to stdout.
 	 */
 	public static void displayWorld() {
 		CritterWorld.displayWorld();
@@ -437,6 +498,7 @@ public abstract class Critter {
 	// 				  Helper Methods					 //
 	///////////////////////////////////////////////////////
 	
+
 	/**
 	 * This method parses the direction command and updates the
 	 * critter's location.
@@ -452,8 +514,8 @@ public abstract class Critter {
 		/*////////////////////////////////////////
 		//	  Directions   /////	  	Map		//
 		 *****************************************
-		 * 		  2         ** y012...  (width-1)*
-		 *   3    |    1    **x                  *
+		 * 		  2         ** x012...  (width-1)*
+		 *   3    |    1    **y                  *
 		 *     \  |  /      **0 			     *
 		 *      \ | /       **1 			     *
 		 * 4 ----------- 0  **2 		         *
@@ -466,116 +528,123 @@ public abstract class Critter {
 		
 		switch (direction) {
 			case 0:
-				if (y < width - 1) {
-					this.y_coord = y + 1;
+				if (x < width - 1) {
+					x += 1;
 				}
 				else {
-					this.y_coord = 0;
+					x = 0;
 				}
 				break;
 			
 			case 1:
-				if (y < width - 1) {
-					this.y_coord = y + 1;
+				if (x < width - 1) {
+					 x += 1;
 				}
 				else {
-					this.y_coord = 0;
+					x = 0;
 				}
-				if (x > 0) {
-					this.x_coord = x - 1;
+				if (y > 0) {
+					y -= 1;
 				}
 				else {
-					this.x_coord = height - 1;
+					y = height - 1;
 				}
 				break;
 			
 			case 2:
-				if (x > 0) {
-					this.x_coord = x - 1;
+				if (y > 0) {
+					y -= 1;
 				}
 				else {
-					this.x_coord = height - 1;
+					y = height - 1;
 				}
 				break;
 			
 			case 3:
-				if(x > 0) {
-					this.x_coord = x - 1;
+				if(y > 0) {
+					y -= 1;
 				}
 				else {
-					this.x_coord = height - 1;
+					y = height - 1;
 				}
-				if (y > 0) {
-					this.y_coord = y - 1;
+				if (x > 0) {
+					x -= 1;
 				}
 				else {
-					this.y_coord = width - 1;
+					x = width - 1;
 				}
 				break;
 			
 			case 4:
-				if (y > 0) {
-					this.y_coord = y - 1;
+				if (x > 0) {
+					x -= 1;
 				}
 				else {
-					this.y_coord = width - 1;
+					x = width - 1;
 				}
 				break;
 			
 			case 5:
-				if (x < height - 1) {
-					this.x_coord = x + 1;
+				if (y < height - 1) {
+					y += 1;
 				}
 				else {
-					this.x_coord = 0;
+					y = 0;
 				}
-				if (y < 0 ) {
-					this.y_coord = y - 1;
+				if (x < 0 ) {
+					x -= 1;
 				}
 				else {
-					this.y_coord = width - 1;
+					x = width - 1;
 				}
 				break;
 			
 			case 6:
-				if (x < height - 1) {
-					this.x_coord = x + 1;
+				if (y < height - 1) {
+					y += 1;
 				}
 				else {
-					this.x_coord = 0;
+					y = 0;
 				}
 				break;
 			
 			case 7:
-				if (x < height - 1) {
-					this.x_coord = x + 1;
+				if (y < height - 1) {
+					y += 1;
 				}
 				else {
-					this.x_coord = 0;
+					y = 0;
 				}
-				if (y < width - 1) {
-					this.y_coord = y + 1;
+				if (x < width - 1) {
+					x += 1;
 				}
 				else {
-					this.y_coord = 0;
+					x = 0;
 				}
 				break;
 			
 			default:
-				// TODO should this throw an error? assertion? exception?
+				System.out.println("I don't know how you reached this );"
+						+ "error message.");
+				System.out.println("You probably tried to choose an unsupported"
+						+ "direction number.");
+				System.out.println("Here is your stack trace:");
+				new Exception().printStackTrace();
+				System.exit(1);
 				break;
 		}
 		
 		// Return a tuple of coordinates so the calling method can update the
 		// virtual map.
 		ArrayList<Integer> coords = new ArrayList<Integer>();
-		coords.add(this.x_coord);
-		coords.add(this.y_coord);
+		coords.add(x);
+		coords.add(y);
 		return coords;
 	}
 	
-	/*
+	/**
 	 * For readability, this function checks if critter is dead.
+	 * @return true if dead, false if not dead
 	 */
 	private boolean dead() {
 		if (this.getEnergy() <= 0) {
@@ -597,6 +666,7 @@ public abstract class Critter {
 			// Add them to the population, and the virtual map.
 			population.add(head);
 			CritterWorld.virtual_map.get(x).get(y).add(head);
+			babies.remove(head);
 		}
 	}
 	
@@ -608,15 +678,30 @@ public abstract class Critter {
 		int x = coords.get(0);
 		int y = coords.get(1);
 		CritterWorld.virtual_map.get(x).get(y).add(this);
+		x_coord = x;
+		y_coord = y;
 	}
 	
-	/*
+	/**
 	 * Removes a critter from the virtual map.
 	 */
 	private void removeFromMap(List<Integer> coords) {
 		int x = coords.get(0);
 		int y = coords.get(1);
 		CritterWorld.virtual_map.get(x).get(y).remove(this);
+	}
+	
+	/**
+	 * 
+	 * @param critter_class_name A Critter class name.
+	 * @return string for the class name
+	 */
+	private static String returnClassName(String critter_class_name) {
+		critter_class_name = critter_class_name.toLowerCase();					//
+		String string = new String();											//
+		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
+		string = myPackage + "." + first + critter_class_name.substring(1);	
+		return string;
 	}
 	
 	///////////////////////////////////////////////////////

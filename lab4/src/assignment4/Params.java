@@ -19,6 +19,6 @@ public class Params {
 	public  static int min_reproduce_energy = 20;
 	public  static int refresh_algae_count = 2;
 	public static  int photosynthesis_energy_amount = 1;
-	public static  int start_energy = 200;
+	public static  int start_energy = 100;
 
 }

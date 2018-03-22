@@ -14,7 +14,6 @@ import assignment4.Critter.TestCritter;
 public class CritterWorld extends TestCritter{
 
 	private static boolean shouldQuit;
-	
 	/**
 	 * Virtual map. Holds the index of the critter that is to be displayed when
 	 *  displayWorld() is called. 'x' is a list, 'y' is a list in 'x', a member
@@ -151,9 +150,6 @@ public class CritterWorld extends TestCritter{
 					System.exit(1);
 				}
 			}
-			else {
-				break; // The conflict must have resolved itself
-			}
 			
 			//while there is more than one critter on that coordinate
 			while(list.size() > 1) {
@@ -167,95 +163,106 @@ public class CritterWorld extends TestCritter{
 				boolean fightB = B.fight(A.toString());
 				
 				boolean ran_away;
-				if (fightA == false) {
-					ran_away = tryToRunAway(A, x, y);
-					if (ran_away == true) {
+				
+				//if there is still a conflict (AKA neither invoked run before setting the
+				//fight or flight flags
+				if(virtual_map.get(x).get(y).size() > 1) {
+					if (fightA == false) {
+						ran_away = tryToRunAway(A, x, y);
+						if (ran_away == true) {
+							list.remove(A);
+						}
+					}
+					
+					if (dead(A)) {
 						list.remove(A);
 					}
-					else {
-						// TODO do nothing?
+					
+					if (fightB == false) {
+						ran_away = tryToRunAway(B, x, y);
+						if (ran_away == true) {
+							list.remove(B);
+						}
+					}
+					
+					if (dead(B)) {
+						list.remove(B);
+					}
+					
+					if (!dead(A) && !dead(B)) {
+						// If both are in the same position and are still alive
+						if (list.contains(A) && list.contains(B)) {
+							
+							int rollA;
+							int rollB;
+							
+							// Assumes bounds are inclusive
+							if(fightA) { //if A elected to fight
+								rollA = getRandomInt(A.getEnergy() + 1);
+							}
+							else {
+							rollA = 0;
+							}
+							if(fightB) { //if B elected to fight
+								rollB = getRandomInt(B.getEnergy() + 1);
+							}
+							else {
+								rollB = 0;
+							}
+							
+							// Determine winner
+							Critter winner;
+							Critter loser;
+						
+							// A wins all ties
+							if(rollA >= rollB) {
+								winner = A;
+								loser = B;
+							}
+							else {
+								winner = B;
+								loser = A;
+							}
+							
+							// Award winner his energy bonus from winning the fight
+							int energy_to_add = loser.getEnergy()/2;
+							winner.setEnergy(winner.getEnergy() + energy_to_add);
+							
+							// Set loser's energy to a negative number so it can be removed
+							loser.setEnergy(-1);
+							try {
+								loser.walk(0);
+							}
+							catch (ArrayIndexOutOfBoundsException e) {
+								System.out.print("You have tried to access the virtual map");
+								System.out.print(" out of bound while killing a critter.\n");
+								System.out.println("x is:\t" + x);
+								System.out.println("y is:\t" + y);
+								System.out.println("Here is the stack trace:");
+								e.printStackTrace();
+							System.exit(1);
+							}
+						}
 					}
 				}
 				
-				if (fightB == false) {
-					ran_away = tryToRunAway(B, x, y);
-					if (ran_away == true) {
-						list.remove(B);
-					}
-					else {
-						// TODO do nothing?
-					}
-				}
-	
-				//if both are still alive and in the same position
-				if(list.contains(A) && list.contains(B)) {
-					
-					int rollA;
-					int rollB;
-					
-					// Assumes bounds are inclusive
-					if(fightA) { //if A elected to fight
-						rollA = getRandomInt(A.getEnergy() + 1);
-					}
-					else {
-						rollA = 0;
-					}
-					if(fightB) { //if B elected to fight
-						rollB = getRandomInt(B.getEnergy() + 1);
-					}
-					else {
-						rollB = 0;
-					}
-					
-					// Determine winner
-					Critter winner;
-					Critter loser;
-					
-					// B wins all ties
-					if(rollA >= rollB) {
-						winner = A;
-						loser = B;
-					}
-					else {
-						winner = B;
-						loser = A;
-					}
-					
-					// Award winner his energy bonus from winning the fight
-					int energy_to_add = loser.getEnergy()/2;
-					winner.setEnergy(winner.getEnergy() + energy_to_add);
-					
-					// Set loser's energy to a negative number so it can be removed
-					loser.setEnergy(-1);
-					try {
-						loser.walk(0);
-					}
-					catch (ArrayIndexOutOfBoundsException e) {
-						System.out.print("You have tried to access the virtual map");
-						System.out.print(" out of bound while killing a critter.\n");
-						System.out.println("x is:\t" + x);
-						System.out.println("y is:\t" + y);
-						System.out.println("Here is the stack trace:");
-						e.printStackTrace();
-						System.exit(1);
-					}
-				}				
-			}			
+			}	
 		}
 	}	
 	
 	/**
 	 * Queue a new critter to be added to the world at the end of the time
 	 * step.
-	 * @param Critter to be added to the babies list for additon to the 
+	 * @param Critter to be added to the babies list for addition to the 
 	 * map later.
 	 */
 	public static void queueNewCritter(Critter new_critter) {
 		new_critters.add(new_critter);
+		TestCritter.getBabies().add(new_critter);
 	}
 	
 	/**
-	 * Update rest energy for all critters. Reset hasmoved flag.
+	 * Update rest energy for all critters. Reset hasMoved flag.
 	 */
 	private static void updateRestEnergy() {
 		for (int i = 0; i < getPopulation().size(); i ++) {
@@ -310,9 +317,9 @@ public class CritterWorld extends TestCritter{
 			for(j = 0; j < Params.world_width; j++) {
 				
 				//if the spot (i,j) is occupied
-				if(virtual_map.get(i).get(j).isEmpty() == false) {
+				if(virtual_map.get(j).get(i).isEmpty() == false) {
 					//print out the critter
-					System.out.print(virtual_map.get(i).get(j).get(0));					
+					System.out.print(virtual_map.get(j).get(i).get(0));					
 				}
 				else {
 					System.out.print(" "); //print an empty space
@@ -365,10 +372,10 @@ public class CritterWorld extends TestCritter{
 	 * @return list of all .class files located inside the package
 	 * @throws URISyntaxException 
 	 */
-	@SuppressWarnings({ "rawtypes", "unused" })
-	public static List<Class> getClassList(String myPackage) {
+	@SuppressWarnings({ "unused" })
+	public static List<String> getClassList(String myPackage) {
 
-	    List<Class> classList = new ArrayList<Class>();
+	    List<String> classList = new ArrayList<String>();
 
 	    // Get a File object for the package
 	    File directory = null;
@@ -392,11 +399,7 @@ public class CritterWorld extends TestCritter{
                 // Removes the .class extension
                 String name = myPackage + '.' + files[i].substring(0, files[i].length() - 6);
                 
-                try {
-					classList.add(Class.forName(name));
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
+                classList.add(name);
             }
         }
         
@@ -418,13 +421,15 @@ public class CritterWorld extends TestCritter{
 			int y_new = new_coords.get(1);
 			// If the spot is empty, then go there
 			if (virtual_map.get(x_new).get(y_new).size() == 0) {
-				c.walk(i);
+				c.run(i);
 				return true;
 			}
+//			else {
+//				c.setEnergy(c.getEnergy() - Params.run_energy_cost);
+//			}
 		}
 		return false;
 	}
-	
 	
 	/**
 	 * This method parses the direction command and updates the
@@ -439,8 +444,8 @@ public class CritterWorld extends TestCritter{
 		/*////////////////////////////////////////
 		//	  Directions   /////	  	Map		//
 		 *****************************************
-		 * 		  2         ** y012...  (width-1)*
-		 *   3    |    1    **x                  *
+		 * 		  2         ** x012...  (width-1)*
+		 *   3    |    1    **y                  *
 		 *     \  |  /      **0 			     *
 		 *      \ | /       **1 			     *
 		 * 4 ----------- 0  **2 		         *
@@ -453,94 +458,79 @@ public class CritterWorld extends TestCritter{
 		
 		switch (direction) {
 			case 0:
-				if (y < width - 1) {
-					y += 1;
+				if (x < width - 1) {
+					x += 1;
 				}
 				else {
-					y = 0;
+					x = 0;
 				}
 				break;
 			
 			case 1:
-				if (y < width - 1) {
-					 y += 1;
+				if (x < width - 1) {
+					 x += 1;
 				}
 				else {
-					y = 0;
+					x = 0;
 				}
-				if (x > 0) {
-					x -= 1;
+				if (y > 0) {
+					y -= 1;
 				}
 				else {
-					x = height - 1;
+					y = height - 1;
 				}
 				break;
 			
 			case 2:
-				if (x > 0) {
-					x -= 1;
+				if (y > 0) {
+					y -= 1;
 				}
 				else {
-					x = height - 1;
+					y = height - 1;
 				}
 				break;
 			
 			case 3:
-				if(x > 0) {
-					x -= 1;
-				}
-				else {
-					x = height - 1;
-				}
-				if (y > 0) {
+				if(y > 0) {
 					y -= 1;
 				}
 				else {
-					y = width - 1;
+					y = height - 1;
+				}
+				if (x > 0) {
+					x -= 1;
+				}
+				else {
+					x = width - 1;
 				}
 				break;
 			
 			case 4:
-				if (y > 0) {
-					y -= 1;
+				if (x > 0) {
+					x -= 1;
 				}
 				else {
-					y = width - 1;
+					x = width - 1;
 				}
 				break;
 			
 			case 5:
-				if (x < height - 1) {
-					x += 1;
+				if (y < height - 1) {
+					y += 1;
 				}
 				else {
-					x = 0;
+					y = 0;
 				}
-				if (y < 0 ) {
-					y -= 1;
+				if (x < 0 ) {
+					x -= 1;
 				}
 				else {
-					y = width - 1;
+					x = width - 1;
 				}
 				break;
 			
 			case 6:
-				if (x < height - 1) {
-					x += 1;
-				}
-				else {
-					x = 0;
-				}
-				break;
-			
-			case 7:
-				if (x < height - 1) {
-					x += 1;
-				}
-				else {
-					x = 0;
-				}
-				if (y < width - 1) {
+				if (y < height - 1) {
 					y += 1;
 				}
 				else {
@@ -548,8 +538,29 @@ public class CritterWorld extends TestCritter{
 				}
 				break;
 			
+			case 7:
+				if (y < height - 1) {
+					y += 1;
+				}
+				else {
+					y = 0;
+				}
+				if (x < width - 1) {
+					x += 1;
+				}
+				else {
+					x = 0;
+				}
+				break;
+			
 			default:
-				// TODO should this throw an error? assertion? exception?
+				System.out.println("I don't know how you reached this );"
+						+ "error message.");
+				System.out.println("You probably tried to choose an unsupported"
+						+ "direction number.");
+				System.out.println("Here is your stack trace:");
+				new Exception().printStackTrace();
+				System.exit(1);
 				break;
 		}
 		

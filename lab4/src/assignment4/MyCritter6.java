@@ -10,12 +10,12 @@ public class MyCritter6 extends TestCritter {
 
 	@Override
 	public boolean fight(String opponent) {
-		run(getRandomInt(8));
+		run(0);
 		return false;
 	}
 
 	@Override
 	public String toString () {
-		return "5";
+		return "6";
 	}
 }
