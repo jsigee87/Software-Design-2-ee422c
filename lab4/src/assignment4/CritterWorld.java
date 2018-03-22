@@ -96,6 +96,7 @@ public class CritterWorld extends TestCritter{
 		// Time step all the critters.
 		for (int i = 0; i < getPopulation().size(); i++) {
 			getPopulation().get(i).doTimeStep();
+			getPopulation().get(i).setEnergy(getPopulation().get(i).getEnergy() - Params.rest_energy_cost);
 		}
 		
 		// Resolve conflicts.
@@ -187,9 +188,11 @@ public class CritterWorld extends TestCritter{
 						// TODO do nothing?
 					}
 				}
-	
-				//if both are still alive and in the same position
-				if(list.contains(A) && list.contains(B)) {
+				
+				///if both are in the same position and are still alive
+				if(list.contains(A) && list.contains(B) && 
+						TestCritter.getPopulation().contains(A) &&
+						TestCritter.getPopulation().contains(B)) {
 					
 					int rollA;
 					int rollB;
@@ -212,7 +215,7 @@ public class CritterWorld extends TestCritter{
 					Critter winner;
 					Critter loser;
 					
-					// B wins all ties
+					// A wins all ties
 					if(rollA >= rollB) {
 						winner = A;
 						loser = B;
@@ -240,8 +243,25 @@ public class CritterWorld extends TestCritter{
 						e.printStackTrace();
 						System.exit(1);
 					}
-				}				
-			}			
+				}
+				//if both are in the same position but either or both of them died
+				else if(list.contains(A) && list.contains(B) && 
+						(!TestCritter.getPopulation().contains(A) ||
+								!TestCritter.getPopulation().contains(B))) {
+					//figure out who died and remove them from the list
+					if(!TestCritter.getPopulation().contains(A)) {
+						list.remove(A);
+					}
+					if(!TestCritter.getPopulation().contains(B)) {
+						list.remove(B);
+					}
+					
+				}
+				else {
+					//do nothing... the conflict has been resolved
+				}
+				
+			}	
 		}
 	}	
 	
@@ -253,6 +273,7 @@ public class CritterWorld extends TestCritter{
 	 */
 	public static void queueNewCritter(Critter new_critter) {
 		new_critters.add(new_critter);
+		TestCritter.getBabies().add(new_critter);
 	}
 	
 	/**

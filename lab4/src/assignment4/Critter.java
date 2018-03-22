@@ -84,75 +84,45 @@ public abstract class Critter {
 		// If they are dead, kill them off. (This one just avoids
 		// the parsing in case we call walk on an already dead 
 		// critter.)
-		if (dead()) {
-			population.remove(population.indexOf(this));
-			removeFromMap(coords);
-		}
-		else {
-			if (hasMoved == false) {
-				// First we remove the critter from the current position.
-				removeFromMap(coords);
-				
-				// Then we get the critter's new coordinates and update their position.
-				coords = parseDirection(direction);
-				updateMap(coords);
-			}
-			
-			// Set the critter's energy level no matter what.
-			this.setEnergy(this.getEnergy() - Params.walk_energy_cost);
-			
-			// If they are dead, kill them off.
+		if(population.contains(this)) {
 			if (dead()) {
 				population.remove(population.indexOf(this));
 				removeFromMap(coords);
 			}
 			else {
-				this.hasMoved = true;
-			
-				// Check if the critter's new spot is already occupied.
-				x = coords.get(0);
-				y = coords.get(1);
-				if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
-					return; //The critter is the only occupant.
+				if (hasMoved == false) {
+					// First we remove the critter from the current position.
+					removeFromMap(coords);
+					
+					// Then we get the critter's new coordinates and update their position.
+					coords = parseDirection(direction);
+					updateMap(coords);
+				}
+				
+				// Set the critter's energy level no matter what.
+				this.setEnergy(this.getEnergy() - Params.walk_energy_cost);
+				
+				// If they are dead, kill them off.
+				if (dead()) {
+					population.remove(population.indexOf(this));
+					removeFromMap(coords);
 				}
 				else {
-					// Add the current spot to conflict list to check later.
-					CritterWorld.conflicts.add(coords);
+					this.hasMoved = true;
+				
+					// Check if the critter's new spot is already occupied.
+					x = coords.get(0);
+					y = coords.get(1);
+					if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
+						return; //The critter is the only occupant.
+					}
+					else {
+						// Add the current spot to conflict list to check later.
+						CritterWorld.conflicts.add(coords);
+					}
 				}
 			}
 		}
-		
-//		if (hasMoved == false) {
-//			// First we remove the critter from the current position.
-//			removeFromMap(coords);
-//			
-//			// Then we get the critter's new coordinates and update their position.
-//			coords = parseDirection(direction);
-//			updateMap(coords);
-//		}
-//		
-//		// Set the critter's energy level no matter what.
-//		this.setEnergy(this.getEnergy() - Params.walk_energy_cost);
-//		
-//		// If they are dead, kill them off.
-//		if (dead()) {
-//			population.remove(population.indexOf(this));
-//			removeFromMap(coords);
-//		}
-//		else {
-//			this.hasMoved = true;
-//		
-//			// Check if the critter's new spot is already occupied.
-//			x = coords.get(0);
-//			y = coords.get(1);
-//			if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
-//				return; //The critter is the only occupant.
-//			}
-//			else {
-//				// Add the current spot to conflict list to check later.
-//				CritterWorld.conflicts.add(coords);
-//			}
-//		}
 	}
 	
 	/**
@@ -169,41 +139,43 @@ public abstract class Critter {
 		// If they are dead, kill them off. (This one just avoids
 		// the parsing in case we call walk on an already dead 
 		// critter.)
-		if (dead()) {
-			population.remove(population.indexOf(this));
-			removeFromMap(coords);
-		}				
-		else {
-			if (hasMoved == false) {
-				// First we remove the critter from the current position.
-				removeFromMap(coords);
-		
-				// Then we get the critter's new coordinates and update their position.
-				coords = parseDirection(direction);
-				coords = parseDirection(direction);
-				updateMap(coords);
-			}
-			
-			// Set the critter's energy level.
-			this.setEnergy(this.getEnergy() - Params.run_energy_cost);
-			
-			// If they are dead, kill them off.
+		if(population.contains(this)) {
 			if (dead()) {
 				population.remove(population.indexOf(this));
 				removeFromMap(coords);
-			}
+			}				
 			else {
-				this.hasMoved = true;
+				if (hasMoved == false) {
+					// First we remove the critter from the current position.
+					removeFromMap(coords);
 			
-				// Check if the critter's new spot is already occupied.
-				x = coords.get(0);
-				y = coords.get(1);
-				if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
-					return; //The critter is the only occupant.
+					// Then we get the critter's new coordinates and update their position.
+					coords = parseDirection(direction);
+					coords = parseDirection(direction);
+					updateMap(coords);
+				}
+				
+				// Set the critter's energy level.
+				this.setEnergy(this.getEnergy() - Params.run_energy_cost);
+				
+				// If they are dead, kill them off.
+				if (dead()) {
+					population.remove(population.indexOf(this));
+					removeFromMap(coords);
 				}
 				else {
-					// Add the current spot to conflict list to check later.
-					CritterWorld.conflicts.add(coords);
+					this.hasMoved = true;
+				
+					// Check if the critter's new spot is already occupied.
+					x = coords.get(0);
+					y = coords.get(1);
+					if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
+						return; //The critter is the only occupant.
+					}
+					else {
+						// Add the current spot to conflict list to check later.
+						CritterWorld.conflicts.add(coords);
+					}
 				}
 			}
 		}
@@ -646,6 +618,7 @@ public abstract class Critter {
 			// Add them to the population, and the virtual map.
 			population.add(head);
 			CritterWorld.virtual_map.get(x).get(y).add(head);
+			babies.remove(head);
 		}
 	}
 	

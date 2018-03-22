@@ -132,7 +132,7 @@ public class Main {
         				displayHelp();
         				break;
         			default:
-        				System.out.println("invalid command: " + str);
+        				System.out.print("invalid command: " + str);
         				break;
         			}
         		}
@@ -182,7 +182,7 @@ public class Main {
 				count = Integer.parseInt(className.substring(className.indexOf(" ")).trim());
 			}
 			catch(NumberFormatException e) {
-				System.out.println("error processing: " + str);
+				System.out.print("error processing: " + str);
 			}
 			
 			className = className.substring(0, className.indexOf(" ")).trim();
@@ -194,7 +194,7 @@ public class Main {
 			try {
 				CritterWorld.makeCritter(className);
 			} catch (InvalidCritterException e) {
-				System.out.println("Invalid Critter!");
+				System.out.print("Invalid Critter!");
 				return;
 			}
 		}
@@ -212,7 +212,7 @@ public class Main {
 			count = Integer.parseInt(str.substring(str.indexOf(" ")).trim());
 		   }
 		   catch(NumberFormatException e) {
-				System.out.println("error processing: " + str);
+				System.out.print("error processing: " + str);
 			}
 		}
 		else {
@@ -235,15 +235,14 @@ public class Main {
 			seed = Long.parseLong(str.substring(str.indexOf(" ")).trim());
 		   }
 		   catch(NumberFormatException e) {
-				System.out.println("error processing: " + str);
+				System.out.print("error processing: " + str);
 			}
 		}
 	   TestCritter.setSeed(seed);	   
    }
    
    public static void statsCommand(String str) {
-	  String unqualifiedClassName = str.substring(str.indexOf(" ")).trim();
-	  
+	  String unqualifiedClassName = str.substring(str.indexOf(" ")).trim();	  
 	  
 	  try {
 		  List<Critter> list = CritterWorld.getInstances(unqualifiedClassName);
@@ -263,7 +262,7 @@ public class Main {
 		  
 	  } 
 	  catch (InvalidCritterException | IllegalAccessException e) {
-		  System.out.println("Invalid Critter!");
+		  System.out.print("Invalid Critter!");
 		  return;
 	  }
 	  catch (InvocationTargetException | NoSuchMethodException | SecurityException e)
