@@ -32,9 +32,9 @@ public class Critter3 extends Critter {
 		return false; //always choose to run away
 	}
 	
-	public static void runStats(java.util.List<Critter> Critter3s) {
-		if(Critter3s.size() > 1) {
-			System.out.print("" + Critter3s.size() + " total Critter3s    ");
+	public static void runStats(java.util.List<Critter> critters) {
+		if(critters.size() > 1) {
+			System.out.print("" + critters.size() + " total Critter3s    ");
 			System.out.println();
 		}
 		else {

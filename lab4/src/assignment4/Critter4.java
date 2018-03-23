@@ -1,6 +1,6 @@
 package assignment4;
 
-/**
+/*
  * Daniel_Critter4 will arbitrarily choose a direction in which to move,
  * and will arbitrarily choose to walk n number of times, where n > 1 will make
  * the critter appear as if it is engaging in teleportation.
