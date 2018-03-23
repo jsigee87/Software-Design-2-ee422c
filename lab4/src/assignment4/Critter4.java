@@ -7,13 +7,13 @@ package assignment4;
  * @author Daniel Diamont
  *
  */
-public class Teleporter extends Critter {
+public class Critter4 extends Critter {
 
 	private int dir;
 	private int numSteps;
 	private int maxStep;
 	
-	Teleporter(){
+	Critter4(){
 		this.dir = Critter.getRandomInt(8);
 		this.maxStep = 4;
 		this.numSteps = Critter.getRandomInt(maxStep) + 1;
@@ -46,7 +46,7 @@ public class Teleporter extends Critter {
 			System.out.println();
 		}
 		else {
-			System.out.println("There is only 1 Teleporter");
+			System.out.println("There is only 1 Critter4");
 		}
 	}
 
