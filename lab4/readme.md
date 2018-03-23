@@ -48,15 +48,15 @@
 `boolean hasMoved` 
 
 A flag to determine if the Critter has already moved in this world time step. A Critter is only allowed to move once, and moving twice should still deduct energy, but not move the Critter.</li>
-        <li>
+        <li>    
 `private static void resetHasMoved()` 
 
 This method is implemented here in order to be able to access the `hasMoved` flag.</li>
-        <li>
+        <li>    
 `private void updateMap(List<Integer> coords)` 
 
 This method takes x and y coordinates and updates them in a virtual map of the world state inside our controller CritterWorld.</li>
-        <li>
+        <li>    
 `private void removeFromMap(List<Integer> coords)` 
 
 This method serves a similar purpose, removing a Critter from the virtual map in the controller. It is here for the same reason, namely a Critter's coordinates are kept private.</li>    
@@ -84,17 +84,17 @@ This function is passed in a Critter and implements the requirements for a Critt
 
 `public static void makeCritter(String critter_class_name)` 
 
-Daniel do this</li>
+This function creates and initializes a Critter subclass. The parameter must be the unqualified name of a concrete subclass of Critter. If not, and InvalidCritterException must be thrown.</li>
         <li>
 
 `public static List<Critter> getInstances(String critter_class_name)` 
 
-Daniel do this </li>
+This function returns a list of Critters of the specified sub-class in the parameter. The function uses reflection to compare the parameter against the available Critter sub-classes in the package, and returns a list with the specified critters if successful. If the parameter does not match any of the avaible Critter sub-classes, then the function throws an InvalidCritterException.</li>
         <li>
 
 `public static void runStats(List<Critter> critters)` 
 
-Daniel do this</li>
+This function returns statistics about the critters specified in a list. The function can either be overridden by sub-classes of Critter such that the sub-classes can display their own statistics of interest. However, if the function is not overridden by a sub-class of Critter, then the Critter class will display the default statistics for the list of critters as provided by the instructors of the course.</li>
         <li>
 
 `public static void worldTimeStep()` 
@@ -194,13 +194,15 @@ This method is run at the end of each world time step. Keeping in mind that the 
 
 `public static List<String> getClassList(String myPackage)` 
 
-Daniel do this here</li>
+This method uses the JVM class-loader in order to obtain the file path of the source directory. The method scan all files for .class extensions and returns a list of all of the Classes available in the directory. This proved to be very useful in order to execute functions dependent on reflection.</li>
+    <li>
+   
     </ul>
 </p>
 
 ### InvalidCritterException.java
 
 <p>
-Daniel insert brief explanation
+    This class allows us create an exception to specify that an invalid Critter sub-class was attempted to be utilized or constructed when the class does not exist in the src/ directory of the project.
 </p>
 
