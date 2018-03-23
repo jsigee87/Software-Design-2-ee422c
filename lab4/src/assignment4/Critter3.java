@@ -3,18 +3,18 @@ package assignment4;
 import assignment4.Critter;
 
 /**
- * Spinner is a critter that only moves in a box shaped pattern.
+ * Critter3 is a critter that only moves in a box shaped pattern.
  * It walks once per time step. It will cycle through directions: right, up, 
  * left, and down in order to make the box pattern
  * @author Daniel Diamont
  *
  */
-public class Spinner extends Critter {
+public class Critter3 extends Critter {
 	
 	private int [] dir = {0,2,4,6};
 	int dirIndex;
 	
-	Spinner(){
+	Critter3(){
 		this.dirIndex = 0;
 	}
 	
@@ -32,13 +32,13 @@ public class Spinner extends Critter {
 		return false; //always choose to run away
 	}
 	
-	public static void runStats(java.util.List<Critter> Spinners) {
-		if(Spinners.size() > 1) {
-			System.out.print("" + Spinners.size() + " total Spinners    ");
+	public static void runStats(java.util.List<Critter> Critter3s) {
+		if(Critter3s.size() > 1) {
+			System.out.print("" + Critter3s.size() + " total Critter3s    ");
 			System.out.println();
 		}
 		else {
-			System.out.println("There is only 1 Spinner");
+			System.out.println("There is only 1 Critter3");
 		}
 	}
 
