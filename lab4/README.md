@@ -1,9 +1,12 @@
-# Readme
+# Assignment 4 "Critters" 
 
 ## Components
 
 <p>
-    This lab consists of several components, including components given as part of the assignment, and components that we created to fulfill the assignment requirements. We added substantially to most of the components given to us, and created non-trivial components in order to complete the assignment. Many of the additions to the given components were to meet specific assignment requirements, namely that most additions must be private. <br> The components given to us were:
+    This lab consists of several components, including components given as part of the assignment, and components that we created to fulfill the assignment requirements. We added substantially to most of the components given to us, and created non-trivial components in order to complete the assignment. Many of the additions to the given components were to meet specific assignment requirements, namely that most additions must be private.
+</p> 
+<p>
+The components given to us were:
     <ul>
         <li>Algae.java</li>
         <li>Craig.java</li>
@@ -11,8 +14,9 @@
         <li>Main.java</li>
         <li>Params.java</li>
     </ul>
-    <br>
-        The components we created were:
+</p>
+<p>        
+The components we created were:
     <ul>
         <li>CritterWorld.java</li>
         <li>InvalidCritterException.java</li>
@@ -49,14 +53,17 @@
 
 A flag to determine if the Critter has already moved in this world time step. A Critter is only allowed to move once, and moving twice should still deduct energy, but not move the Critter.</li>
         <li>    
+
 `private static void resetHasMoved()` 
 
 This method is implemented here in order to be able to access the `hasMoved` flag.</li>
         <li>    
+
 `private void updateMap(List<Integer> coords)` 
 
 This method takes x and y coordinates and updates them in a virtual map of the world state inside our controller CritterWorld.</li>
         <li>    
+
 `private void removeFromMap(List<Integer> coords)` 
 
 This method serves a similar purpose, removing a Critter from the virtual map in the controller. It is here for the same reason, namely a Critter's coordinates are kept private.</li>    
@@ -184,7 +191,7 @@ This data structure is used to check and resolve conflicts. Anytime a Critter ch
 </p>
 <p>
     The highlighted methods are:
-    <ul>
+   <ul>
         <li>
 
 `public static void resolveConflicts()` 
@@ -195,9 +202,8 @@ This method is run at the end of each world time step. Keeping in mind that the 
 `public static List<String> getClassList(String myPackage)` 
 
 This method uses the JVM class-loader in order to obtain the file path of the source directory. The method scan all files for .class extensions and returns a list of all of the Classes available in the directory. This proved to be very useful in order to execute functions dependent on reflection.</li>
-    <li>
-   
-    </ul>
+      
+   </ul>
 </p>
 
 ### InvalidCritterException.java
