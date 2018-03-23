@@ -1,7 +1,7 @@
 package assignment4;
 
-/**
- * Daniel_Teleporter will arbitrarily choose a direction in which to move,
+/*
+ * Daniel_Critter4 will arbitrarily choose a direction in which to move,
  * and will arbitrarily choose to walk n number of times, where n > 1 will make
  * the critter appear as if it is engaging in teleportation.
  * @author Daniel Diamont
@@ -40,9 +40,9 @@ public class Critter4 extends Critter {
 		return true; //always choose to fight
 	}
 	
-	public static void runStats(java.util.List<Critter> Teleporters) {
-		if(Teleporters.size() > 1) {
-			System.out.print("" + Teleporters.size() + " total Teleporters    ");
+	public static void runStats(java.util.List<Critter> Critter4s) {
+		if(Critter4s.size() > 1) {
+			System.out.print("" + Critter4s.size() + " total Critter4s    ");
 			System.out.println();
 		}
 		else {
