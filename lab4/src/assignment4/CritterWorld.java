@@ -112,12 +112,27 @@ public class CritterWorld extends TestCritter{
 	}
 	
 	/**
-	 * Display the world on the console.
+	 * Display the world on the console. DEBUG mode
 	 */
 	public static void displayWorld() {		
 		printEdge();
 		printBody();
 		printEdge();
+	}
+	
+	/**
+	 * Display the world on the console. DEBUG mode
+	 */
+	public static void displayWorldDebug() {		
+		ArrayList<ArrayList<Integer>> johnlocations = new ArrayList<ArrayList<Integer>>();
+		printEdge();
+		johnlocations = printBodyDebug(johnlocations);
+		printEdge();
+		System.out.println();
+		System.out.println("The coordinates were the display thinks a johncritter is are:");
+		for (int i = 0; i < johnlocations.size(); i ++){
+			System.out.println(johnlocations.get(i));
+		}
 	}
 	
 	/**
@@ -307,6 +322,7 @@ public class CritterWorld extends TestCritter{
 	
 	/**
 	 * Prints the map body via the virtual map.
+	 * @return 
 	 */
 	public static void printBody() {
 		int i = 0;
@@ -327,6 +343,38 @@ public class CritterWorld extends TestCritter{
 			}
 			System.out.println("|");
 		}
+	}
+	
+	/**
+	 * Prints the map body via the virtual map. DEBUG
+	 * Use this to make johncritters (Critter2) and display their locations.
+	 * @return 
+	 */
+	public static ArrayList<ArrayList<Integer>> printBodyDebug(ArrayList<ArrayList<Integer>> johnlocations) {
+		int i = 0;
+		int j = 0;
+		
+		for (i = 0; i < Params.world_height; i++) {
+			System.out.print("|");
+			for(j = 0; j < Params.world_width; j++) {
+				
+				//if the spot (i,j) is occupied
+				if(virtual_map.get(j).get(i).isEmpty() == false) {
+					ArrayList<Integer> loc = new ArrayList<Integer>();
+					loc.add(j);
+					loc.add(i);
+					johnlocations.add(loc);
+				
+					//print out the critter
+					System.out.print(virtual_map.get(j).get(i).get(0));					
+				}
+				else {
+					System.out.print(" "); //print an empty space
+				}
+			}
+			System.out.println("|");
+		}
+		return johnlocations;
 	}
 	
 	/**

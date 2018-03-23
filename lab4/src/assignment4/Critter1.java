@@ -9,12 +9,12 @@ import assignment4.Critter;
  * @author John Sigmon
  *
  */
-public class Fighter extends Critter{
+public class Critter1 extends Critter{
 
 	/**
 	 *  Default constructor
 	 */
-	public Fighter() {
+	public Critter1() {
 		//not used
 	}
 	
@@ -32,7 +32,7 @@ public class Fighter extends Critter{
 	 */
 	@Override
 	public void doTimeStep() {
-		Critter baby = new Fighter();
+		Critter baby = new Critter1();
 		int move = Critter.getRandomInt(8);
 		walk(move);
 		this.reproduce(baby, (move + 1) % 7);

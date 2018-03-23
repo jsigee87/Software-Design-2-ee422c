@@ -38,7 +38,7 @@ public class Main {
     // Package of Critter file.  Critter cannot be in default package.
     private static String assignment4;
     // Use it or not, as you wish!
-    private static boolean DEBUG = false; 
+    public static final boolean DEBUG = false; 
     // If you want to restore output to console
     static PrintStream old = System.out;	
 
@@ -103,15 +103,10 @@ public class Main {
 //    	System.out.println(" help for a list of supported commands.");
 //    	System.out.println();
     	
-        //int blinker = 0; 
+        
     	while(true) {
-    		//if (blinker == 0) {
-    			System.out.print("critters>");
-    		//}
-    		//if (blinker == 1) {
-    			//System.out.print("critters> |");
-    		//}
-    		//blinker ^= blinker;
+    		System.out.print("critters>");
+    	
     		//TODO fix parser to match up exactly with JUNIT test
     		if(kb.hasNextLine()) {
         		String str = kb.nextLine();
@@ -123,8 +118,13 @@ public class Main {
         				break;
         			case "show":
         		    	System.out.println();
-        				TestCritter.displayWorld();
-        		    	System.out.println();
+        		    	if (DEBUG) {
+        		    		CritterWorld.displayWorldDebug();
+        		    	}
+        		    	else {
+        		    		TestCritter.displayWorld();
+        		    	}
+        				System.out.println();
         				break;
         			case "step":
         				TestCritter.worldTimeStep();
@@ -159,14 +159,12 @@ public class Main {
         			}
         		
 	        	}
-//	        	System.out.println();
 	        	if (CritterWorld.shouldQuit()) {
 	        		break;
 	        	}
     		}//end if-block
 	        
     	}//end while
-//    	System.out.println("Quitting Critters...");
         System.out.flush();
     }
     
@@ -242,6 +240,10 @@ public class Main {
 	   TestCritter.setSeed(seed);	   
    }
    
+   /**
+    * TODO Daniel
+    * @param str
+    */
    public static void statsCommand(String str) {
 	  String unqualifiedClassName = str.substring(str.indexOf(" ")).trim();	  
 	  
