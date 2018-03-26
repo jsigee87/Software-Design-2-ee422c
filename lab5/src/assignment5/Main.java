@@ -24,14 +24,17 @@ import assignment5.Critter.TestCritter;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -146,20 +149,87 @@ public class Main extends Application {
 		@Override
 		public void handle(ActionEvent arg0) {
 			System.out.println("You clicked on Make");
-			Stage newStage = new Stage();
+			Stage make_popup = new Stage();
+			make_popup.setTitle("What Kind of Critter Do You Want?");
 			VBox comp = new VBox();
-			TextField nameField = new TextField("Name");
-			TextField phoneNumber = new TextField("Phone Number");
-			comp.getChildren().add(nameField);
-			comp.getChildren().add(phoneNumber);
-
-			Scene stageScene = new Scene(comp, 300, 300);
-			newStage.setScene(stageScene);
-			newStage.show();
+			HBox box1 = new HBox(100);
+			HBox box2 = new HBox(62);
+			box1.setPadding(new Insets(8, 5, 5, 5));
+			box2.setPadding(new Insets(5, 5, 8, 5));
+			Label critter_type = new Label("Critter Type");
+			TextField critter_type_field = new TextField("Enter Critter Type Here");
+			Label num_crits = new Label("Number of Critters");
+			TextField num_crits_field = new TextField("Enter Number of Critters Here");
+			
+			//critter_type.setOnAction(new critter_type_h());
+			box1.getChildren().addAll(critter_type, critter_type_field);
+			
+			box2.getChildren().addAll(num_crits, num_crits_field);
+			
+			comp.getChildren().addAll(box1, box2);
+			
+			ArrayList<String> args = new ArrayList<String>();
+			// Set text handlers
+			critter_type_field.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					String critter_type_input = new String();
+					critter_type_input = critter_type_field.getText();
+					args.add(critter_type_input);
+					
+					try {
+						CritterWorld.makeCritter(critter_type_input);
+					} catch (InvalidCritterException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println(args);
+					CritterWorld.displayWorld();
+				}	
+			});
+			
+			num_crits_field.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					String num_crits_input = new String();
+					num_crits_input = num_crits_field.getText();
+					args.add(num_crits_input);
+				}	
+			});			
+			
+			
+			try {
+				if(args.size() == 2) {
+					CritterWorld.makeCritter(args.get(0));
+					System.out.println(args);
+					CritterWorld.displayWorld();
+				}
+			}
+			catch(InvalidCritterException e) {
+				System.out.println("Invalid Critter!");
+			}
+			
+			Scene stageScene = new Scene(comp, 350, 75);
+			make_popup.setScene(stageScene);
+			make_popup.show();
+			
+			
 			
 		}
 		
 	}
+	
+	private class critter_type_h implements EventHandler<ActionEvent>{
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			System.out.println("You typed" + arg0.);
+		}
+		
+	}
+
+	
+	
 	
 	
     
