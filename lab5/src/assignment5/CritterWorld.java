@@ -18,7 +18,7 @@ public class CritterWorld extends TestCritter{
 	 * Virtual map. Holds the index of the critter that is to be displayed when
 	 *  displayWorld() is called. 'x' is a list, 'y' is a list in 'x', a member
 	 *  of 'y' is a list of critters.
-	 *  
+	 *
 	 *  Ex. Given x and y, to access the critters in that location, first check
 	 *  that virtual_map.get(x).get(y).isEmpty() is false. Then you can simply
 	 *  call virtual_map.get(x).get(y).get(i) to get the ith critter in that 
@@ -26,6 +26,12 @@ public class CritterWorld extends TestCritter{
 	 *  an out of bounds exception.
 	 */
 	protected static ArrayList<ArrayList<ArrayList<Critter>>> virtual_map = 
+			new ArrayList<ArrayList<ArrayList<Critter>>>();
+	
+	/**
+	 * 
+	 */
+	protected static ArrayList<ArrayList<ArrayList<Critter>>> old_map = 
 			new ArrayList<ArrayList<ArrayList<Critter>>>();
 	
 	/**
@@ -59,6 +65,16 @@ public class CritterWorld extends TestCritter{
 			}
 			virtual_map.add(outer_list);
 		}
+		
+		for(int i = 0; i < Params.world_height; i++) {
+			ArrayList<ArrayList<Critter>> outer_list = 
+					new ArrayList<ArrayList<Critter>>();
+			for (int j = 0; j < Params.world_width; j ++) {
+				ArrayList<Critter> inner_list = new ArrayList<Critter>();
+				outer_list.add(inner_list);
+			}
+			old_map.add(outer_list);
+		}
 	}
 	
 	/**
@@ -85,6 +101,7 @@ public class CritterWorld extends TestCritter{
 	public static void clearWorld() {
 		TestCritter.getPopulation().clear();
 		virtual_map.clear();
+		old_map.clear();
 		new_critters.clear();
 		conflicts.clear();
 	}
@@ -92,11 +109,16 @@ public class CritterWorld extends TestCritter{
 	/**
 	 * Perform a world time step.
 	 */
-	public static void worldTimeStep() {				
+	public static void worldTimeStep() {	
+		// Copy current virtual map into "old map"
+		old_map = (ArrayList<ArrayList<ArrayList<Critter>>>) virtual_map.clone();
+		
 		// Time step all the critters.
 		for (int i = 0; i < getPopulation().size(); i++) {
 			getPopulation().get(i).doTimeStep();
 		}
+		
+		old_map = virtual_map;
 		
 		// Resolve conflicts.
 		resolveConflicts();
@@ -485,7 +507,7 @@ public class CritterWorld extends TestCritter{
 	 * @param direction is a random integer from 0 to 7.
 	 * @return List of integers of the coordinates of the new location.
 	 */
-	private static ArrayList<Integer> parseDirection(int direction, int x, int y) {
+	protected static ArrayList<Integer> parseDirection(int direction, int x, int y) {
 		int width = Params.world_width;
 		int height = Params.world_height;
 		
@@ -618,6 +640,12 @@ public class CritterWorld extends TestCritter{
 		coords.add(x);
 		coords.add(y);
 		return coords;
+	}
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 	

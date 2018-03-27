@@ -32,6 +32,13 @@ public abstract class Critter {
 	private static String myPackage;
 	private	static List<Critter> population = new ArrayList<Critter>();
 	private static List<Critter> babies = new ArrayList<Critter>();
+	public enum CritterShape {
+		CIRCLE,
+		SQUARE,
+		TRIANGLE,
+		DIAMOND,
+		STAR
+	}
 	
 	/*///////////////////
 	//	  	Map		   //
@@ -51,7 +58,27 @@ public abstract class Critter {
 	private int energy = 0;
 	private static Random rand = new Random();
 	private boolean hasMoved = false;
+
+	/* the default color is white, which I hope makes critters invisible by default
+	 * If you change the background color of your View component, then update the default
+	 * color to be the same as you background 
+	 * 
+	 * critters must override at least one of the following three methods, it is not 
+	 * proper for critters to remain invisible in the view
+	 * 
+	 * If a critter only overrides the outline color, then it will look like a non-filled 
+	 * shape, at least, that's the intent. You can edit these default methods however you 
+	 * need to, but please preserve that intent as you implement them. 
+	 */
+	public javafx.scene.paint.Color viewColor() { 
+		return javafx.scene.paint.Color.WHITE; 
+	}
 	
+	public javafx.scene.paint.Color viewOutlineColor() { return viewColor(); }
+	public javafx.scene.paint.Color viewFillColor() { return viewColor(); }
+	
+	public abstract CritterShape viewShape(); 
+
 	/**
 	 *  Gets the package name. This assumes that Critter and its subclasses 
 	 *  are all in the same package.
@@ -101,13 +128,13 @@ public abstract class Critter {
 			removeFromMap(coords);
 		}
 		else {
-			this.hasMoved = true;
+			hasMoved = true;
 	
 		// Check if the critter's new spot is already occupied.
 			x = coords.get(0);
 			y = coords.get(1);
 			if (CritterWorld.virtual_map.get(x).get(y).size() == 1) {
-				return; //The critter is the only occupant.
+				 return; //The critter is the only occupant.
 			}
 			else {
 			// Add the current spot to conflict list to check later.
@@ -115,7 +142,31 @@ public abstract class Critter {
 			}
 		}
 	}
-	
+
+	protected final String look(int direction, boolean steps) {
+		
+		//deduct energy
+		this.setEnergy(this.getEnergy() - Params.look_energy_cost);
+		
+		ArrayList<Integer> coords = this.parseDirection(direction);
+		int x = coords.get(0);
+		int y = coords.get(1);
+		
+		if (steps) {
+			coords = CritterWorld.parseDirection(direction, x, y);
+			x = coords.get(0);
+			y = coords.get(1);			
+		}
+		//check if there is a critter at that spot in the map
+		
+		if(CritterWorld.old_map.get(x).get(y).isEmpty()) {
+			return null;
+		}
+		else {
+			return (CritterWorld.old_map.get(x).get(y).get(0).toString());
+		}		
+	}	
+
 	/**
 	 * Run just walks in some direction twice.
 	 * @param direction is an integer between 0 and 7 that is parsed.
