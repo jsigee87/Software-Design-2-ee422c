@@ -470,52 +470,6 @@ public abstract class Critter {
 		CritterWorld.worldTimeStep();
 		addNewCritters();
 		resetHasMoved();
-		// This code was all to fix our system to work with the JUnit cases.
-		// Instead of going through the appropriate methods, it would directly
-		// change Critter coordinates, which threw off our logic.
-		/*
-		ArrayList<Integer> coords = new ArrayList<Integer>();
-		ArrayList<Integer> oldCoords = new ArrayList<Integer>();
-		//in case coordinates were set externally...
-		for(Critter crit : population) {
-			int x = crit.x_coord;
-			int y = crit.y_coord;
-			coords.add(x);
-			coords.add(y);
-			
-//			System.out.println("new: (" + x + "," + y + ")");
-			//get old coords
-			int oldX;
-			int oldY;
-			for(ArrayList<ArrayList<Critter>> xList : CritterWorld.virtual_map) {
-				oldX = CritterWorld.virtual_map.indexOf(xList);
-				for(ArrayList<Critter> yList :
-					CritterWorld.virtual_map.get(oldX)) {
-					oldY = xList.indexOf(yList);
-					if(CritterWorld.virtual_map.get(oldX).get(oldY).contains(crit)
-							) {
-						oldCoords.add(oldX);
-						oldCoords.add(oldY);
-//						System.out.println("old: (" + oldX + "," + oldY + ")");
-						crit.removeFromMap(oldCoords);
-						crit.updateMap(coords);
-					}
-				}
-			}
-			
-		}
-		
-		//check for conflicts
-		for(Critter crit1 : population) {
-			for(Critter crit2 : population) {
-				if(!crit2.equals(crit1) && (crit1.x_coord == crit2.x_coord &&
-						crit1.y_coord == crit2.y_coord)) {
-					
-					CritterWorld.conflicts.add(coords);
-				}
-			}
-		}
-		*/
 	}
 	
 	/**

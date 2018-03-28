@@ -77,6 +77,8 @@ public class Main extends Application {
      *  all output to be directed to a String), or nothing.
      */
     public static void main(String[] args) { 
+    	new CritterWorld();
+    	
     	launch(args);
     }
 
@@ -129,10 +131,12 @@ public class Main extends Application {
 		// Add button handlers
 		
 		make.setOnAction(new MakeHandler());
-
-		
-		
-	
+		step.setOnAction(new StepHandler());
+		show.setOnAction(new ShowHandler());
+		help.setOnAction(new HelpHandler());
+		quit.setOnAction(new QuitHandler());
+		seed.setOnAction(new SeedHandler());
+		stats.setOnAction(new StatsHandler());	
 		
 		Scene scene = new Scene(pane, width, height);
 		
@@ -151,79 +155,123 @@ public class Main extends Application {
 			System.out.println("You clicked on Make");
 			Stage make_popup = new Stage();
 			make_popup.setTitle("What Kind of Critter Do You Want?");
+			HBox bigBox = new HBox();
 			VBox comp = new VBox();
+			VBox buttonBox = new VBox();
 			HBox box1 = new HBox(100);
 			HBox box2 = new HBox(62);
 			box1.setPadding(new Insets(8, 5, 5, 5));
 			box2.setPadding(new Insets(5, 5, 8, 5));
+			buttonBox.setPadding(new Insets(8, 5, 8, 5));
 			Label critter_type = new Label("Critter Type");
 			TextField critter_type_field = new TextField("Enter Critter Type Here");
-			Label num_crits = new Label("Number of Critters");
+			Label num_crits_label = new Label("Number of Critters");
 			TextField num_crits_field = new TextField("Enter Number of Critters Here");
 			
+			
+			//buttons			
+			Button submit = new Button("Submit");			
+			
 			//critter_type.setOnAction(new critter_type_h());
-			box1.getChildren().addAll(critter_type, critter_type_field);
-			
-			box2.getChildren().addAll(num_crits, num_crits_field);
-			
+			box1.getChildren().addAll(critter_type, critter_type_field);			
+			box2.getChildren().addAll(num_crits_label, num_crits_field);		
+			buttonBox.getChildren().addAll(submit);
 			comp.getChildren().addAll(box1, box2);
-			
-			ArrayList<String> args = new ArrayList<String>();
-			// Set text handlers
-			critter_type_field.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
-					String critter_type_input = new String();
-					critter_type_input = critter_type_field.getText();
-					args.add(critter_type_input);
-					
+			bigBox.getChildren().addAll(comp, buttonBox);
+		
+			// Handle Submit Button
+			submit.setOnAction(x->{
+				if(critter_type_field.getText() != null &&
+						!critter_type_field.getText().isEmpty() &&
+						num_crits_field.getText() != null &&
+						!num_crits_field.getText().isEmpty()) {
 					try {
-						CritterWorld.makeCritter(critter_type_input);
-					} catch (InvalidCritterException e) {
-						// TODO Auto-generated catch block
+						int num_crits = Integer.valueOf(num_crits_field.getText());
+						for(int i = 0; i < num_crits; i++) {
+							Critter.makeCritter(critter_type_field.getText());
+						}
+						Critter.displayWorld();
+					}
+					catch(InvalidCritterException e) {
+						//TODO
 						e.printStackTrace();
 					}
-					System.out.println(args);
-					CritterWorld.displayWorld();
-				}	
-			});
-			
-			num_crits_field.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
-					String num_crits_input = new String();
-					num_crits_input = num_crits_field.getText();
-					args.add(num_crits_input);
-				}	
-			});			
-			
-			
-			try {
-				if(args.size() == 2) {
-					CritterWorld.makeCritter(args.get(0));
-					System.out.println(args);
-					CritterWorld.displayWorld();
 				}
-			}
-			catch(InvalidCritterException e) {
-				System.out.println("Invalid Critter!");
-			}
-			
-			Scene stageScene = new Scene(comp, 350, 75);
+			});
+
+			Scene stageScene = new Scene(bigBox, 400, 75);
 			make_popup.setScene(stageScene);
-			make_popup.show();
-			
-			
+			make_popup.show();	
 			
 		}
 		
+	}
+	
+	private class StepHandler implements EventHandler<ActionEvent> {
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+	
+	private class ShowHandler implements EventHandler<ActionEvent> {
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+	
+	private class HelpHandler implements EventHandler<ActionEvent> {
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+	
+	private class QuitHandler implements EventHandler<ActionEvent> {
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+	
+	private class SeedHandler implements EventHandler<ActionEvent> {
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+	
+	private class StatsHandler implements EventHandler<ActionEvent> {
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 	
 	private class critter_type_h implements EventHandler<ActionEvent>{
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			System.out.println("You typed" + arg0.);
+			System.out.println("You typed" + arg0);
 		}
 		
 	}
