@@ -51,14 +51,21 @@ public class Critter1 extends Critter{
 	 * Displays the critter's stats per pdf
 	 * @param fighters a list of Fighter critters
 	 */
-	public static void runStats(List<Critter> fighters) {
+	public static String runStats(List<Critter> fighters) {
+		String stats = new String();
 		if (fighters.size() > 1) {
-			System.out.print(fighters.size() + " total Fighters    ");
-			System.out.println();
+			stats += fighters.size() + " total Fighters    ";
 		}
 		else {
-			System.out.println("There is only one Fighter");
+			stats += "There is only one Fighter";
 		}
-	
+		
+		return stats;	
+	}
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -33,10 +33,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /*
@@ -116,17 +120,14 @@ public class Main extends Application {
 		Button seed = new Button("Seed");
 		Button stats = new Button("Stats");
 
-		//pane.getChildren().add(make);
-		//GridPane.setColumnSpan(make, 2);
-		//GridPane.setRowSpan(make, 2);
 		// Add buttons to gridpane
 		pane.add(make, 0, 0);
 		pane.add(step, 1, 0);
 		pane.add(show, 2, 0);
 		pane.add(help, 0, 1);
-		pane.add(quit, 1, 1);
+		pane.add(quit, 1, 2);
 		pane.add(seed, 2, 1);
-		pane.add(stats, 1, 2);
+		pane.add(stats, 1, 1);
 		
 		// Add button handlers
 		
@@ -143,16 +144,14 @@ public class Main extends Application {
 		stage.setScene(scene);
 		stage.show();
 		
-	}
+	}    
     
-    
-	
+	//TODO implement exception handling
 	// Handlers
 	private class MakeHandler implements EventHandler<ActionEvent>{
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			System.out.println("You clicked on Make");
 			Stage make_popup = new Stage();
 			make_popup.setTitle("What Kind of Critter Do You Want?");
 			HBox bigBox = new HBox();
@@ -164,9 +163,9 @@ public class Main extends Application {
 			box2.setPadding(new Insets(5, 5, 8, 5));
 			buttonBox.setPadding(new Insets(8, 5, 8, 5));
 			Label critter_type = new Label("Critter Type");
-			TextField critter_type_field = new TextField("Enter Critter Type Here");
+			TextField critter_type_field = new TextField();
 			Label num_crits_label = new Label("Number of Critters");
-			TextField num_crits_field = new TextField("Enter Number of Critters Here");
+			TextField num_crits_field = new TextField();
 			
 			
 			//buttons			
@@ -196,6 +195,8 @@ public class Main extends Application {
 						//TODO
 						e.printStackTrace();
 					}
+					
+					make_popup.close();
 				}
 			});
 
@@ -211,8 +212,46 @@ public class Main extends Application {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
+			Stage make_popup = new Stage();
+			make_popup.setTitle("Steps");
+			HBox bigBox = new HBox();
+			VBox comp = new VBox();
+			VBox buttonBox = new VBox();
+			HBox box1 = new HBox(100);
+			box1.setPadding(new Insets(8, 5, 5, 5));
+			buttonBox.setPadding(new Insets(8, 5, 8, 5));
+			Label step_label = new Label("Step");
+			TextField step_num_field = new TextField("Enter # of steps here: ");			
+			
+			//buttons			
+			Button submit = new Button("Submit");			
+			
+			//critter_type.setOnAction(new critter_type_h());
+			box1.getChildren().addAll(step_label, step_num_field);				
+			buttonBox.getChildren().addAll(submit);
+			comp.getChildren().addAll(box1);
+			bigBox.getChildren().addAll(comp, buttonBox);
+		
+			// Handle Submit Button
+			submit.setOnAction(x->{
+				if(step_num_field.getText() != null && !step_num_field.getText().isEmpty()) {
+					
+					Integer steps = Integer.valueOf(step_num_field.getText());
+					
+					for(int i = 0; i < steps; i++) {
+						Critter.worldTimeStep();
+					}
+					
+					Critter.displayWorld();
+					
+					make_popup.close();
+				}
+			});
 
+			Scene stageScene = new Scene(bigBox, 400, 75);
+			make_popup.setScene(stageScene);
+			make_popup.show();	
+			
 		}
 
 	}
@@ -221,18 +260,50 @@ public class Main extends Application {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-
+			
+			Critter.displayWorld();
 		}
-
 	}
 	
 	private class HelpHandler implements EventHandler<ActionEvent> {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
+			Stage make_popup = new Stage();
+			make_popup.setTitle("Help");
+			FlowPane fp = new FlowPane();
+			Canvas canvas = new Canvas(200, 200);
+	        GraphicsContext gc = canvas.getGraphicsContext2D();
+	        
+	        Text t = new Text("Valid commands are:\r\n "+
+	        		"    	quit  : Quits the game.\r\n" + 
+	        		"    	show  : Displays the game world.\r\n" + 
+	        		"    	step [<count>] : Implements time steps.\r\n" + 
+	        		"    	make <class_name> [<count>] t: Creates Critters of type class name and adds the single or <count> critters to the world.\r\n" + 
+	        		"    	stats : returns the number of critters of the specified class.\r\n" + 
+	        		"    	seed  : Sets the random seed for the simulator.\r\n" + 
+	        		"    	help  : Displays this help manual.");
+	        
+	        t.setFill(Color.BLACK);
+	        Font f = new Font(14);
+	        t.setFont(f);
+	        
+	        Button btn = new Button ("Quit Help...");
+	        btn.setOnAction(new EventHandler<ActionEvent>() {     
+	            @Override 
+	            public void handle(ActionEvent e) {
+	            	make_popup.close();
+	            }
+	        });
+	        
+	        fp.getChildren().add(t);
+	        fp.getChildren().add(canvas);
+	        fp.getChildren().add(btn);
 
+
+	        Scene scene = new Scene(fp);
+	        make_popup.setScene(scene);
+	        make_popup.show();
 		}
 
 	}
@@ -241,44 +312,177 @@ public class Main extends Application {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-
+			System.exit(0);
 		}
-
 	}
 	
 	private class SeedHandler implements EventHandler<ActionEvent> {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
+			Stage make_popup = new Stage();
+			make_popup.setTitle("Steps");
+			HBox bigBox = new HBox();
+			VBox comp = new VBox();
+			VBox buttonBox = new VBox();
+			HBox box1 = new HBox(100);
+			box1.setPadding(new Insets(8, 5, 5, 5));
+			buttonBox.setPadding(new Insets(8, 5, 8, 5));
+			Label seed_label = new Label("Seed");
+			TextField seed_num_field = new TextField("Enter seed here: ");			
+			
+			//buttons			
+			Button submit = new Button("Submit");			
+			
+			//critter_type.setOnAction(new critter_type_h());
+			box1.getChildren().addAll(seed_label, seed_num_field);				
+			buttonBox.getChildren().addAll(submit);
+			comp.getChildren().addAll(box1);
+			bigBox.getChildren().addAll(comp, buttonBox);
+		
+			// Handle Submit Button
+			submit.setOnAction(x->{
+				long seed = 0;
+			   try {
+				seed = Long.parseLong(seed_num_field.getText().trim());
+			   }
+			   catch(NumberFormatException e) {
+					System.out.println("error processing: " + seed_num_field.getText());
+				}
+					
+			   TestCritter.setSeed(seed);			   
+			   make_popup.close();
+			});
 
+			Scene stageScene = new Scene(bigBox, 400, 75);
+			make_popup.setScene(stageScene);
+			make_popup.show();	
+
+			
 		}
-
 	}
 	
 	private class StatsHandler implements EventHandler<ActionEvent> {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
-	
-	private class critter_type_h implements EventHandler<ActionEvent>{
-
-		@Override
-		public void handle(ActionEvent arg0) {
-			System.out.println("You typed" + arg0);
-		}
+			//input Critter and create new screen on which to show the stats
+			Stage make_popup = new Stage();
+			make_popup.setTitle("Stats Request");
+			HBox bigBox = new HBox();
+			VBox comp = new VBox();
+			VBox buttonBox = new VBox();
+			HBox box1 = new HBox(100);
+			box1.setPadding(new Insets(8, 5, 5, 5));
+			buttonBox.setPadding(new Insets(8, 5, 8, 5));
+			Label crit_type_label = new Label("Critter Type: ");
+			TextField crit_type_field = new TextField();			
+			
+			//buttons			
+			Button submit = new Button("Submit");			
+			
+			//critter_type.setOnAction(new critter_type_h());
+			box1.getChildren().addAll(crit_type_label, crit_type_field);				
+			buttonBox.getChildren().addAll(submit);
+			comp.getChildren().addAll(box1);
+			bigBox.getChildren().addAll(comp, buttonBox);
 		
-	}
+			// Handle Submit Button
+			submit.setOnAction(x->{
+				
+				String crit_type = new String(crit_type_field.getText());
+				
+				String unqualifiedClassName = crit_type.trim();	  
+				
+				String stats = null;
+				
+				try {
+					 List<Critter> list = CritterWorld.getInstances(unqualifiedClassName);
 
+					 if(unqualifiedClassName.toLowerCase().equals("critter")) {
+						  CritterWorld.runStats(list);
+					 }
+					 else {
+						  Class<?> c = Class.forName(returnClassName(unqualifiedClassName));
+						  @SuppressWarnings("rawtypes")
+						  Class[] cArg = new Class[1];
+					      cArg[0] = List.class;
+						  Method m = c.getMethod("runStats", cArg);
+						  
+						  stats = (String) m.invoke(c, list);
+					 }  
+					  
+				 } 
+				 catch (InvalidCritterException | IllegalAccessException e) {
+					  System.out.println("Invalid Critter!");
+				 }
+				 catch (InvocationTargetException | NoSuchMethodException | SecurityException e)
+				 {
+					  e.printStackTrace();
+				 } catch (ClassNotFoundException e) {
+					  e.printStackTrace();
+				 }
+				
+				Stage stats_stage = new Stage();
+				stats_stage.setTitle("Stats");
+				FlowPane fp = new FlowPane();
+				Canvas canvas = new Canvas(350, 350);
+		        GraphicsContext gc = canvas.getGraphicsContext2D();
+		        
+		        Text t = new Text(stats);
+		        
+		        t.setFill(Color.BLACK);
+		        Font f = new Font(14);
+		        t.setFont(f);
+		        
+		        Button btn = new Button ("Quit Stats...");
+		        btn.setOnAction(y->{
+		        	stats_stage.close();
+		        });
+		        
+		        fp.getChildren().add(t);
+		        fp.getChildren().add(canvas);
+		        fp.getChildren().add(btn);
+
+
+		        Scene scene = new Scene(fp);
+		        stats_stage.setScene(scene);
+		        stats_stage.show();
+			
+			});
+
+			Scene stageScene = new Scene(bigBox, 400, 75);
+			make_popup.setScene(stageScene);
+			make_popup.show();	
+		}
+	}
 	
+	private static String returnClassName(String critter_class_name) {
+		critter_class_name = critter_class_name.toLowerCase();					//
+		String string = new String();											//
+		char first = Character.toUpperCase(critter_class_name.charAt(0));		//
+		string = assignment5 + "." + first + critter_class_name.substring(1);
+		
+		List<String> classList = CritterWorld.getClassList(assignment5);
+		
+		List<String> lowClassList = new ArrayList<String>();
+		
+		for(String s : classList) {
+			lowClassList.add(s.toLowerCase());
+		}
+		if(lowClassList.contains(string.toLowerCase())) {
+			int idx = lowClassList.indexOf(string.toLowerCase());
+			return classList.get(idx);
+		}
+		return string;
+	}
 	
-	
-	
-    
+//	private class critter_type_h implements EventHandler<ActionEvent>{
+//
+//		@Override
+//		public void handle(ActionEvent arg0) {
+//			System.out.println("You typed" + arg0);
+//		}
+//		
+//	}    
 }

@@ -51,14 +51,22 @@ public class Critter2 extends Critter{
 	 * Displays the critter's stats, per pdf
 	 * @param johns a list of all the John critters
 	 */
-	public static void runStats(List<Critter> johns) {
+	public static String runStats(List<Critter> johns) {
+		String stats = new String();
 		if (johns.size() > 1) {
-			System.out.print(johns.size() + " total Critter2s    ");
-			System.out.println();
+			stats += johns.size() + " total Critter2s    ";
 		}
 		else {
-			System.out.println("There is only one Critter2");
+			stats += "There is only one Critter2";
 		}
+		
+		return stats;
+	}
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

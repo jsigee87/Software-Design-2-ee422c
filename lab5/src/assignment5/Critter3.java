@@ -32,14 +32,22 @@ public class Critter3 extends Critter {
 		return false; //always choose to run away
 	}
 	
-	public static void runStats(java.util.List<Critter> critters) {
+	public static String runStats(java.util.List<Critter> critters) {
+		String stats = new String();
+		
 		if(critters.size() > 1) {
-			System.out.print("" + critters.size() + " total Critter3s    ");
-			System.out.println();
+			stats += "" + critters.size() + " total Critter3s    ";
 		}
 		else {
-			System.out.println("There is only 1 Critter3");
+			stats += "There is only 1 Critter3";
 		}
+		return stats;
+	}
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

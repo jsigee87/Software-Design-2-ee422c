@@ -40,14 +40,23 @@ public class Critter4 extends Critter {
 		return true; //always choose to fight
 	}
 	
-	public static void runStats(java.util.List<Critter> Critter4s) {
+	public static String runStats(java.util.List<Critter> Critter4s) {
+		String stats = new String();
+		
 		if(Critter4s.size() > 1) {
-			System.out.print("" + Critter4s.size() + " total Critter4s    ");
-			System.out.println();
+			stats += "" + Critter4s.size() + " total Critter4s    ";
 		}
 		else {
-			System.out.println("There is only 1 Critter4");
+			stats += "There is only 1 Critter4";
 		}
+		
+		return stats;
+	}
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
