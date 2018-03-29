@@ -220,8 +220,8 @@ public class Main extends Application {
 			HBox box1 = new HBox(100);
 			box1.setPadding(new Insets(8, 5, 5, 5));
 			buttonBox.setPadding(new Insets(8, 5, 8, 5));
-			Label step_label = new Label("Step");
-			TextField step_num_field = new TextField("Enter # of steps here: ");			
+			Label step_label = new Label("Number of Steps");
+			TextField step_num_field = new TextField();			
 			
 			//buttons			
 			Button submit = new Button("Submit");			
@@ -234,21 +234,26 @@ public class Main extends Application {
 		
 			// Handle Submit Button
 			submit.setOnAction(x->{
-				if(step_num_field.getText() != null && !step_num_field.getText().isEmpty()) {
-					
-					Integer steps = Integer.valueOf(step_num_field.getText());
+				if(step_num_field.getText() != null && 
+						!step_num_field.getText().isEmpty()
+						) {
+					//System.out.println(step_num_field.getText());
+					int steps = Integer.valueOf(step_num_field.getText());
 					
 					for(int i = 0; i < steps; i++) {
 						Critter.worldTimeStep();
 					}
-					
+					// TODO is this just for debugging?
 					Critter.displayWorld();
 					
 					make_popup.close();
 				}
+				else {
+					//do nothing
+				}
 			});
 
-			Scene stageScene = new Scene(bigBox, 400, 75);
+			Scene stageScene = new Scene(bigBox, 500, 60);
 			make_popup.setScene(stageScene);
 			make_popup.show();	
 			
@@ -272,17 +277,18 @@ public class Main extends Application {
 			Stage make_popup = new Stage();
 			make_popup.setTitle("Help");
 			FlowPane fp = new FlowPane();
-			Canvas canvas = new Canvas(200, 200);
+			Canvas canvas = new Canvas(190, 150);
 	        GraphicsContext gc = canvas.getGraphicsContext2D();
 	        
 	        Text t = new Text("Valid commands are:\r\n "+
-	        		"    	quit  : Quits the game.\r\n" + 
-	        		"    	show  : Displays the game world.\r\n" + 
-	        		"    	step [<count>] : Implements time steps.\r\n" + 
-	        		"    	make <class_name> [<count>] t: Creates Critters of type class name and adds the single or <count> critters to the world.\r\n" + 
-	        		"    	stats : returns the number of critters of the specified class.\r\n" + 
-	        		"    	seed  : Sets the random seed for the simulator.\r\n" + 
-	        		"    	help  : Displays this help manual.");
+	        		"\tquit : \n\t\tQuits the game.\r\n" + 
+	        		"\tshow : \n\t\tDisplays the game world.\r\n" + 
+	        		"\tstep <count> : \n\t\tImplements time steps.\r\n" + 
+	        		"\tmake <class_name> <count> : \n\t\tCreates Critters of type " +
+	        		"class name and \n\t\tadds the single or <count> critters to the world.\r\n" + 
+	        		"\tstats : \n\t\treturns the number of critters of the specified class.\r\n" + 
+	        		"\tseed  : \n\t\tSets the random seed for the simulator.\r\n" + 
+	        		"\thelp  : \n\t\tDisplays this help manual :)");
 	        
 	        t.setFill(Color.BLACK);
 	        Font f = new Font(14);
@@ -321,15 +327,15 @@ public class Main extends Application {
 		@Override
 		public void handle(ActionEvent arg0) {
 			Stage make_popup = new Stage();
-			make_popup.setTitle("Steps");
+			make_popup.setTitle("Setting the Random Seed");
 			HBox bigBox = new HBox();
 			VBox comp = new VBox();
 			VBox buttonBox = new VBox();
 			HBox box1 = new HBox(100);
 			box1.setPadding(new Insets(8, 5, 5, 5));
 			buttonBox.setPadding(new Insets(8, 5, 8, 5));
-			Label seed_label = new Label("Seed");
-			TextField seed_num_field = new TextField("Enter seed here: ");			
+			Label seed_label = new Label("Enter Random Seed");
+			TextField seed_num_field = new TextField();			
 			
 			//buttons			
 			Button submit = new Button("Submit");			
@@ -342,19 +348,22 @@ public class Main extends Application {
 		
 			// Handle Submit Button
 			submit.setOnAction(x->{
-				long seed = 0;
-			   try {
-				seed = Long.parseLong(seed_num_field.getText().trim());
-			   }
-			   catch(NumberFormatException e) {
-					System.out.println("error processing: " + seed_num_field.getText());
-				}
-					
-			   TestCritter.setSeed(seed);			   
-			   make_popup.close();
+				if (seed_num_field.getText() != null &&
+						seed_num_field.getText().isEmpty()) {
+					long seed;
+				    try {
+				    	seed = Long.parseLong(seed_num_field.getText().trim());
+				    	TestCritter.setSeed(seed);
+				    }
+				    catch(NumberFormatException e) {
+				    	System.out.println("error processing: " + seed_num_field.getText());
+					}
+				}	
+			   			   
+			    make_popup.close();
 			});
 
-			Scene stageScene = new Scene(bigBox, 400, 75);
+			Scene stageScene = new Scene(bigBox, 600, 70);
 			make_popup.setScene(stageScene);
 			make_popup.show();	
 
@@ -368,14 +377,14 @@ public class Main extends Application {
 		public void handle(ActionEvent arg0) {
 			//input Critter and create new screen on which to show the stats
 			Stage make_popup = new Stage();
-			make_popup.setTitle("Stats Request");
+			make_popup.setTitle("Find a Critter's Stats");
 			HBox bigBox = new HBox();
 			VBox comp = new VBox();
 			VBox buttonBox = new VBox();
 			HBox box1 = new HBox(100);
 			box1.setPadding(new Insets(8, 5, 5, 5));
 			buttonBox.setPadding(new Insets(8, 5, 8, 5));
-			Label crit_type_label = new Label("Critter Type: ");
+			Label crit_type_label = new Label("Critter Type");
 			TextField crit_type_field = new TextField();			
 			
 			//buttons			
@@ -397,13 +406,15 @@ public class Main extends Application {
 				String stats = null;
 				
 				try {
-					 List<Critter> list = CritterWorld.getInstances(unqualifiedClassName);
+					 List<Critter> list = CritterWorld.getInstances(
+							 unqualifiedClassName);
 
 					 if(unqualifiedClassName.toLowerCase().equals("critter")) {
 						  CritterWorld.runStats(list);
 					 }
 					 else {
-						  Class<?> c = Class.forName(returnClassName(unqualifiedClassName));
+						  Class<?> c = Class.forName(returnClassName(
+								  unqualifiedClassName));
 						  @SuppressWarnings("rawtypes")
 						  Class[] cArg = new Class[1];
 					      cArg[0] = List.class;
@@ -416,17 +427,15 @@ public class Main extends Application {
 				 catch (InvalidCritterException | IllegalAccessException e) {
 					  System.out.println("Invalid Critter!");
 				 }
-				 catch (InvocationTargetException | NoSuchMethodException | SecurityException e)
-				 {
+				 catch (InvocationTargetException | ClassNotFoundException |
+						 NoSuchMethodException | SecurityException e){
 					  e.printStackTrace();
-				 } catch (ClassNotFoundException e) {
-					  e.printStackTrace();
-				 }
+				 } 
 				
 				Stage stats_stage = new Stage();
-				stats_stage.setTitle("Stats");
+				stats_stage.setTitle("Stats for " + crit_type_field.getText());
 				FlowPane fp = new FlowPane();
-				Canvas canvas = new Canvas(350, 350);
+				Canvas canvas = new Canvas(370, 80);
 		        GraphicsContext gc = canvas.getGraphicsContext2D();
 		        
 		        Text t = new Text(stats);
@@ -451,7 +460,7 @@ public class Main extends Application {
 			
 			});
 
-			Scene stageScene = new Scene(bigBox, 400, 75);
+			Scene stageScene = new Scene(bigBox, 500, 70);
 			make_popup.setScene(stageScene);
 			make_popup.show();	
 		}
