@@ -107,6 +107,7 @@ public class AnimationView extends Stage {
 	    public static void update() {
 		    int i = 0;
 			int j = 0;
+			pane.getChildren().removeAll(pane.getChildren());
 			Critter.worldTimeStep();
 			
 	    	for (i = 0; i < Params.world_height; i++) {
