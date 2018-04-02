@@ -2,6 +2,8 @@ package assignment5;
 
 import java.util.List;
 import assignment5.Critter;
+import assignment5.Critter.CritterShape;
+import javafx.scene.paint.Color;
 
 /**
  * This is my first critter. It runs north all
@@ -65,7 +67,14 @@ public class Critter1 extends Critter{
 
 	@Override
 	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
+		return Critter.CritterShape.CIRCLE;
+	}
+	
+	public Color viewOutlineColor() {
+		return Color.BLACK;		
+	}
+	
+	public Color viewFillColor() {
+		return Color.AQUAMARINE;
 	}
 }

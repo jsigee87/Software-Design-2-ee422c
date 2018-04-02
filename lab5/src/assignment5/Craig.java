@@ -1,5 +1,7 @@
 package assignment5;
 
+import assignment5.Critter.CritterShape;
+import javafx.scene.paint.Color;
 
 /*
  * Example critter
@@ -78,9 +80,17 @@ public class Craig extends Critter {
 		return str;
 	}
 
+
 	@Override
 	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
+		return Critter.CritterShape.CIRCLE;
+	}
+	
+	public Color viewOutlineColor() {
+		return Color.BLACK;		
+	}
+	
+	public Color viewFillColor() {
+		return Color.YELLOW;
 	}
 }

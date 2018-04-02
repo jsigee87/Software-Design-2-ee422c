@@ -2,6 +2,8 @@ package assignment5;
 
 import java.util.List;
 import assignment5.Main;
+import assignment5.Critter.CritterShape;
+import javafx.scene.paint.Color;
 import assignment5.Critter;
 
 /**
@@ -63,10 +65,17 @@ public class Critter2 extends Critter{
 		return stats;
 	}
 
+
 	@Override
 	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
+		return Critter.CritterShape.CIRCLE;
 	}
-
+	
+	public Color viewOutlineColor() {
+		return Color.BLACK;		
+	}
+	
+	public Color viewFillColor() {
+		return Color.BURLYWOOD;
+	}
 }

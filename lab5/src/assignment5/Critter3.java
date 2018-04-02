@@ -1,6 +1,8 @@
 package assignment5;
 
 import assignment5.Critter;
+import assignment5.Critter.CritterShape;
+import javafx.scene.paint.Color;
 
 /**
  * Critter3 is a critter that only moves in a box shaped pattern.
@@ -46,8 +48,14 @@ public class Critter3 extends Critter {
 
 	@Override
 	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
+		return Critter.CritterShape.CIRCLE;
 	}
-
+	
+	public Color viewOutlineColor() {
+		return Color.BLACK;		
+	}
+	
+	public Color viewFillColor() {
+		return Color.DARKSALMON;
+	}
 }

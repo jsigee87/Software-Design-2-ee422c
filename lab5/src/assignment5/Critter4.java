@@ -1,5 +1,8 @@
 package assignment5;
 
+import assignment5.Critter.CritterShape;
+import javafx.scene.paint.Color;
+
 /*
  * Daniel_Critter4 will arbitrarily choose a direction in which to move,
  * and will arbitrarily choose to walk n number of times, where n > 1 will make
@@ -55,8 +58,14 @@ public class Critter4 extends Critter {
 
 	@Override
 	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
+		return Critter.CritterShape.CIRCLE;
 	}
-
+	
+	public Color viewOutlineColor() {
+		return Color.BLACK;		
+	}
+	
+	public Color viewFillColor() {
+		return Color.TOMATO;
+	}
 }

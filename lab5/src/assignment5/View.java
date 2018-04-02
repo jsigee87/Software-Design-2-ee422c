@@ -87,11 +87,15 @@ public class View extends Stage {
 				if(CritterWorld.virtual_map.get(i).get(j).isEmpty() == false) {
 					//print out the critter
 					CritterShape shape = CritterWorld.virtual_map.get(i).get(j).get(0).viewShape();
+					Color edge = CritterWorld.virtual_map.get(i).get(j).get(0).viewOutlineColor();
+					Color fill = CritterWorld.virtual_map.get(i).get(j).get(0).viewFillColor();
 					
 					switch(shape) {
 						case CIRCLE:
 							double radius = Math.sqrt(box_area/(Math.PI));
 							Circle circle = new Circle(radius,Color.BLUE);
+							circle.setFill(fill);
+							circle.setStroke(edge);
 							GridPane.setConstraints(circle,i,j);
 						    pane.getChildren().add(circle);
 							break;
