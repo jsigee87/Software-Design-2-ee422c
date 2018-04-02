@@ -486,7 +486,7 @@ public abstract class Critter {
 	 * Displays the world to stdout.
 	 */
 	public static void displayWorld() {
-		CritterWorld.displayWorld();
+		//CritterWorld.displayWorld();
 		new View();
 	}
 	

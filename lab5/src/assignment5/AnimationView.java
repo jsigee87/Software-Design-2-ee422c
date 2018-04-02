@@ -14,6 +14,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.Lighting;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -37,15 +39,18 @@ public class AnimationView extends Stage {
 	    
 	    private Integer step;
 	    private Integer counter = 0;
+	    private Double speed;
+	    private long lastUpdate = 0;
 	    
 	    static int box_width = width / (Params.world_width + 10); 
 	    static int box_height = height / (Params.world_height + 10);
 	    static int box_area = box_width*box_height;
 	    
-	    AnimationView(Integer step){
+	    AnimationView(Integer step, Double speed){
 	    	final int numCols = Params.world_height;
 		    final int numRows = Params.world_width;
 		    
+		    this.speed = speed;
 		    this.step = step;
 		      
 		    pane = new GridPane();
@@ -69,14 +74,27 @@ public class AnimationView extends Stage {
 			
 			this.setTitle("Animation View");
 			
+			Slider slider = new Slider(0, 1, 0.5);
+			slider.setValue(speed);
+			slider.setShowTickMarks(true);
+			slider.setShowTickLabels(true);
+			slider.setMajorTickUnit(0.25f);
+			slider.setBlockIncrement(0.1f);
+			
+			Label speed_label = new Label("Set the speed: ");
+			
 			timer = new AnimationTimer() {
 	            @Override
 	            public void handle(long l) {
-	                update();
-	                if(counter == step && step != -1) {
-	                	timer.stop();
-	                }
-	                counter++;
+	            	
+	            	if (l - lastUpdate >= 280000*(1/slider.getValue())) {
+	            		update();
+		                if(counter == step && step != -1) {
+		                	timer.stop();
+		                }
+		                counter++;
+                        lastUpdate = l;
+                    }
 	            }	 
 	        };
 	        
@@ -95,8 +113,10 @@ public class AnimationView extends Stage {
 	        box.setPadding(new Insets(0, width - 20, 0, width));
 	        box.getChildren().add(stop);
 	        box.getChildren().add(resume);
+	        box.getChildren().add(speed_label);
+	        box.getChildren().add(slider);
 			root.getChildren().addAll(pane,box);
-			Scene scene = new Scene(root, width + 100, height);
+			Scene scene = new Scene(root, width + 200, height);
 			
 			timer.start();
 			

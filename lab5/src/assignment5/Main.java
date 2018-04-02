@@ -34,6 +34,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -126,7 +127,7 @@ public class Main extends Application {
 		Button quit = new Button("Quit");
 		Button seed = new Button("Seed");
 		Button stats = new Button("Stats");
-		Button animate = new Button("animate");
+		Button clear = new Button("Clear");
 
 		// Add buttons to gridpane
 		pane.add(make, 0, 0);
@@ -136,7 +137,7 @@ public class Main extends Application {
 		pane.add(quit, 1, 2);
 		pane.add(seed, 2, 1);
 		pane.add(stats, 1, 1);
-		pane.add(animate, 2, 2);
+		pane.add(clear, 2, 2);
 		
 		// Add button handlers
 		
@@ -147,7 +148,9 @@ public class Main extends Application {
 		quit.setOnAction(new QuitHandler());
 		seed.setOnAction(new SeedHandler());
 		stats.setOnAction(new StatsHandler());
-		animate.setOnAction(new AnimationHandler());
+		clear.setOnAction(e ->{
+			Critter.clearWorld();
+		});
 		
 		Scene scene = new Scene(pane, width, height);
 		
@@ -199,7 +202,6 @@ public class Main extends Application {
 						for(int i = 0; i < num_crits; i++) {
 							Critter.makeCritter(critter_type_field.getText());
 						}
-						Critter.displayWorld();
 					}
 					catch(InvalidCritterException e) {
 						//TODO
@@ -233,65 +235,19 @@ public class Main extends Application {
 			Label step_label = new Label("Number of Steps");
 			TextField step_num_field = new TextField();			
 			
+			 Slider slider = new Slider(0, 1, 0.5);
+			 slider.setShowTickMarks(true);
+			 slider.setShowTickLabels(true);
+			 slider.setMajorTickUnit(0.25f);
+			 slider.setBlockIncrement(0.1f);
+			 
 			//buttons			
-			Button submit = new Button("Submit");			
+			Button submit = new Button("Animate");			
 			
 			//critter_type.setOnAction(new critter_type_h());
 			box1.getChildren().addAll(step_label, step_num_field);				
 			buttonBox.getChildren().addAll(submit);
-			comp.getChildren().addAll(box1);
-			bigBox.getChildren().addAll(comp, buttonBox);
-		
-			// Handle Submit Button
-			submit.setOnAction(x->{
-				if(step_num_field.getText() != null && 
-						!step_num_field.getText().isEmpty()
-						) {
-
-					int steps = Integer.valueOf(step_num_field.getText());
-					
-					for(int i = 0; i < steps; i++) {
-						
-						Critter.worldTimeStep();
-					}
-					// TODO is this just for debugging?
-					Critter.displayWorld();
-					
-					make_popup.close();
-				}
-				else {
-					//do nothing
-				}
-			});
-
-			Scene stageScene = new Scene(bigBox, 500, 60);
-			make_popup.setScene(stageScene);
-			make_popup.show();			
-		}
-
-	}
-	
-	private class AnimationHandler implements EventHandler<ActionEvent> {
-
-		@Override
-		public void handle(ActionEvent arg0) {
-			Stage make_popup = new Stage();
-			make_popup.setTitle("Animation");
-			HBox bigBox = new HBox();
-			VBox comp = new VBox();
-			VBox buttonBox = new VBox();
-			buttonBox.setPadding(new Insets(8, 5, 8, 5));	
-			HBox box1 = new HBox(100);
-			box1.setPadding(new Insets(8, 5, 5, 5));
-			buttonBox.setPadding(new Insets(8, 5, 8, 5));
-			Label step_label = new Label("Number of Steps");
-			TextField step_num_field = new TextField();	
-			
-			//buttons			
-			Button submit = new Button("Animate");		
-			box1.getChildren().addAll(step_label, step_num_field);
-			buttonBox.getChildren().addAll(submit);
-			comp.getChildren().addAll(box1);
+			comp.getChildren().addAll(box1,slider);
 			bigBox.getChildren().addAll(comp, buttonBox);
 		
 			// Handle Submit Button
@@ -302,13 +258,13 @@ public class Main extends Application {
 
 					int steps = Integer.valueOf(step_num_field.getText());
 
-					new AnimationView(steps);
+					new AnimationView(steps, slider.getValue());
 					
 					make_popup.close();
 				}
 			});
 
-			Scene stageScene = new Scene(bigBox, 500, 60);
+			Scene stageScene = new Scene(bigBox, 500, 100);
 			make_popup.setScene(stageScene);
 			make_popup.show();			
 		}
