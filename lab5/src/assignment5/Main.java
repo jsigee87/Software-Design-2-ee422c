@@ -21,6 +21,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import assignment5.Critter.TestCritter;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -42,6 +46,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /*
  * Usage: java <pkgname>.Main <input file> test
@@ -67,6 +72,8 @@ public class Main extends Application {
     private static final int width = 600;
     GridPane pane;
     private GraphicsContext gc;
+    private Timeline timeline;
+    private AnimationTimer timer;
 
     // Gets the package name.  The usage assumes that Critter and its sub-
     //classes are all in the same package.
@@ -119,6 +126,7 @@ public class Main extends Application {
 		Button quit = new Button("Quit");
 		Button seed = new Button("Seed");
 		Button stats = new Button("Stats");
+		Button animate = new Button("animate");
 
 		// Add buttons to gridpane
 		pane.add(make, 0, 0);
@@ -128,6 +136,7 @@ public class Main extends Application {
 		pane.add(quit, 1, 2);
 		pane.add(seed, 2, 1);
 		pane.add(stats, 1, 1);
+		pane.add(animate, 2, 2);
 		
 		// Add button handlers
 		
@@ -137,7 +146,8 @@ public class Main extends Application {
 		help.setOnAction(new HelpHandler());
 		quit.setOnAction(new QuitHandler());
 		seed.setOnAction(new SeedHandler());
-		stats.setOnAction(new StatsHandler());	
+		stats.setOnAction(new StatsHandler());
+		animate.setOnAction(new AnimationHandler());
 		
 		Scene scene = new Scene(pane, width, height);
 		
@@ -237,10 +247,11 @@ public class Main extends Application {
 				if(step_num_field.getText() != null && 
 						!step_num_field.getText().isEmpty()
 						) {
-					//System.out.println(step_num_field.getText());
+
 					int steps = Integer.valueOf(step_num_field.getText());
 					
 					for(int i = 0; i < steps; i++) {
+						
 						Critter.worldTimeStep();
 					}
 					// TODO is this just for debugging?
@@ -255,8 +266,51 @@ public class Main extends Application {
 
 			Scene stageScene = new Scene(bigBox, 500, 60);
 			make_popup.setScene(stageScene);
-			make_popup.show();	
+			make_popup.show();			
+		}
+
+	}
+	
+	private class AnimationHandler implements EventHandler<ActionEvent> {
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			Stage make_popup = new Stage();
+			make_popup.setTitle("Animation");
+			HBox bigBox = new HBox();
+			VBox comp = new VBox();
+			VBox buttonBox = new VBox();
+			buttonBox.setPadding(new Insets(8, 5, 8, 5));	
+			HBox box1 = new HBox(100);
+			box1.setPadding(new Insets(8, 5, 5, 5));
+			buttonBox.setPadding(new Insets(8, 5, 8, 5));
+			Label step_label = new Label("Number of Steps");
+			TextField step_num_field = new TextField();	
 			
+			//buttons			
+			Button submit = new Button("Animate");		
+			box1.getChildren().addAll(step_label, step_num_field);
+			buttonBox.getChildren().addAll(submit);
+			comp.getChildren().addAll(box1);
+			bigBox.getChildren().addAll(comp, buttonBox);
+		
+			// Handle Submit Button
+			submit.setOnAction(x->{
+				if(step_num_field.getText() != null && 
+						!step_num_field.getText().isEmpty()
+						) {
+
+					int steps = Integer.valueOf(step_num_field.getText());
+
+					new AnimationView(steps);
+					
+					make_popup.close();
+				}
+			});
+
+			Scene stageScene = new Scene(bigBox, 500, 60);
+			make_popup.setScene(stageScene);
+			make_popup.show();			
 		}
 
 	}
