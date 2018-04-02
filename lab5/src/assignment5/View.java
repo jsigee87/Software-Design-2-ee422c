@@ -37,9 +37,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class View extends Stage {
-	
+		
 	private static final int height = 600;
     private static final int width = 600;
+	private static final int scene_width = Params.world_width*(width/Params.world_width);
+	private static final int scene_height = Params.world_height*(height/Params.world_height);	
     GridPane pane;
     private GraphicsContext gc;
     
@@ -52,8 +54,8 @@ public class View extends Stage {
      */
     View() {
     	
-    	final int numCols = Params.world_height;
-	    final int numRows = Params.world_width;
+    	final int numCols = Params.world_width;
+	    final int numRows = Params.world_height;
 	      
 	    pane = new GridPane();
 	    
@@ -79,9 +81,9 @@ public class View extends Stage {
 		
 		this.setTitle("View");
 		
-		for (i = 0; i < Params.world_height; i++) {
+		for (i = 0; i < Params.world_width; i++) {
 //			System.out.print("|");
-			for(j = 0; j < Params.world_width; j++) {
+			for(j = 0; j < Params.world_height; j++) {
 				
 				//if the spot (i,j) is occupied
 				if(CritterWorld.virtual_map.get(i).get(j).isEmpty() == false) {
@@ -119,7 +121,7 @@ public class View extends Stage {
 		}
 		
 		root.getChildren().add(pane);
-		Scene scene = new Scene(root, width, height);
+		Scene scene = new Scene(root, scene_width, scene_height);
 		
 		this.setScene(scene);
 		this.show();
