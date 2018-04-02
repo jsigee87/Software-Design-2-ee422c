@@ -294,9 +294,9 @@ public abstract class Critter {
 				
 				// Set critter's initial position at random
 				newCritter.x_coord = TestCritter.getRandomInt(
-						Params.world_height);
-				newCritter.y_coord = TestCritter.getRandomInt(
 						Params.world_width);
+				newCritter.y_coord = TestCritter.getRandomInt(
+						Params.world_height);
 				
 //				/*
 //				 * Test

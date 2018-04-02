@@ -56,20 +56,20 @@ public class CritterWorld extends TestCritter{
 	public CritterWorld() {
 		shouldQuit = false;
 		// Populate the virtual map.
-		for(int i = 0; i < Params.world_height; i++) {
+		for(int i = 0; i < Params.world_width; i++) {
 			ArrayList<ArrayList<Critter>> outer_list = 
 					new ArrayList<ArrayList<Critter>>();
-			for (int j = 0; j < Params.world_width; j ++) {
+			for (int j = 0; j < Params.world_height; j ++) {
 				ArrayList<Critter> inner_list = new ArrayList<Critter>();
 				outer_list.add(inner_list);
 			}
 			virtual_map.add(outer_list);
 		}
 		
-		for(int i = 0; i < Params.world_height; i++) {
+		for(int i = 0; i < Params.world_width; i++) {
 			ArrayList<ArrayList<Critter>> outer_list = 
 					new ArrayList<ArrayList<Critter>>();
-			for (int j = 0; j < Params.world_width; j ++) {
+			for (int j = 0; j < Params.world_height; j ++) {
 				ArrayList<Critter> inner_list = new ArrayList<Critter>();
 				outer_list.add(inner_list);
 			}
@@ -109,6 +109,7 @@ public class CritterWorld extends TestCritter{
 	/**
 	 * Perform a world time step.
 	 */
+	@SuppressWarnings("unchecked")
 	public static void worldTimeStep() {	
 		// Copy current virtual map into "old map"
 		old_map = (ArrayList<ArrayList<ArrayList<Critter>>>) virtual_map.clone();
@@ -322,8 +323,8 @@ public class CritterWorld extends TestCritter{
 	protected static void genAlgae() {
 		for (int i = 0; i < Params.refresh_algae_count; i ++) {
 			Algae alg = new Algae();
-			int x = getRandomInt(Params.world_height);
-			int y = getRandomInt(Params.world_width);
+			int x = getRandomInt(Params.world_width);
+			int y = getRandomInt(Params.world_height);
 			alg.setX_coord(x);
 			alg.setY_coord(y);
 			addCritter(alg, x, y);	
@@ -350,14 +351,14 @@ public class CritterWorld extends TestCritter{
 		int i = 0;
 		int j = 0;
 		
-		for (i = 0; i < Params.world_height; i++) {
+		for (j = 0; j < Params.world_height; j++) {
 			System.out.print("|");
-			for(j = 0; j < Params.world_width; j++) {
+			for(i = 0; i < Params.world_width; i++) {
 				
 				//if the spot (i,j) is occupied
-				if(virtual_map.get(j).get(i).isEmpty() == false) {
+				if(virtual_map.get(i).get(j).isEmpty() == false) {
 					//print out the critter
-					System.out.print(virtual_map.get(j).get(i).get(0));					
+					System.out.print(virtual_map.get(i).get(j).get(0));					
 				}
 				else {
 					System.out.print(" "); //print an empty space
@@ -376,19 +377,19 @@ public class CritterWorld extends TestCritter{
 		int i = 0;
 		int j = 0;
 		
-		for (i = 0; i < Params.world_height; i++) {
+		for (i = 0; i < Params.world_width; i++) {
 			System.out.print("|");
-			for(j = 0; j < Params.world_width; j++) {
+			for(j = 0; j < Params.world_height; j++) {
 				
 				//if the spot (i,j) is occupied
-				if(virtual_map.get(j).get(i).isEmpty() == false) {
+				if(virtual_map.get(i).get(j).isEmpty() == false) {
 					ArrayList<Integer> loc = new ArrayList<Integer>();
-					loc.add(j);
 					loc.add(i);
+					loc.add(j);
 					johnlocations.add(loc);
 				
 					//print out the critter
-					System.out.print(virtual_map.get(j).get(i).get(0));					
+					System.out.print(virtual_map.get(i).get(j).get(0));					
 				}
 				else {
 					System.out.print(" "); //print an empty space
