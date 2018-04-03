@@ -31,6 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -98,18 +99,44 @@ public class View extends Stage {
 							Circle circle = new Circle(radius,Color.BLUE);
 							circle.setFill(fill);
 							circle.setStroke(edge);
-							GridPane.setConstraints(circle,i,j);
+							GridPane.setConstraints(circle, i, j);
 						    pane.getChildren().add(circle);
 							break;
 						case DIAMOND:
+							Rectangle diamond = new Rectangle();
+							diamond.setFill(fill);
+							diamond.setStroke(edge);
+							GridPane.setConstraints(diamond, i, j);
+							pane.getChildren().add(diamond);
 							break;
 						case SQUARE:
+							Rectangle square = new Rectangle();
+							square.setFill(fill);
+							square.setStroke(edge);
+							GridPane.setConstraints(square, i, j);
+							pane.getChildren().add(square);
 							break;
 						case STAR:
+							Rectangle star = new Rectangle();
+							star.setFill(fill);
+							star.setStroke(edge);
+							GridPane.setConstraints(star, i, j);
+							pane.getChildren().add(star);
 							break;
 						case TRIANGLE:
+							Polygon triangle = new Polygon();
+							triangle.setFill(fill);
+							triangle.setStroke(edge);
+							GridPane.setConstraints(triangle, i, j);
+							pane.getChildren().add(triangle);
 							break;
-						default:
+						default:	//get a circle
+							double rad = Math.sqrt(box_area/(Math.PI));
+							Circle cir = new Circle(rad,Color.BLUE);
+							cir.setFill(fill);
+							cir.setStroke(edge);
+							GridPane.setConstraints(cir, i, j);
+						    pane.getChildren().add(cir);
 							break;
 					
 					}
