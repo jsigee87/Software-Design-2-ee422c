@@ -104,12 +104,17 @@ public class View extends Stage {
 							break;
 						case DIAMOND:
 							{Double rad = (double) (box_width / 2);
-							Double[] points = {i + rad, (double) j, 
+							Double[] points = {j - rad, (double) i,
+												i + rad, (double) j, 
 												j + rad, (double) i,
-												i - rad, (double) j,
-												j - rad, (double) i};
+												i - rad, (double) j,};
 							Polygon diamond = new Polygon();
-							diamond.getPoints().addAll(points);
+							diamond.getPoints().addAll((double)(j - box_height/2), (double) i,
+														(double) (i + box_width/2), (double) j,
+														(double) (j + box_height/2), (double) i,
+														(double) (i - box_width/2), (double) j);
+	
+									
 							diamond.setFill(fill);;
 							diamond.setStroke(edge);
 							GridPane.setConstraints(diamond, i, j);
