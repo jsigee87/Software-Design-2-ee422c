@@ -103,14 +103,20 @@ public class View extends Stage {
 						    pane.getChildren().add(circle);
 							break;
 						case DIAMOND:
-							Rectangle diamond = new Rectangle();
-							diamond.setFill(fill);
+							{Double rad = (double) (box_width / 2);
+							Double[] points = {i + rad, (double) j, 
+												j + rad, (double) i,
+												i - rad, (double) j,
+												j - rad, (double) i};
+							Polygon diamond = new Polygon();
+							diamond.getPoints().addAll(points);
+							diamond.setFill(fill);;
 							diamond.setStroke(edge);
 							GridPane.setConstraints(diamond, i, j);
 							pane.getChildren().add(diamond);
-							break;
+							break;}
 						case SQUARE:
-							Rectangle square = new Rectangle();
+							Rectangle square = new Rectangle(box_width, box_width);
 							square.setFill(fill);
 							square.setStroke(edge);
 							GridPane.setConstraints(square, i, j);
@@ -131,13 +137,13 @@ public class View extends Stage {
 							pane.getChildren().add(triangle);
 							break;
 						default:	//get a circle
-							double rad = Math.sqrt(box_area/(Math.PI));
+							{double rad = Math.sqrt(box_area/(Math.PI));
 							Circle cir = new Circle(rad,Color.BLUE);
 							cir.setFill(fill);
 							cir.setStroke(edge);
 							GridPane.setConstraints(cir, i, j);
 						    pane.getChildren().add(cir);
-							break;
+							break;}
 					
 					}
 				}
