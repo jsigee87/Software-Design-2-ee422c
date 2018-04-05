@@ -197,15 +197,39 @@ public class Main extends Application {
 						!critter_type_field.getText().isEmpty() &&
 						num_crits_field.getText() != null &&
 						!num_crits_field.getText().isEmpty()) {
+					
+					int num_crits = 1;
+					
 					try {
-						int num_crits = Integer.valueOf(num_crits_field.getText());
+						num_crits = Integer.valueOf(num_crits_field.getText());
+						
+						if(num_crits < 0) {
+							Stage invalidNum = new Stage();
+							invalidNum.setTitle("Invalid Number!");
+							Label invalid = new Label("Error processing: " + num_crits);
+							invalidNum.setScene(new Scene(invalid, 250,50));
+							invalidNum.show();
+						}
+						
 						for(int i = 0; i < num_crits; i++) {
 							Critter.makeCritter(critter_type_field.getText());
 						}
 					}
 					catch(InvalidCritterException e) {
-						//TODO
-						e.printStackTrace();
+						//print invalid critter message
+						Stage invalidCritter = new Stage();
+						invalidCritter.setTitle("Invalid Critter!");
+						Label invalid = new Label("You entered an invalid critter! Try again...");
+						Scene invalid_scene = new Scene(invalid, 250,50);
+						invalidCritter.setScene(invalid_scene);
+						invalidCritter.show();
+					}
+					catch(NumberFormatException e) {
+						Stage invalidNum = new Stage();
+						invalidNum.setTitle("Invalid Number!");
+						Label invalid = new Label("Error processing: " + num_crits_field.getText());
+						invalidNum.setScene(new Scene(invalid, 250,50));		
+						invalidNum.show();
 					}
 					
 					make_popup.close();
@@ -229,11 +253,12 @@ public class Main extends Application {
 			HBox bigBox = new HBox();
 			VBox comp = new VBox();
 			VBox buttonBox = new VBox();
-			HBox box1 = new HBox(100);
+			HBox box1 = new HBox();
 			box1.setPadding(new Insets(8, 5, 5, 5));
 			buttonBox.setPadding(new Insets(8, 5, 8, 5));
-			Label step_label = new Label("Number of Steps");
-			TextField step_num_field = new TextField();			
+			Label step_label = new Label("Number of Steps: ");
+			TextField step_num_field = new TextField();
+			Label hint_label = new Label("Enter -1 for infinite steps\nSet speed with slider.");
 			
 			 Slider slider = new Slider(0, 1, 0.5);
 			 slider.setShowTickMarks(true);
@@ -247,7 +272,7 @@ public class Main extends Application {
 			//critter_type.setOnAction(new critter_type_h());
 			box1.getChildren().addAll(step_label, step_num_field);				
 			buttonBox.getChildren().addAll(submit);
-			comp.getChildren().addAll(box1,slider);
+			comp.getChildren().addAll(box1,slider,hint_label);
 			bigBox.getChildren().addAll(comp, buttonBox);
 		
 			// Handle Submit Button
@@ -256,15 +281,31 @@ public class Main extends Application {
 						!step_num_field.getText().isEmpty()
 						) {
 
-					int steps = Integer.valueOf(step_num_field.getText());
-
-					new AnimationView(steps, slider.getValue());
+					int steps = 0;
+					try {
+						steps = Integer.valueOf(step_num_field.getText());
+						
+						if(steps < -1) {
+							throw new NumberFormatException();
+						}
+						
+						new AnimationView(steps, slider.getValue());
+					}
+					catch(NumberFormatException e) {
+						//invalid step size
+				    	Stage invalidStep = new Stage();
+						invalidStep.setTitle("Invalid Step Size!");
+						Label invalid = new Label("Error processing: " + step_num_field.getText());
+						Scene invalid_scene = new Scene(invalid, 300,50);
+						invalidStep.setScene(invalid_scene);
+						invalidStep.show();
+					}
 					
 					make_popup.close();
 				}
 			});
 
-			Scene stageScene = new Scene(bigBox, 500, 100);
+			Scene stageScene = new Scene(bigBox, 350, 120);
 			make_popup.setScene(stageScene);
 			make_popup.show();			
 		}
@@ -359,14 +400,26 @@ public class Main extends Application {
 			// Handle Submit Button
 			submit.setOnAction(x->{
 				if (seed_num_field.getText() != null &&
-						seed_num_field.getText().isEmpty()) {
+						!seed_num_field.getText().isEmpty()) {
 					long seed;
 				    try {
 				    	seed = Long.parseLong(seed_num_field.getText().trim());
+				    	
+				    	//error check user input
+				    	if(seed < 0) {
+				    		throw new NumberFormatException();
+				    	}
+				    	
 				    	TestCritter.setSeed(seed);
 				    }
 				    catch(NumberFormatException e) {
-				    	System.out.println("error processing: " + seed_num_field.getText());
+				    	//invalid seed
+				    	Stage invalidSeed = new Stage();
+						invalidSeed.setTitle("Invalid Seed!");
+						Label invalid = new Label("Error processing: " + seed_num_field.getText());
+						Scene invalid_scene = new Scene(invalid, 250,50);
+						invalidSeed.setScene(invalid_scene);
+						invalidSeed.show();
 					}
 				}	
 			   			   
@@ -420,7 +473,7 @@ public class Main extends Application {
 							 unqualifiedClassName);
 
 					 if(unqualifiedClassName.toLowerCase().equals("critter")) {
-						  CritterWorld.runStats(list);
+						  stats = Critter.runStats(list);
 					 }
 					 else {
 						  Class<?> c = Class.forName(returnClassName(
@@ -431,43 +484,48 @@ public class Main extends Application {
 						  Method m = c.getMethod("runStats", cArg);
 						  
 						  stats = (String) m.invoke(c, list);
-					 }  
-					  
+					 }
+					 
+				 	Stage stats_stage = new Stage();
+					stats_stage.setTitle("Stats for " + crit_type_field.getText());
+					FlowPane fp = new FlowPane();
+					Canvas canvas = new Canvas(370, 80);
+			        GraphicsContext gc = canvas.getGraphicsContext2D();
+			        
+			        Text t = new Text(stats);
+			        
+			        t.setFill(Color.BLACK);
+			        Font f = new Font(14);
+			        t.setFont(f);
+			        
+			        Button btn = new Button ("Quit Stats...");
+			        btn.setOnAction(y->{
+			        	stats_stage.close();
+			        });
+			        
+			        fp.getChildren().add(t);
+			        fp.getChildren().add(canvas);
+			        fp.getChildren().add(btn);
+
+
+			        Scene scene = new Scene(fp);
+			        stats_stage.setScene(scene);
+			        stats_stage.show();
+				  
 				 } 
 				 catch (InvalidCritterException | IllegalAccessException e) {
-					  System.out.println("Invalid Critter!");
+					//print invalid critter message
+						Stage invalidCritter = new Stage();
+						invalidCritter.setTitle("Invalid Critter!");
+						Label invalid = new Label("You entered an invalid critter! Try again...");
+						Scene invalid_scene = new Scene(invalid, 250,50);
+						invalidCritter.setScene(invalid_scene);
+						invalidCritter.show();
 				 }
 				 catch (InvocationTargetException | ClassNotFoundException |
 						 NoSuchMethodException | SecurityException e){
 					  e.printStackTrace();
-				 } 
-				
-				Stage stats_stage = new Stage();
-				stats_stage.setTitle("Stats for " + crit_type_field.getText());
-				FlowPane fp = new FlowPane();
-				Canvas canvas = new Canvas(370, 80);
-		        GraphicsContext gc = canvas.getGraphicsContext2D();
-		        
-		        Text t = new Text(stats);
-		        
-		        t.setFill(Color.BLACK);
-		        Font f = new Font(14);
-		        t.setFont(f);
-		        
-		        Button btn = new Button ("Quit Stats...");
-		        btn.setOnAction(y->{
-		        	stats_stage.close();
-		        });
-		        
-		        fp.getChildren().add(t);
-		        fp.getChildren().add(canvas);
-		        fp.getChildren().add(btn);
-
-
-		        Scene scene = new Scene(fp);
-		        stats_stage.setScene(scene);
-		        stats_stage.show();
-			
+				 } 			
 			});
 
 			Scene stageScene = new Scene(bigBox, 500, 70);
@@ -496,12 +554,4 @@ public class Main extends Application {
 		return string;
 	}
 	
-//	private class critter_type_h implements EventHandler<ActionEvent>{
-//
-//		@Override
-//		public void handle(ActionEvent arg0) {
-//			System.out.println("You typed" + arg0);
-//		}
-//		
-//	}    
 }

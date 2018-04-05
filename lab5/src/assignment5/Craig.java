@@ -83,7 +83,7 @@ public class Craig extends Critter {
 
 	@Override
 	public CritterShape viewShape() {
-return Critter.CritterShape.DIAMOND;
+		return Critter.CritterShape.DIAMOND;
 	}
 	
 	public Color viewOutlineColor() {
