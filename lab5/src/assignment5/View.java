@@ -75,7 +75,7 @@ public class View extends Stage {
 	    }
 	    
 	    pane.setStyle("-fx-background-color: black, -fx-control-inner-background; -fx-background-insets: 0, 2; -fx-padding: 2;");
-	    pane.setGridLinesVisible(true);
+	    pane.setGridLinesVisible(false);
 	    
 	    int i = 0;
 		int j = 0;

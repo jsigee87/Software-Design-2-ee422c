@@ -77,7 +77,7 @@ public class AnimationView extends Stage {
 		    }
 		    
 		    pane.setStyle("-fx-background-color: black, -fx-control-inner-background; -fx-background-insets: 0, 2; -fx-padding: 2;");
-		    pane.setGridLinesVisible(true);
+		    pane.setGridLinesVisible(false);
 			
 			Group root = new Group();
 			
