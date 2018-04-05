@@ -62,8 +62,7 @@ public class View extends Stage {
 	    
 	    for (int i = 0; i < numCols; i++) {
 	    	ColumnConstraints colConst = new ColumnConstraints(width / (Params.world_width + 1));
-//	        ColumnConstraints colConst = new ColumnConstraints();
-	        //colConst.setPercentWidth(100.0 / numCols);
+
 	        pane.getColumnConstraints().add(colConst);
 	    }
 	    for (int i = 0; i < numRows; i++) {
@@ -83,7 +82,7 @@ public class View extends Stage {
 		this.setTitle("View");
 		
 		for (i = 0; i < Params.world_width; i++) {
-//			System.out.print("|");
+
 			for(j = 0; j < Params.world_height; j++) {
 				
 				//if the spot (i,j) is occupied
@@ -148,8 +147,7 @@ public class View extends Stage {
 							cir.setStroke(edge);
 							GridPane.setConstraints(cir, i, j);
 						    pane.getChildren().add(cir);
-							break;}
-					
+							break;}					
 					}
 				}
 				else {

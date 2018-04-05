@@ -24,6 +24,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
  
@@ -133,7 +135,6 @@ public class AnimationView extends Stage {
 			Critter.worldTimeStep();
 			
 	    	for (i = 0; i < Params.world_width; i++) {
-//				System.out.print("|");
 				for(j = 0; j < Params.world_height; j++) {
 					
 					//if the spot (i,j) is occupied
@@ -144,25 +145,61 @@ public class AnimationView extends Stage {
 						Color fill = CritterWorld.virtual_map.get(i).get(j).get(0).viewFillColor();
 						
 						switch(shape) {
-							case CIRCLE:
-								double radius = Math.sqrt(box_area/(Math.PI));
-								Circle circle = new Circle(radius,Color.BLUE);
-								circle.setFill(fill);
-								circle.setStroke(edge);
-								GridPane.setConstraints(circle,i,j);
-							    pane.getChildren().add(circle);
-								break;
-							case DIAMOND:
-								break;
-							case SQUARE:
-								break;
-							case STAR:
-								break;
-							case TRIANGLE:
-								break;
-							default:
-								break;
-						
+						case CIRCLE:
+							double radius = Math.sqrt(box_area/(Math.PI));
+							Circle circle = new Circle(radius,Color.BLUE);
+							circle.setFill(fill);
+							circle.setStroke(edge);
+							GridPane.setConstraints(circle, i, j);
+						    pane.getChildren().add(circle);
+							break;
+						case DIAMOND:
+							{Double rad = (double) (box_width / 2);
+							Double[] points = {j - rad, (double) i,
+												i + rad, (double) j, 
+												j + rad, (double) i,
+												i - rad, (double) j,};
+							Polygon diamond = new Polygon();
+							diamond.getPoints().addAll((double)(j - box_height/2), (double) i,
+														(double) (i + box_width/2), (double) j,
+														(double) (j + box_height/2), (double) i,
+														(double) (i - box_width/2), (double) j);
+	
+									
+							diamond.setFill(fill);;
+							diamond.setStroke(edge);
+							GridPane.setConstraints(diamond, i, j);
+							pane.getChildren().add(diamond);
+							break;}
+						case SQUARE:
+							Rectangle square = new Rectangle(box_width, box_width);
+							square.setFill(fill);
+							square.setStroke(edge);
+							GridPane.setConstraints(square, i, j);
+							pane.getChildren().add(square);
+							break;
+						case STAR:
+							Rectangle star = new Rectangle();
+							star.setFill(fill);
+							star.setStroke(edge);
+							GridPane.setConstraints(star, i, j);
+							pane.getChildren().add(star);
+							break;
+						case TRIANGLE:
+							Polygon triangle = new Polygon();
+							triangle.setFill(fill);
+							triangle.setStroke(edge);
+							GridPane.setConstraints(triangle, i, j);
+							pane.getChildren().add(triangle);
+							break;
+						default:	//get a circle
+							{double rad = Math.sqrt(box_area/(Math.PI));
+							Circle cir = new Circle(rad,Color.BLUE);
+							cir.setFill(fill);
+							cir.setStroke(edge);
+							GridPane.setConstraints(cir, i, j);
+						    pane.getChildren().add(cir);
+							break;}				
 						}
 					}
 					else {
