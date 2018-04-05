@@ -67,7 +67,7 @@ public class Critter1 extends Critter{
 
 	@Override
 	public CritterShape viewShape() {
-		return Critter.CritterShape.CIRCLE;
+		return Critter.CritterShape.SQUARE;
 	}
 	
 	public Color viewOutlineColor() {

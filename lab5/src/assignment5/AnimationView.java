@@ -2,6 +2,9 @@ package assignment5;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import java.util.Arrays;
+
 import assignment5.Critter.CritterShape;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -27,6 +30,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
 import javafx.util.Duration;
  
 public class AnimationView extends Stage {
@@ -91,7 +96,7 @@ public class AnimationView extends Stage {
 	            @Override
 	            public void handle(long l) {
 	            	
-	            	if (l - lastUpdate >= 280000*(1/slider.getValue())) {
+	            	if (l - lastUpdate >= 28000000*(1/slider.getValue())) {
 	            		update();
 		                if(counter == step && step != -1) {
 		                	timer.stop();
@@ -154,18 +159,26 @@ public class AnimationView extends Stage {
 						    pane.getChildren().add(circle);
 							break;
 						case DIAMOND:
-							{Double rad = (double) (box_width / 2);
-							Double[] points = {j - rad, (double) i,
-												i + rad, (double) j, 
-												j + rad, (double) i,
-												i - rad, (double) j,};
-							Polygon diamond = new Polygon();
-							diamond.getPoints().addAll((double)(j - box_height/2), (double) i,
-														(double) (i + box_width/2), (double) j,
-														(double) (j + box_height/2), (double) i,
-														(double) (i - box_width/2), (double) j);
-	
-									
+							{Polygon diamond = new Polygon();
+							
+							double [] diamond_points = new double[]{
+								   1.0,0.0,
+								   0.0,1.0,
+								   1.0,2.0,
+								   2.0,1.0};
+							
+							Scale diamond_sc = new Scale(box_width*0.3, box_height*0.3,i,j);
+
+							for (Transform transform : Arrays.asList(diamond_sc)) {
+							    transform.transform2DPoints(diamond_points, 0, diamond_points, 0, diamond_points.length/2);
+							}
+							
+							Double [] diamondPointArr = new Double [diamond_points.length];
+							for (int x = 0; x < diamond_points.length; x++) {
+								diamondPointArr[x] = diamond_points[x];
+							}
+							
+							diamond.getPoints().addAll(diamondPointArr);
 							diamond.setFill(fill);;
 							diamond.setStroke(edge);
 							GridPane.setConstraints(diamond, i, j);
@@ -179,7 +192,32 @@ public class AnimationView extends Stage {
 							pane.getChildren().add(square);
 							break;
 						case STAR:
-							Rectangle star = new Rectangle();
+							Polygon star = new Polygon();
+							
+							double [] star_points = new double[]{
+								    3.0,1.0,
+								    2.25,3.5,
+								    0.0,3.75,
+								    2.0,4.5,
+								    1.0,7.0,
+								    3.0,5.0,
+								    5.0,7.0,
+								    4.0,4.5,
+								    6.0,3.75,
+								    3.75,3.5};
+							
+							Scale star_sc = new Scale(box_width*0.2, box_height*0.2,i,j);
+
+							for (Transform transform : Arrays.asList(star_sc)) {
+							    transform.transform2DPoints(star_points, 0, star_points, 0, star_points.length/2);
+							}
+							
+							Double [] starPointArr = new Double [star_points.length];
+							for (int x = 0; x < star_points.length; x++) {
+								starPointArr[x] = star_points[x];
+							}
+							
+							star.getPoints().addAll(starPointArr);
 							star.setFill(fill);
 							star.setStroke(edge);
 							GridPane.setConstraints(star, i, j);
@@ -187,6 +225,23 @@ public class AnimationView extends Stage {
 							break;
 						case TRIANGLE:
 							Polygon triangle = new Polygon();
+							double [] tri_points = new double[]{
+							    1.0, 0.0,
+							    0.0, 1.0,
+							    2.0, 1.0 };
+						
+							Scale tri_sc = new Scale(box_width/2, box_height*0.80,i,j);
+
+							for (Transform transform : Arrays.asList(tri_sc)) {
+							    transform.transform2DPoints(tri_points, 0, tri_points, 0, tri_points.length/2);
+							}
+							
+							Double [] triPointArr = new Double [tri_points.length];
+							for (int i1 = 0; i1 < tri_points.length; i1++) {
+								triPointArr[i1] = tri_points[i1];
+							}
+							
+							triangle.getPoints().addAll(triPointArr);
 							triangle.setFill(fill);
 							triangle.setStroke(edge);
 							GridPane.setConstraints(triangle, i, j);

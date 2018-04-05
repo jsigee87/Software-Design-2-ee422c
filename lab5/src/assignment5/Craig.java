@@ -91,6 +91,6 @@ public class Craig extends Critter {
 	}
 	
 	public Color viewFillColor() {
-		return Color.YELLOW;
+		return Color.PURPLE;
 	}
 }

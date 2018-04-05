@@ -131,7 +131,6 @@ public class CritterWorld extends TestCritter{
 		genAlgae();
 		
 		// Add new critters to the map is done inside Critter.
-		//TODO do we need to clear anything else here??
 	}
 	
 	/**

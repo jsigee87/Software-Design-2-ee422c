@@ -184,7 +184,6 @@ public class Main extends Application {
 			//buttons			
 			Button submit = new Button("Submit");			
 			
-			//critter_type.setOnAction(new critter_type_h());
 			box1.getChildren().addAll(critter_type, critter_type_field);			
 			box2.getChildren().addAll(num_crits_label, num_crits_field);		
 			buttonBox.getChildren().addAll(submit);
