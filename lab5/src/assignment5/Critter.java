@@ -254,8 +254,8 @@ public abstract class Critter {
 	 * parameter has lower case instead of upper. For example, if craig is 
 	 * supplied instead of Craig, an error is thrown instead of an Exception.)
 	 * 															
-	 * @param critter_class_name
-	 * @throws InvalidCritterException
+	 * @param critter_class_name a critter class name
+	 * @throws InvalidCritterException an exception
 	 */
 	public static void makeCritter(String critter_class_name) 					//
 								throws InvalidCritterException {				//
@@ -323,7 +323,7 @@ public abstract class Critter {
 	 * @param critter_class_name What kind of Critter is to be listed. 
 	 * 			Unqualified class name.
 	 * @return List of Critters.
-	 * @throws InvalidCritterException
+	 * @throws InvalidCritterException an exception
 	 */
 	public static List<Critter> getInstances(String critter_class_name) 
 									throws InvalidCritterException {
@@ -372,6 +372,7 @@ public abstract class Critter {
 	/**
 	 * Prints out how many Critters of each type there are on the board.
 	 * @param critters List of Critters.
+	 * @return String the stats
 	 */
 	public static String runStats(List<Critter> critters) {
 		String stats = new String();

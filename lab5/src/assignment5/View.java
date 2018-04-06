@@ -54,7 +54,7 @@ public class View extends Stage {
     int box_area = box_width*box_height;
     
     /**
-     * Standard parameter-less Constructor
+     * The constructor displays a snapshot of the world.
      */
     View() {
     	

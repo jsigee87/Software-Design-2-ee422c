@@ -52,6 +52,7 @@ public class Critter1 extends Critter{
 	/**
 	 * Displays the critter's stats per pdf
 	 * @param fighters a list of Fighter critters
+	 * @return String stats
 	 */
 	public static String runStats(List<Critter> fighters) {
 		String stats = new String();

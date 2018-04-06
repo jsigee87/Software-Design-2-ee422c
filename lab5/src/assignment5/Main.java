@@ -2,9 +2,9 @@ package assignment5;
 /* CRITTERS Main.java
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
- * <Student1 Name> //TODO John
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
+ * <John Sigmon>
+ * <js85773>
+ * <15455>
  * <Daniel Diamont>
  * <dd28977>
  * <15455>
@@ -49,8 +49,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/*
- * Usage: java <pkgname>.Main <input file> test
+/**
+ * Usage: java pkgname. Main input file test
  * input file is optional. If input file is specified, the word 'test' is 
  * optional.
  * May not use 'test' argument without specifying input file.
@@ -58,8 +58,6 @@ import javafx.util.Duration;
 public class Main extends Application {
 	// Scanner connected to keyboard input, or input file.
     static Scanner kb;	
-    // Input file, used instead of keyboard input if specified.
-    private static String inputFile;	
     // If test specified, holds all console output.
     static ByteArrayOutputStream testOutputString;	
     // Package of Critter file.  Critter cannot be in default package.
@@ -73,9 +71,6 @@ public class Main extends Application {
     private static final int width = 600;
     GridPane pane;
     private GraphicsContext gc;
-    private Timeline timeline;
-    private AnimationTimer timer;
-
     // Gets the package name.  The usage assumes that Critter and its sub-
     //classes are all in the same package.
     static {
@@ -93,7 +88,10 @@ public class Main extends Application {
     	
     	launch(args);
     }
-
+    
+    /**
+     *  Launches the controller, with buttons displaying the options.
+     */
 	@Override
 	public void start(Stage stage) throws Exception {
 		//final int COLSPAN = 1;
@@ -159,8 +157,12 @@ public class Main extends Application {
 		
 	}    
     
-	//TODO implement exception handling
-	// Handlers
+	/**
+	 * 
+	 * This event handler takes care of what happens when a user presses 
+	 * the make button.
+	 *
+	 */
 	private class MakeHandler implements EventHandler<ActionEvent>{
 
 		@Override
@@ -243,6 +245,11 @@ public class Main extends Application {
 		
 	}
 	
+	/**
+	 * This method takes care of what happens when a user presses the Step Handler button
+	 *
+	 *
+	 */
 	private class StepHandler implements EventHandler<ActionEvent> {
 
 		@Override
@@ -311,6 +318,11 @@ public class Main extends Application {
 
 	}
 	
+	/**
+	 * This method implements the show button
+	 * 
+	 *
+	 */
 	private class ShowHandler implements EventHandler<ActionEvent> {
 
 		@Override
@@ -320,6 +332,11 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * This method displays a help menu
+	 * 
+	 *
+	 */
 	private class HelpHandler implements EventHandler<ActionEvent> {
 
 		@Override
@@ -328,7 +345,7 @@ public class Main extends Application {
 			make_popup.setTitle("Help");
 			FlowPane fp = new FlowPane();
 			Canvas canvas = new Canvas(190, 150);
-	        GraphicsContext gc = canvas.getGraphicsContext2D();
+	        canvas.getGraphicsContext2D();
 	        
 	        Text t = new Text("Valid commands are:\r\n "+
 	        		"\tquit : \n\t\tQuits the game.\r\n" + 
@@ -364,6 +381,11 @@ public class Main extends Application {
 
 	}
 	
+	/**
+	 * This method quits the game.
+	 * 
+	 *
+	 */
 	private class QuitHandler implements EventHandler<ActionEvent> {
 
 		@Override
@@ -372,6 +394,11 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * This method allows the user to change the random seed.
+	 * 
+	 *
+	 */
 	private class SeedHandler implements EventHandler<ActionEvent> {
 
 		@Override
@@ -433,6 +460,10 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * This method allows the user to ask for stats on specific critters.
+	 *
+	 */
 	private class StatsHandler implements EventHandler<ActionEvent> {
 
 		@Override
@@ -489,7 +520,7 @@ public class Main extends Application {
 					stats_stage.setTitle("Stats for " + crit_type_field.getText());
 					FlowPane fp = new FlowPane();
 					Canvas canvas = new Canvas(370, 80);
-			        GraphicsContext gc = canvas.getGraphicsContext2D();
+			        canvas.getGraphicsContext2D();
 			        
 			        Text t = new Text(stats);
 			        
@@ -533,6 +564,11 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * This method gets a class name
+	 * @param critter_class_name
+	 * @return String for class name
+	 */
 	private static String returnClassName(String critter_class_name) {
 		critter_class_name = critter_class_name.toLowerCase();					//
 		String string = new String();											//

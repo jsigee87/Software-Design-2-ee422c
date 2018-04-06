@@ -42,16 +42,17 @@ public class Critter2 extends Critter{
 	}
 
 	/**
-	 * @param boolean returns false to run away instead of fighting.
+	 * @param opponent boolean returns false to run away instead of fighting.
 	 */
 	@Override
-	public boolean fight(String oponent) {
+	public boolean fight(String opponent) {
 		return false;
 	}
 	
 	/**
 	 * Displays the critter's stats, per pdf
 	 * @param johns a list of all the John critters
+	 * @return String stats
 	 */
 	public static String runStats(List<Critter> johns) {
 		String stats = new String();

@@ -55,6 +55,11 @@ public class AnimationView extends Stage {
 	    static int box_height = height / (Params.world_height + 10);
 	    static int box_area = box_width*box_height;
 	    
+	    /**
+	     *This is a constructor for the animation
+	     * @param step how many steps to take
+	     * @param speed how fast to step
+	     */
 	    AnimationView(Integer step, Double speed){
 	    	final int numCols = Params.world_width;
 		    final int numRows = Params.world_height;
@@ -133,6 +138,9 @@ public class AnimationView extends Stage {
 			this.show();
 		}
 	    
+	    /**
+	     * this method updates the animation map
+	     */
 	    public static void update() {
 		    int i = 0;
 			int j = 0;

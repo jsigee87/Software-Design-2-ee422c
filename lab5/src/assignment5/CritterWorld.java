@@ -290,7 +290,7 @@ public class CritterWorld extends TestCritter{
 	/**
 	 * Queue a new critter to be added to the world at the end of the time
 	 * step.
-	 * @param Critter to be added to the babies list for addition to the 
+	 * @param new_critter Critter to be added to the babies list for addition to the 
 	 * map later.
 	 */
 	public static void queueNewCritter(Critter new_critter) {
@@ -344,7 +344,7 @@ public class CritterWorld extends TestCritter{
 	
 	/**
 	 * Prints the map body via the virtual map.
-	 * @return 
+	 * 
 	 */
 	public static void printBody() {
 		int i = 0;
@@ -370,7 +370,7 @@ public class CritterWorld extends TestCritter{
 	/**
 	 * Prints the map body via the virtual map. DEBUG
 	 * Use this to make johncritters (Critter2) and display their locations.
-	 * @return 
+	 * @return  debug lists
 	 */
 	public static ArrayList<ArrayList<Integer>> printBodyDebug(ArrayList<ArrayList<Integer>> johnlocations) {
 		int i = 0;
@@ -401,6 +401,7 @@ public class CritterWorld extends TestCritter{
 	
 	/**
 	 * Accesses the quit game flag.
+	 * @return boolean for should quit
 	 */
 	public static boolean shouldQuit() {
 		return shouldQuit;
@@ -438,9 +439,8 @@ public class CritterWorld extends TestCritter{
 	/**
 	 * This method gets the classes inside a package and returns in a list
 	 * all of the files located inside that package.
-	 * @param pkg is assignment4
+	 * @param myPackage pkg is assignment4
 	 * @return list of all .class files located inside the package
-	 * @throws URISyntaxException 
 	 */
 	@SuppressWarnings({ "unused" })
 	public static List<String> getClassList(String myPackage) {
@@ -482,6 +482,7 @@ public class CritterWorld extends TestCritter{
 	 * @param c Critter trying to run away
 	 * @param x Critter's x location
 	 * @param y Critter's y location
+	 * @return boolean whether running was successful
 	 */
 	public static boolean tryToRunAway(Critter c, int x, int y) {
 		ArrayList<Integer> new_coords = new ArrayList<Integer>();
