@@ -1,0 +1,22 @@
+# Ignore all Eclipse workspace files #
+*.eclipse*
+*.xml
+*.log
+*.class
+*.class*
+*.metadata*
+*.recommenders*
+
+# Ignore all virtual environment files
+bin
+include
+local
+lib
+share
+*selfcheck.json
+
+# Ignore log files
+*results.txt
+
+# Ignore javadoc
+*.html
