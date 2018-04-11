@@ -27,7 +27,17 @@ public class Theater {
 
 		@Override
 		public String toString() {
-			// TODO: Implement this method to return the full Seat location ex: A1
+			// Convert row number to String by calculating number
+			// of A's needed, then adding the appropriate ending letter
+			String row = "";
+			int len_row = this.getRowNum() % 26;
+			for (int i = 0; i < len_row - 1; i ++) {
+				row = row + "A";
+			}
+			row = row + String.valueOf((char)(this.getRowNum()/26 + 64));
+			
+			// Add the integer value on the end
+			return row + String.valueOf(this.getSeatNum());
 		}
 	}
 
@@ -38,7 +48,7 @@ public class Theater {
 		private String show;
 		private String boxOfficeId;
 		private Seat seat;
-	  private int client;
+	    private int client;
 
 		public Ticket(String show, String boxOfficeId, Seat seat, int client) {
 			this.show = show;
@@ -65,7 +75,44 @@ public class Theater {
 
 		@Override
 		public String toString() {
-			// TODO: Implement this method to return a string that resembles a ticket
+			String ticket = new String();
+			ticket = "";
+			
+			// Line 1
+			ticket += "--------------------------------\n";
+			
+			// Line 2
+			ticket += "| Show:  " + this.getShow();
+			for (int i = 0; i < 22 - this.getShow().length(); i ++) {
+				ticket += " ";
+			}
+			ticket += "|";
+			
+			// Line 3
+			ticket += "| Box Office ID:  " + this.getBoxOfficeId();
+			for (int i = 0; i < 14 - this.getBoxOfficeId().length(); i ++) {
+				ticket += " ";
+			}
+			ticket += "|";
+			
+			// Line 4
+			ticket += "| Seat:  " + this.getSeat();
+			for (int i = 0; i < 22 - this.getSeat().toString().length(); i ++) {
+				ticket += " ";
+			}
+			ticket += "|";
+			
+			//Line 5
+			ticket += "| Client:  " + this.getClient();
+			for (int i = 0; i < 20 - this.getClient(); i ++) {
+				ticket += " ";
+			}
+			ticket += "|";
+			
+			// Line 6
+			ticket += "--------------------------------";
+			
+			return ticket;
 		}
 	}
 
