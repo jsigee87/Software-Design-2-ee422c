@@ -1,9 +1,22 @@
 // insert header here
 package assignment6;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Theater {
+	private int rows;
+	private int width; //seats
+	private String show;
+	private int next_best_seat;
+	private int next_best_row;
+	private int next_id;
+	private boolean sold_out; //needed?
+	
+	private List<Ticket> tickets_sold;
+	
+	
+	
 	/*
 	 * Represents a seat in the theater
 	 * A1, A2, A3, ... B1, B2, B3 ...
@@ -116,17 +129,52 @@ public class Theater {
 		}
 	}
 
+	/**
+	 * Constructor
+	 * @param numRows number of rows
+	 * @param seatsPerRow seats per show
+	 * @param show show name
+	 */
 	public Theater(int numRows, int seatsPerRow, String show) {
-		// TODO: Implement this constructor
+		this.rows = numRows;
+		this.width = seatsPerRow;
+		this.show = show;
+		this.tickets_sold = new ArrayList<>();
+		this.next_best_row = 1;
+		this.next_best_seat = 1;
+		this.next_id = 1;
+		this.sold_out = false;
 	}
 
-	/*
+	/**
 	 * Calculates the best seat not yet reserved
 	 *
  	 * @return the best seat or null if theater is full
    */
 	public Seat bestAvailableSeat() {
-		//TODO: Implement this method
+		if (next_best_row > rows) {
+			return null;
+		}
+		
+		Seat best_seat = new Seat(next_best_row, next_best_seat);
+		
+		// update best seat and row
+		if (next_best_seat == width) {
+			next_best_seat = 1;
+		}
+		else {
+			next_best_seat += 1;
+		}
+		
+		if (next_best_seat == 1) {
+			next_best_row += 1;
+		}
+		
+		if (next_best_row > rows) {
+			return null;
+		}
+				
+		return best_seat;
 	}
 
 	/*
@@ -137,7 +185,25 @@ public class Theater {
    * @return a ticket or null if a box office failed to reserve the seat
    */
 	public Ticket printTicket(String boxOfficeId, Seat seat, int client) {
-		//TODO: Implement this method
+		if (seat == null) {
+			if (sold_out) {
+				return null;
+			}
+			sold_out = true;
+			System.out.println("Sorry, we are sold out!");
+			return null;
+		}
+		else {
+			Ticket ticket = new Ticket(show, boxOfficeId, seat, client);
+			tickets_sold.add(ticket);
+			//int row_num_last_seat = tickets_sold.get(tickets_sold.size() - 1).getSeat().rowNum;
+			//int seat_num_last_seat = tickets_sold.get(tickets_sold.size() - 1).getSeat().seatNum;
+			//if ((seat.rowNum + seat.seatNum) != (row_num_last_seat + seat_num_last_seat)) {
+			//}
+			System.out.println(ticket);
+			return ticket;
+			
+		}
 	}
 
 	/*
@@ -146,6 +212,6 @@ public class Theater {
    * @return list of tickets sold
    */
 	public List<Ticket> getTransactionLog() {
-		//TODO: Implement this method
+		return tickets_sold;
 	}
 }

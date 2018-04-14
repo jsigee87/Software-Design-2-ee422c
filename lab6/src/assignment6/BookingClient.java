@@ -10,7 +10,7 @@ public class BookingClient {
 	private Map<String, Integer> office;
 	private Theater theater;
 	
-	
+
 	
 	
 	/*
@@ -18,7 +18,8 @@ public class BookingClient {
 	 * @param theater the theater where the show is playing
 	 */
 	public BookingClient(Map<String, Integer> office, Theater theater) {
-	  // TODO: Implement this constructor
+	  this.office = office;
+	  this.theater = theater;
 	}
 	
 	/*
@@ -30,7 +31,17 @@ public class BookingClient {
 	 */
 	public List<Thread> simulate() {
 		List<Thread> threads = new ArrayList<>();
-		// do stuff
+		
+		for (Map.Entry<String, Integer> off : office.entrySet()) {
+			BoxOffice box_office = new BoxOffice(off.getKey(), 
+					off.getValue(), this);
+			threads.add(box_office);
+		}
+		
+		for (int i = 0; i < threads.size(); i ++) {
+			threads.get(i).start();
+		}
+		
 		return threads;
 	}
 
