@@ -214,4 +214,12 @@ public class Theater {
 	public List<Ticket> getTransactionLog() {
 		return tickets_sold;
 	}
+
+	public int getNextId(int num_cust) {
+		int tmp = next_id;
+		next_id += num_cust;
+		return tmp;
+	}
+
+
 }

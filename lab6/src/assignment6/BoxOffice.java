@@ -14,12 +14,26 @@ public class BoxOffice extends Thread{
 		this.num_customers = value;
 		this.client = bookingClient;
 		this.theater = bookingClient.getTheater();
-		this.first_customer = bookingClient.getTheater().getNext(value);
+		this.first_customer = bookingClient.getTheater().getNextId(value);
 	}
 
 
-
+	@Override
 	public void run(){
+		int i = num_customers;
 		
+		while (i > 0) {
+			synchronized (client) {
+				Theater.Seat new_seat = theater.bestAvailableSeat();
+				if (theater.printTicket(id, new_seat, first_customer) == null) {
+					break;
+				}
+			}
+			try {
+				sleep(50);
+			}
+			catch (InterruptedException e) {}
+			i --;
+		}
 	}
 }
