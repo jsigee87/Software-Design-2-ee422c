@@ -45,9 +45,9 @@ public class Theater {
 			String row = "";
 			int len_row = this.getRowNum() % 26;
 			for (int i = 0; i < len_row - 1; i ++) {
-				row = row + "A";
+				row += "A";
 			}
-			row = row + String.valueOf((char)(this.getRowNum()/26 + 64));
+			row += String.valueOf((char)(this.getRowNum()/26 + 65));
 			
 			// Add the integer value on the end
 			return row + String.valueOf(this.getSeatNum());
@@ -99,31 +99,31 @@ public class Theater {
 			for (int i = 0; i < 22 - this.getShow().length(); i ++) {
 				ticket += " ";
 			}
-			ticket += "|";
+			ticket += "|\n";
 			
 			// Line 3
 			ticket += "| Box Office ID:  " + this.getBoxOfficeId();
-			for (int i = 0; i < 14 - this.getBoxOfficeId().length(); i ++) {
+			for (int i = 0; i < 13 - this.getBoxOfficeId().length(); i ++) {
 				ticket += " ";
 			}
-			ticket += "|";
+			ticket += "|\n";
 			
 			// Line 4
 			ticket += "| Seat:  " + this.getSeat();
 			for (int i = 0; i < 22 - this.getSeat().toString().length(); i ++) {
 				ticket += " ";
 			}
-			ticket += "|";
+			ticket += "|\n";
 			
 			//Line 5
 			ticket += "| Client:  " + this.getClient();
 			for (int i = 0; i < 20 - this.getClient(); i ++) {
 				ticket += " ";
 			}
-			ticket += "|";
+			ticket += "|\n";
 			
 			// Line 6
-			ticket += "--------------------------------";
+			ticket += "--------------------------------\n";
 			
 			return ticket;
 		}

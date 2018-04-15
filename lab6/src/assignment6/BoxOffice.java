@@ -3,7 +3,7 @@ package assignment6;
 public class BoxOffice extends Thread{
 	private String id;
 	private int num_customers;
-	private int first_customer;
+	private int customer;
 	private BookingClient client;
 	private Theater theater;
 	
@@ -14,7 +14,7 @@ public class BoxOffice extends Thread{
 		this.num_customers = value;
 		this.client = bookingClient;
 		this.theater = bookingClient.getTheater();
-		this.first_customer = bookingClient.getTheater().getNextId(value);
+		this.customer = bookingClient.getTheater().getNextId(value);
 	}
 
 
@@ -25,7 +25,7 @@ public class BoxOffice extends Thread{
 		while (i > 0) {
 			synchronized (client) {
 				Theater.Seat new_seat = theater.bestAvailableSeat();
-				if (theater.printTicket(id, new_seat, first_customer) == null) {
+				if (theater.printTicket(id, new_seat, customer) == null) {
 					break;
 				}
 			}
