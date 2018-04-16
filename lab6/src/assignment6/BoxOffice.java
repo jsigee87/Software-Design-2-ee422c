@@ -1,3 +1,6 @@
+// Author John Sigmon
+// 4/16/18
+
 package assignment6;
 
 public class BoxOffice extends Thread{
@@ -28,9 +31,10 @@ public class BoxOffice extends Thread{
 				if (theater.printTicket(id, new_seat, customer) == null) {
 					break;
 				}
+				customer ++;
 			}
 			try {
-				sleep(50);
+				Thread.sleep(50);
 			}
 			catch (InterruptedException e) {}
 			i --;

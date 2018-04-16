@@ -1,4 +1,5 @@
-// insert header here
+// John Sigmon
+// 4/16/18
 package assignment6;
 
 import java.util.ArrayList;
@@ -40,9 +41,20 @@ public class Theater {
 
 		@Override
 		public String toString() {
+			String row = "";
+			while (rowNum > 0) {
+				rowNum-=1;
+				int rem = rowNum % 26;
+				char num = (char) (rem + 65);
+				row = num + row;
+				rowNum = (rowNum - rem) / 26;
+			}
+			String seatNumber = Integer.toString(this.seatNum);
+			return row.concat(seatNumber);
+			
 			// Convert row number to String by calculating number
 			// of A's needed, then adding the appropriate ending letter
-			String row = "";
+			/*String row = "";
 			int len_row = this.getRowNum() % 26;
 			for (int i = 0; i < len_row - 1; i ++) {
 				row += "A";
@@ -50,7 +62,7 @@ public class Theater {
 			row += String.valueOf((char)(this.getRowNum()/26 + 65));
 			
 			// Add the integer value on the end
-			return row + String.valueOf(this.getSeatNum());
+			return row + String.valueOf(this.getSeatNum()); */
 		}
 	}
 
@@ -89,7 +101,22 @@ public class Theater {
 		@Override
 		public String toString() {
 			String ticket = new String();
-			ticket = "";
+			String tmp = "";
+			for(int i = 0; i < 31; i ++) {
+				tmp += "-";
+			}
+			ticket += tmp + "\n";
+			ticket += String.format("%-30.30s", ("| Show: " + getShow()));
+			ticket += "|\n";
+			ticket += String.format("%-30.30s", ("| Box Office ID: " + getBoxOfficeId()));
+			ticket += "|\n";
+			ticket += String.format("%-30.30s", ("| Seat: " + getSeat().toString()));
+			ticket +="|\n";
+			ticket += String.format("%-30.30s", ("| Client: " + getClient()));
+			ticket += "|\n";
+			ticket += (tmp + "\n");
+			return ticket;
+			/*ticket = "";
 			
 			// Line 1
 			ticket += "--------------------------------\n";
@@ -124,8 +151,8 @@ public class Theater {
 			
 			// Line 6
 			ticket += "--------------------------------\n";
-			
-			return ticket;
+			*/
+			//return ticket;
 		}
 	}
 
@@ -215,7 +242,7 @@ public class Theater {
 		return tickets_sold;
 	}
 
-	public int getNextId(int num_cust) {
+	public synchronized int getNextId(int num_cust) {
 		int tmp = next_id;
 		next_id += num_cust;
 		return tmp;
