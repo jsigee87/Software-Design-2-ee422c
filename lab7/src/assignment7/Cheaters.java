@@ -1,3 +1,16 @@
+/* CHEATERS Cheaters.java
+ * EE422C Project 7 submission by
+ *
+ * <John Sigmon>
+ * <js85773>
+ * <15455>
+ * <Daniel Diamont>
+ * <dd28977>
+ * <15455>
+ * Slip days used: <0>
+ * Spring 2018
+ */
+
 package assignment7;
 
 import java.io.BufferedReader;
@@ -20,12 +33,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * 
+ * @author Daniel Diamont and John Sigmon
+ *
+ */
 public class Cheaters {
 
 	static List<String> file_list;
 	static Integer substring_len;
 	static Integer threshold;
-//	Hashtable<Integer, LinkedList<Integer>> table;
 	private static String myPackage = Cheaters.class.getPackage().toString().split(" ")[1];
 	
 	public static void main(String[] args) {
@@ -64,24 +81,32 @@ public class Cheaters {
 			parseFile(file_list.get(i),path,i);			
 		}
 		
-		//build matrix
+		//build matrix and dictionary
 		Model.buildMatrix();
 		Model.buildDictionary();
-		Model.printDictionary();
 		
+		//print dictionary
+		Model.printDictionary();		
 		
 	}
 	
+	/**
+	 * This function takes an absolute file path and returns a list of
+	 * names of the .txt files in the filepath
+	 * @param path is the filepath to use for the .txt file look-up
+	 * @return list of files
+	 */
 	public static List<String> getFileList(String path){
 		
 		
 		List<String> results = new ArrayList<String>();
 		
-		//System.out.println(path); 
+		//get all files that end in .txt
 		File[] files = new File(path).listFiles(new FilenameFilter() {
 			@Override public boolean accept(File dir, String name) {
 				return name.endsWith(".txt"); } });
-		//System.out.println(files); 
+ 
+		//add the file names to the list of files we want to return
 		for (File file : files) {
 		    if (file.isFile()) {
 		        results.add(file.getName());
@@ -91,20 +116,26 @@ public class Cheaters {
 		return results;
 	}
 	
+	/**
+	 * parses a file to generate hashes for each of the possible subquences of
+	 * substring_len words.
+	 * 
+	 * @param file_name is the name of the particular .txt file to parse
+	 * @param path is the absolute filepath to the group of .txt files
+	 * @param file_code is the index of the file we will use for the later measure of similarity tests
+	 */
 	public static void parseFile(String file_name, String path, int file_code) {
 		try {
 			File f = new File(path + "/" + file_name);
 			
-//			System.out.println("\nfile name: " + file_name);
-			
-			//get all the words in the file and put them in a big String
-			FileReader fr = new FileReader(f);
-			
+			//get all the words in the file and put them in a String
+			FileReader fr = new FileReader(f);			
 			BufferedReader br = new BufferedReader(fr);
 			
 			String line;		
 			ArrayList<String> lines = new ArrayList<String>();
 			
+			//read in the words
 			while( (line=br.readLine()) != null ){
 			     if(line != null){
 			         lines.add(line);
@@ -113,16 +144,17 @@ public class Cheaters {
 			fr.close();
 			br.close();
 			
-			String content = "";
-			
+			//create one long string with all the words in the file 
+			String content = "";			
 			for(String s : lines) {
 				content += s + "\n";
-			}
+			}			
 			
+			//split up the words
 			String [] words = content.split(" ");
-//			System.out.println("words length: " + words.length);
-			int end;
 			
+			//for all the words, create hashes for all possible combinations of all word chunks
+			//of size substring_len
 			for(int i = 0; i < words.length-substring_len; i++) {	
 				String subString = "";
 				for(int j = i; j < substring_len + i; j++) {
@@ -136,7 +168,7 @@ public class Cheaters {
 				if(Model.hashtable.containsKey(hash)) {
 					Model.hashtable.get(hash).add(file_code);
 				}
-				else {
+				else {//create a new list and add the hash
 					LinkedList<Integer> list = new LinkedList<Integer>();
 					list.add(file_code);		
 					Model.hashtable.put(hash, list);					
@@ -148,21 +180,26 @@ public class Cheaters {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param file_list is the list of .txt files that we want to pre-process
+	 * @param path is the the absolute filepath to the group of .txt files
+	 */
 	public static void preProcess(List<String> file_list, String path) {
 		
+		//for each file in the file_list, delete all punctuation and turn to uppercase
 		for(String file_name : file_list) {
 			
 			try {
-				File f = new File(path + "/" + file_name);
-				
-				FileReader fr = new FileReader(f);
-				
+				File f = new File(path + "/" + file_name);				
+				FileReader fr = new FileReader(f);				
 				BufferedReader br = new BufferedReader(fr);
 				
 				String [] words;
 				String verify, putData;		
 				ArrayList<String> lines = new ArrayList<String>();
 				
+				//use regex for pre-processing
 				while( (verify=br.readLine()) != null ){
 				     if(verify != null){
 				         words = verify.replaceAll("[^a-zA-Z ]", "").toUpperCase().split("\\s+");
@@ -173,6 +210,7 @@ public class Cheaters {
 				fr.close();
 				br.close();
 				
+				//write result back out to file
 				FileWriter fw = new FileWriter(f);
 	            BufferedWriter out = new BufferedWriter(fw);
 	            for(String s : lines)

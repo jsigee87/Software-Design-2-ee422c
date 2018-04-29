@@ -1,3 +1,16 @@
+/* CHEATERS Model.java
+ * EE422C Project 7 submission by
+ *
+ * <John Sigmon>
+ * <js85773>
+ * <15455>
+ * <Daniel Diamont>
+ * <dd28977>
+ * <15455>
+ * Slip days used: <0>
+ * Spring 2018
+ */
+
 package assignment7;
 
 import java.util.ArrayList;
@@ -10,6 +23,11 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 
+/**
+ * 
+ * @author Daniel Diamont and John Sigmon
+ *
+ */
 public class Model {
 
 	public static Hashtable<Integer, LinkedList<Integer>> hashtable;
@@ -19,14 +37,14 @@ public class Model {
 	public Model(int TOTAL_FILES){
 		hashtable = new Hashtable<Integer, LinkedList<Integer>>(5 * TOTAL_FILES);
 		output_matrix = new int [TOTAL_FILES][TOTAL_FILES];
-		//output_dict = new TreeMap<Integer, Integer>();
 	}
 	
+	/**
+	 * This method builds a 2D matrix where each entry in the matrix represents the
+	 * number of similarities that any two files have with each other
+	 */
 	public static void buildMatrix() {
-		/*for (Integer key : hashtable.keySet()) {
-			System.out.println(hashtable.get(key));
-		}*/
-		//System.out.println(setOfKeys.toString());
+		
 		for (Integer key: hashtable.keySet()) {
 			if (hashtable.get(key) != null) {
 				List<Integer> vals = hashtable.get(key);
@@ -39,19 +57,14 @@ public class Model {
 				}
 			}
 		}
-		
-		
-//		for (int i = 0; i < output_matrix.length; i ++) { 
-//			for (int j = 0; j < output_matrix.length; j ++) {
-//				
-//				System.out.print(output_matrix[i][j] + "|"); 
-//			}
-//			System.out.println();
-//			for (int k = 0; k < 2* output_matrix.length; k ++) {System.out.print("-");}
-//			System.out.println();
-//		}
 	}
-	
+
+	/**
+	 * This method builds a dictionary out of the 2D matrix, where each key
+	 * in the dictionary the number of similarities that a group of files
+	 * share with each other, and the respective groups of files are the values
+	 * attached to each key 
+	 */
 	public static void buildDictionary() {
 		Map<Integer, List<Integer>> flattened_matrix = new HashMap<>();
 		for (int i = 0; i < output_matrix.length; i ++) {
@@ -73,23 +86,17 @@ public class Model {
 					}
 				}
 			}
-		}
+		}	
 		
-//		System.out.println("Keys in flattened matrix");
-//		for(Integer i : flattened_matrix.keySet()) {
-//			System.out.println(i);
-//		}
-//		
-//		System.out.println("flattened matrix entries");
-//		for(int i = 0; i < flattened_matrix.size(); i++) {
-//			System.out.println(flattened_matrix.get(i));
-//		}
-		
-		
+		//create a red-black tree keyed by the decreasing order of the keys of the flattened_matrix
 		output_dict = new TreeMap<Integer, List<Integer>>(flattened_matrix);
 		
 	}
 	
+	/**
+	 * This method repeatedly polls the last entry "x" of the output_dict red-black tree
+	 * and prints out the files which share x similarities
+	 */
 	public static void printDictionary() {
 		if (output_dict == null) {
 			System.out.println("You haven't built the dictionary " + 
@@ -98,23 +105,10 @@ public class Model {
 		}
 		else {
 			// get set of highest key values
-			//NavigableSet<Integer> descending_keys = output_dict.descendingKeySet();
-//			System.out.println("tyc12 index: " + Cheaters.file_list.indexOf("tyc12.txt"));
-//			System.out.println("hal10 index: " + Cheaters.file_list.indexOf("hal10.txt"));
-//			System.out.println("ecu201 index: " + Cheaters.file_list.indexOf("ecu201.txt"));
-//			System.out.println("catchmeifyoucan index: " + Cheaters.file_list.indexOf("catchmeifyoucan.txt"));
-			
 			for (int i = 0; i < output_dict.size(); i ++) {
 				Map.Entry<Integer, List<Integer>> entry = 
 						output_dict.pollLastEntry();
 			
-				//System.out.println(output_dict.size());
-				
-				//System.out.println(entry.getValue().get(0));
-				//System.out.println(entry.getValue().get(1));
-				//System.out.println(Cheaters.file_list.size());
-				//String file1 = Cheaters.file_list.get(entry.getValue().get(0));
-				//String file2 = Cheaters.file_list.get(entry.getValue().get(1));
 				System.out.print("Files [");
 				System.out.print(Cheaters.file_list.get(entry.getValue().get(0)));
 				for (int j = 1; j < entry.getValue().size(); j++) {
@@ -126,7 +120,4 @@ public class Model {
 		}
 	}
 	
-	public static void printMatrix() {
-		
-	}
 }
