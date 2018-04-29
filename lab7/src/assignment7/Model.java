@@ -16,7 +16,7 @@ public class Model {
 	public static int [][] output_matrix;
 	public static TreeMap<Integer, List<Integer>> output_dict;
 	
-	Model(int TOTAL_FILES){
+	public Model(int TOTAL_FILES){
 		hashtable = new Hashtable<Integer, LinkedList<Integer>>(5 * TOTAL_FILES);
 		output_matrix = new int [TOTAL_FILES][TOTAL_FILES];
 		//output_dict = new TreeMap<Integer, Integer>();
