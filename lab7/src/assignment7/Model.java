@@ -70,20 +70,19 @@ public class Model {
 		for (int i = 0; i < output_matrix.length; i ++) {
 			for (int j = 0; j < output_matrix.length; j++) {
 				int similarities = output_matrix[i][j];
-				if (similarities >= Cheaters.threshold) {
-					// if similarities is not already in the map
-					if (!flattened_matrix.containsKey(similarities)){
-						List<Integer> files = new ArrayList<>();
-						files.add(i);
-						files.add(j);
-						flattened_matrix.put(similarities, files);
-					}
-					else {
-						List <Integer> files = new ArrayList<>(flattened_matrix.get(similarities));
-						files.add(i);
-						files.add(j);
-						flattened_matrix.put(similarities, files);
-					}
+				
+				// if similarities is not already in the map
+				if (!flattened_matrix.containsKey(similarities)){
+					List<Integer> files = new ArrayList<>();
+					files.add(i);
+					files.add(j);
+					flattened_matrix.put(similarities, files);
+				}
+				else {
+					List <Integer> files = new ArrayList<>(flattened_matrix.get(similarities));
+					files.add(i);
+					files.add(j);
+					flattened_matrix.put(similarities, files);
 				}
 			}
 		}	
@@ -109,13 +108,15 @@ public class Model {
 				Map.Entry<Integer, List<Integer>> entry = 
 						output_dict.pollLastEntry();
 			
-				System.out.print("Files [");
-				System.out.print(Cheaters.file_list.get(entry.getValue().get(0)));
-				for (int j = 1; j < entry.getValue().size(); j++) {
-					System.out.print(", ");
-					System.out.print(Cheaters.file_list.get(entry.getValue().get(j))); // Print file name
-				}
-				System.out.println("] have " + entry.getKey() + " similarities with each other.");
+				if(entry.getKey() >= Cheaters.threshold) {
+					System.out.print("Files [");
+					System.out.print(Cheaters.file_list.get(entry.getValue().get(0)));
+					for (int j = 1; j < entry.getValue().size(); j++) {
+						System.out.print(", ");
+						System.out.print(Cheaters.file_list.get(entry.getValue().get(j))); // Print file name
+					}
+					System.out.println("] have " + entry.getKey() + " similarities with each other.");
+				}				
 			}
 		}
 	}
