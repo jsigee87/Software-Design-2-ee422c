@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -92,23 +95,40 @@ public class Cheaters {
 		try {
 			File f = new File(path + "/" + file_name);
 			
-			@SuppressWarnings("resource")
-			String content = new Scanner(f).useDelimiter("\\Z").next();
+//			System.out.println("\nfile name: " + file_name);
+			
+			//get all the words in the file and put them in a big String
+			FileReader fr = new FileReader(f);
+			
+			BufferedReader br = new BufferedReader(fr);
+			
+			String line;		
+			ArrayList<String> lines = new ArrayList<String>();
+			
+			while( (line=br.readLine()) != null ){
+			     if(line != null){
+			         lines.add(line);
+			     }
+			 }
+			fr.close();
+			br.close();
+			
+			String content = "";
+			
+			for(String s : lines) {
+				content += s + "\n";
+			}
 			
 			String [] words = content.split(" ");
+//			System.out.println("words length: " + words.length);
 			int end;
 			
-			if (words.length < substring_len) {
-				end = words.length;
-			}
-			else{
-				end = substring_len;
-			}
-			for(int i = 0; i < end; i++) {	
+			for(int i = 0; i < words.length-substring_len; i++) {	
 				String subString = "";
-				for(int j = i; j < end; j++) {
-					subString += words[j];
+				for(int j = i; j < substring_len + i; j++) {
+					subString += words[j] + " ";
 				}
+				
 				//create hash
 				int hash = subString.hashCode();
 				
@@ -145,8 +165,8 @@ public class Cheaters {
 				
 				while( (verify=br.readLine()) != null ){
 				     if(verify != null){
-				         words = verify.replaceAll("[^a-z A-Z]", "").toLowerCase().split("\\s+");
-				         putData = String.join(" ", words);
+				         words = verify.replaceAll("[^a-zA-Z ]", "").toUpperCase().split("\\s+");
+				         putData = String.join(" ", words) + "\n";
 				         lines.add(putData);
 				     }
 				 }
