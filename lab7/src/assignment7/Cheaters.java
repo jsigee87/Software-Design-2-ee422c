@@ -46,6 +46,8 @@ public class Cheaters {
 	private static String myPackage = Cheaters.class.getPackage().toString().split(" ")[1];
 	
 	public static void main(String[] args) {
+		long start, end;
+		start = System.nanoTime();
 		assert args.length == 3;
 		
 		//get list of files
@@ -71,22 +73,36 @@ public class Cheaters {
 		file_list = getFileList(path);
 		
 		//preProcess each file
+		start = System.nanoTime();
 		preProcess(file_list, path);
+		System.out.println("pre-process time: " + (System.nanoTime()-start)/1000000000.0);
 		
 		//create and initialize model
 		new Model(file_list.size());
 		
 		//parse each file and fill up the hashtable
+		start = System.nanoTime();
 		for(int i = 0; i < file_list.size(); i++) {
 			parseFile(file_list.get(i),path,i);			
 		}
+		System.out.println("parse-file time: " + (System.nanoTime()-start)/1000000000.0);
 		
 		//build matrix and dictionary
+		start = System.nanoTime();
 		Model.buildMatrix();
+		System.out.println("build matrix time: " + (System.nanoTime()-start)/1000000000.0);
+		
+		start = System.nanoTime();
 		Model.buildDictionary();
+		System.out.println("build dict time: " + (System.nanoTime()-start)/1000000000.0);
 		
 		//print dictionary
-		Model.printDictionary();		
+		start = System.nanoTime();
+		Model.printDictionary();
+		System.out.println("pint dict time: " + (System.nanoTime()-start)/1000000000.0);
+		
+//		long end = System.nanoTime();
+//		System.out.println("run time: " + (end-start)/1000000000.0);
 		
 	}
 	

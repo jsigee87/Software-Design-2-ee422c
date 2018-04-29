@@ -33,10 +33,12 @@ public class Model {
 	public static Hashtable<Integer, LinkedList<Integer>> hashtable;
 	public static int [][] output_matrix;
 	public static TreeMap<Integer, List<Integer>> output_dict;
+	public static int total_files;
 	
 	public Model(int TOTAL_FILES){
 		hashtable = new Hashtable<Integer, LinkedList<Integer>>(5 * TOTAL_FILES);
 		output_matrix = new int [TOTAL_FILES][TOTAL_FILES];
+		Model.total_files = TOTAL_FILES;
 	}
 	
 	/**
@@ -66,7 +68,11 @@ public class Model {
 	 * attached to each key 
 	 */
 	public static void buildDictionary() {
-		Map<Integer, List<Integer>> flattened_matrix = new HashMap<>();
+		
+		long start = System.nanoTime();
+		
+		Map<Integer, List<Integer>> flattened_matrix = new HashMap<>(Model.total_files*Model.total_files*5);
+		
 		for (int i = 0; i < output_matrix.length; i ++) {
 			for (int j = 0; j < output_matrix.length; j++) {
 				int similarities = output_matrix[i][j];
@@ -87,6 +93,7 @@ public class Model {
 			}
 		}	
 		
+		System.out.println("flat matrix make time :" + (System.nanoTime()-start)/1000000000.0);
 		//create a red-black tree keyed by the decreasing order of the keys of the flattened_matrix
 		output_dict = new TreeMap<Integer, List<Integer>>(flattened_matrix);
 		
