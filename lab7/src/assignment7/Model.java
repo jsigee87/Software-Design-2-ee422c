@@ -23,20 +23,33 @@ public class Model {
 	}
 	
 	public static void buildMatrix() {
-		Set<Integer> setOfKeys = hashtable.keySet();
-		for (Integer key: setOfKeys) {
+		/*for (Integer key : hashtable.keySet()) {
+			System.out.println(hashtable.get(key));
+		}*/
+		//System.out.println(setOfKeys.toString());
+		for (Integer key: hashtable.keySet()) {
 			if (hashtable.get(key) != null) {
-				List<Integer> vals = new ArrayList<Integer>();
-				vals = hashtable.get(key);
+				List<Integer> vals = hashtable.get(key);
 				for (int i = 0; i < vals.size(); i ++) {
 					for (int j = i; j < vals.size(); j ++) {
 						if (i != j) {
-							output_matrix[i][j] += 1;
+							output_matrix[vals.get(i)][vals.get(j)] += 1;
 						}
 					}
 				}
 			}
-		}	
+		}
+		
+		
+		for (int i = 0; i < output_matrix.length; i ++) { 
+			for (int j = 0; j < output_matrix.length; j ++) {
+				
+				System.out.print(output_matrix[i][j] + "|"); 
+			}
+			System.out.println();
+			for (int k = 0; k < 2* output_matrix.length; k ++) {System.out.print("-");}
+			System.out.println();
+		}
 	}
 	
 	public static void buildDictionary() {
@@ -44,16 +57,29 @@ public class Model {
 		for (int i = 0; i < output_matrix.length; i ++) {
 			for (int j = (i + 1); j < output_matrix.length; j++) {
 				int similarities = output_matrix[i][j];
-				List<Integer> files = new ArrayList<Integer>();
-				files.add(i);
-				files.add(j);
-				flattened_matrix.put(similarities, files);
+				if (similarities >= Cheaters.threshold) {
+					// if similarities is not already in the map
+					if (!flattened_matrix.containsKey(similarities)){
+						List<Integer> files = new ArrayList<>();
+						files.add(i);
+						files.add(j);
+						flattened_matrix.put(similarities, files);
+					}
+					else {
+						List <Integer> files = new ArrayList<>();
+						files = flattened_matrix.get(similarities);
+						files.add(i);
+						files.add(j);
+						flattened_matrix.put(similarities, files);
+					}
+				}
 			}
 		}
+		System.out.println(flattened_matrix.get(0));
 		output_dict = new TreeMap<Integer, List<Integer>>(flattened_matrix);
 	}
 	
-	public static void printDictionary(int num_files) {
+	public static void printDictionary() {
 		if (output_dict == null) {
 			System.out.println("You haven't built the dictionary " + 
 								"yet, you can't print it");
@@ -62,13 +88,24 @@ public class Model {
 		else {
 			// get set of highest key values
 			//NavigableSet<Integer> descending_keys = output_dict.descendingKeySet();
-			for (int i = 0; i < num_files; i ++) {
+			
+			for (int i = 0; i < output_dict.size(); i ++) {
 				Map.Entry<Integer, List<Integer>> entry = 
 						output_dict.pollLastEntry();
-				String file1 = Cheaters.file_list.get(entry.getValue().get(0));
-				String file2 = Cheaters.file_list.get(entry.getValue().get(1));
-				System.out.print("Files " + file1 + " and " + file2 + " had ");
-				System.out.println(entry.getKey() + "similarities");
+				//System.out.println(output_dict.size());
+				System.out.println(Cheaters.file_list.indexOf("catchmeifyoucan.txt"));
+				//System.out.println(entry.getValue().get(0));
+				//System.out.println(entry.getValue().get(1));
+				//System.out.println(Cheaters.file_list.size());
+				//String file1 = Cheaters.file_list.get(entry.getValue().get(0));
+				//String file2 = Cheaters.file_list.get(entry.getValue().get(1));
+				System.out.print("Files ");
+				System.out.print(Cheaters.file_list.get(entry.getValue().get(0)));
+				for (int j = 1; j < entry.getValue().size(); j++) {
+					System.out.print(", ");
+					System.out.print(Cheaters.file_list.get(entry.getValue().get(j))); // Print file name
+				}
+				System.out.println(" have " + entry.getKey() + " similarities with each other.");
 			}
 		}
 	}

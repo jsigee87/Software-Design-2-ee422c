@@ -20,18 +20,29 @@ import java.util.Scanner;
 public class Cheaters {
 
 	static List<String> file_list;
-	static Integer len;
+	static Integer substring_len;
+	static Integer threshold;
 //	Hashtable<Integer, LinkedList<Integer>> table;
 	private static String myPackage = Cheaters.class.getPackage().toString().split(" ")[1];
 	
 	public static void main(String[] args) {
-				
-		//get list of files
-		String path = args[2];
-		len = null;
+		assert args.length == 3;
 		
+		//get list of files
+		String path = args[0];
+		substring_len = null;
+		
+		// Parse arg 2
 		try {
-			len = Integer.valueOf(args[3]);
+			substring_len = Integer.valueOf(args[1]);
+		}
+		catch(NumberFormatException e) {
+			e.printStackTrace();
+		}
+		
+		// Parse arg 3
+		try {
+			threshold = Integer.valueOf(args[2]);
 		}
 		catch(NumberFormatException e) {
 			e.printStackTrace();
@@ -53,7 +64,7 @@ public class Cheaters {
 		//build matrix
 		Model.buildMatrix();
 		Model.buildDictionary();
-		Model.printDictionary(len);
+		Model.printDictionary();
 		
 		
 	}
@@ -63,11 +74,11 @@ public class Cheaters {
 		
 		List<String> results = new ArrayList<String>();
 		
-		System.out.println(path); 
+		//System.out.println(path); 
 		File[] files = new File(path).listFiles(new FilenameFilter() {
 			@Override public boolean accept(File dir, String name) {
 				return name.endsWith(".txt"); } });
-		
+		//System.out.println(files); 
 		for (File file : files) {
 		    if (file.isFile()) {
 		        results.add(file.getName());
@@ -79,17 +90,23 @@ public class Cheaters {
 	
 	public static void parseFile(String file_name, String path, int file_code) {
 		try {
-			File f = new File(path + "\\" + file_name);
+			File f = new File(path + "/" + file_name);
 			
 			@SuppressWarnings("resource")
 			String content = new Scanner(f).useDelimiter("\\Z").next();
 			
 			String [] words = content.split(" ");
+			int end;
 			
-			for(int i = 0; i < words.length; i++) {
-				
+			if (words.length < substring_len) {
+				end = words.length;
+			}
+			else{
+				end = substring_len;
+			}
+			for(int i = 0; i < end; i++) {	
 				String subString = "";
-				for(int j = i; j < len; j++) {
+				for(int j = i; j < end; j++) {
 					subString += words[j];
 				}
 				//create hash
@@ -101,12 +118,10 @@ public class Cheaters {
 				}
 				else {
 					LinkedList<Integer> list = new LinkedList<Integer>();
-					
-					list.add(file_code);
-					
+					list.add(file_code);		
 					Model.hashtable.put(hash, list);					
 				}				
-			}			
+			}
 		}
 		catch(IOException e) {
 			e.getStackTrace();
@@ -118,7 +133,7 @@ public class Cheaters {
 		for(String file_name : file_list) {
 			
 			try {
-				File f = new File(path + "\\" + file_name);
+				File f = new File(path + "/" + file_name);
 				
 				FileReader fr = new FileReader(f);
 				
