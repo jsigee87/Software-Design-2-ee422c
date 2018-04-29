@@ -1,6 +1,6 @@
 # Readme for Cheaters
 
-This code was written by John Sigmon and Daniel Diamont for lab number 7 for Software Design and Implementation 2 at UT Austin. The code was last modified April 28, 2018.
+This code was written by John Sigmon and Daniel Diamont for lab number 7 for Software Design and Implementation 2 at UT Austin. The code was last modified April 29, 2018.
 
 ---
 
@@ -41,13 +41,21 @@ java cheaters <filepath> <substring length> <similarity threshold>
 
 #### Variables
 
-<p>
-</p>
+`file_list` is a List of the file names in the absolute file path to the directory where the desired .txt documents are.
+
+`substring_len` is the desired length of substrings for which we want to check.
+
+`threshold` is the number below which we want to ignore similarities.
 
 #### Methods
 
-<p>
-</p>
+`main` This is the program driver. It parses the files, runs our own measure of similarity software, and outputs the results.
+
+`getFileList` returns a list of all the .txt files in the directory specified by `filepath` in the command line arguments.
+
+`preProcess` goes through all of the specified .txt files and deletes punctuation while converting all A-Z characters to uppercase.
+
+`parseFile` iterates through a .txt file and creates a hash for every possible combination of `substring_len` words. It stores these hashes in Model's `hashtable`, where the keys of the table are the hashes, and the values are the files which contain the same set of words (i.e., share the same hash).
 
 ### Model
 
