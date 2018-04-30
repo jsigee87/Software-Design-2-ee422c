@@ -75,35 +75,35 @@ public class Cheaters {
 		//preProcess each file
 		start = System.nanoTime();
 		preProcess(file_list, path);
-		System.out.println("pre-process time: " + (System.nanoTime()-start)/1000000000.0);
+		//System.out.println("pre-process time: " + (System.nanoTime()-start)/1000000000.0);
 		
 		//create and initialize model
 		new Model(file_list.size());
 		
 		//parse each file and fill up the hashtable
-		start = System.nanoTime();
+		//start = System.nanoTime();
 		for(int i = 0; i < file_list.size(); i++) {
 			parseFile(file_list.get(i),path,i);			
 		}
-		System.out.println("parse-file time: " + (System.nanoTime()-start)/1000000000.0);
+		//System.out.println("parse-file time: " + (System.nanoTime()-start)/1000000000.0);
 		
 		//build matrix and dictionary
-		start = System.nanoTime();
+		//start = System.nanoTime();
 		Model.buildMatrix();
-		System.out.println("build matrix time: " + (System.nanoTime()-start)/1000000000.0);
+		//System.out.println("build matrix time: " + (System.nanoTime()-start)/1000000000.0);
 		
-		start = System.nanoTime();
+		//start = System.nanoTime();
 		Model.buildDictionary();
-		System.out.println("build dict time: " + (System.nanoTime()-start)/1000000000.0);
+		//System.out.println("build dict time: " + (System.nanoTime()-start)/1000000000.0);
 		
 		//print dictionary
-		start = System.nanoTime();
+		//start = System.nanoTime();
 		Model.printDictionary();
-		System.out.println("pint dict time: " + (System.nanoTime()-start)/1000000000.0);
+		//System.out.println("pint dict time: " + (System.nanoTime()-start)/1000000000.0);
 		
 //		long end = System.nanoTime();
 //		System.out.println("run time: " + (end-start)/1000000000.0);
-		
+		System.out.println("Total Run Time: " + (System.nanoTime()-start)/1000000000.0);
 	}
 	
 	/**

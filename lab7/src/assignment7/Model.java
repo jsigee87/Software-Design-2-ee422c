@@ -14,6 +14,7 @@
 package assignment7;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -30,15 +31,17 @@ import java.util.TreeMap;
  */
 public class Model {
 
-	public static Hashtable<Integer, LinkedList<Integer>> hashtable;
+	public static Hashtable<Integer, List<Integer>> hashtable;
 	public static int [][] output_matrix;
 	public static TreeMap<Integer, List<Integer>> output_dict;
 	public static int total_files;
+	public static Map<Integer, List<Integer>> flattened_matrix;
 	
 	public Model(int TOTAL_FILES){
-		hashtable = new Hashtable<Integer, LinkedList<Integer>>(5 * TOTAL_FILES);
+		hashtable = new Hashtable<Integer, List<Integer>>(5 * TOTAL_FILES);
 		output_matrix = new int [TOTAL_FILES][TOTAL_FILES];
-		Model.total_files = TOTAL_FILES;
+		total_files = TOTAL_FILES;
+		flattened_matrix = new HashMap<Integer, List<Integer>>((int)Math.pow(total_files, 2));
 	}
 	
 	/**
@@ -46,7 +49,7 @@ public class Model {
 	 * number of similarities that any two files have with each other
 	 */
 	public static void buildMatrix() {
-		
+		System.out.println("Building an adjacency matrix of connections...");
 		for (Integer key: hashtable.keySet()) {
 			if (hashtable.get(key) != null) {
 				List<Integer> vals = hashtable.get(key);
@@ -69,33 +72,44 @@ public class Model {
 	 */
 	public static void buildDictionary() {
 		
-		long start = System.nanoTime();
+		//long start = System.nanoTime();
 		
-		Map<Integer, List<Integer>> flattened_matrix = new HashMap<>(Model.total_files*Model.total_files*5);
-		
+		//System.out.println("Flattening Matrix...");
 		for (int i = 0; i < output_matrix.length; i ++) {
+			//System.out.println("Working on row " + i + " out of " + output_matrix.length + " rows.");
 			for (int j = 0; j < output_matrix.length; j++) {
 				int similarities = output_matrix[i][j];
+				if (i != j) {
+					if (Cheaters.threshold <= similarities) {
 				
-				// if similarities is not already in the map
-				if (!flattened_matrix.containsKey(similarities)){
-					List<Integer> files = new ArrayList<>();
-					files.add(i);
-					files.add(j);
-					flattened_matrix.put(similarities, files);
+					// if similarities is not already in the map
+						if (!flattened_matrix.containsKey(similarities)){
+							List<Integer> files = new ArrayList<>();
+							files.add(i);
+							files.add(j);
+							flattened_matrix.put(similarities, files);
+						}
+						else {
+							List <Integer> files = new ArrayList<>(flattened_matrix.get(similarities));
+							files.add(i);
+							files.add(j);
+							flattened_matrix.put(similarities, files);
+						}
+					}
 				}
-				else {
-					List <Integer> files = new ArrayList<>(flattened_matrix.get(similarities));
-					files.add(i);
-					files.add(j);
-					flattened_matrix.put(similarities, files);
-				}
+					//if (similarities > 10 && similarities < 200) {
+				//		System.out.println("Similarities is " + similarities);
+				//}
 			}
 		}	
 		
-		System.out.println("flat matrix make time :" + (System.nanoTime()-start)/1000000000.0);
+		//System.out.println("flattened matrix make time :" + (System.nanoTime()-start)/1000000000.0);
 		//create a red-black tree keyed by the decreasing order of the keys of the flattened_matrix
-		output_dict = new TreeMap<Integer, List<Integer>>(flattened_matrix);
+		System.out.println("Flat matrix size: " + flattened_matrix.size());
+		
+		output_dict = new TreeMap<Integer, List<Integer>>(Collections.reverseOrder());
+		output_dict.putAll(flattened_matrix);
+		System.out.println("Red Black Tree size: " + output_dict.size());
 		
 	}
 	
@@ -110,12 +124,22 @@ public class Model {
 			new Exception().printStackTrace(System.out);
 		}
 		else {
-			// get set of highest key values
+			
+			for (Integer key : output_dict.keySet()) {
+				System.out.print("Files [");
+				System.out.print(Cheaters.file_list.get(output_dict.get(key).get(0)));
+				for (int j = 1; j < output_dict.get(key).size(); j++) {
+					System.out.print(", ");
+					System.out.print(Cheaters.file_list.get(output_dict.get(key).get(j))); // Print file name
+				}
+				System.out.println("] have " + key + " similarities with each other.");
+			}
+			/*
 			for (int i = 0; i < output_dict.size(); i ++) {
 				Map.Entry<Integer, List<Integer>> entry = 
 						output_dict.pollLastEntry();
 			
-				if(entry.getKey() >= Cheaters.threshold) {
+				//if(entry.getKey() >= Cheaters.threshold) {
 					System.out.print("Files [");
 					System.out.print(Cheaters.file_list.get(entry.getValue().get(0)));
 					for (int j = 1; j < entry.getValue().size(); j++) {
@@ -123,8 +147,8 @@ public class Model {
 						System.out.print(Cheaters.file_list.get(entry.getValue().get(j))); // Print file name
 					}
 					System.out.println("] have " + entry.getKey() + " similarities with each other.");
-				}				
-			}
+				//}				
+			}*/
 		}
 	}
 	
